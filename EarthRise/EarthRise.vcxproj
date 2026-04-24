@@ -82,7 +82,7 @@
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
-    <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)NeuronClient;$(SolutionDir)NeuronClient\vcpkg_installed\x64-windows\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -121,6 +121,14 @@
     <Image Include="Assets\Square44x44Logo.scale-200.png" />
     <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Image Include="Assets\StoreLogo.png" />
+    <Image Include="Assets\texture\ice.jpg" />
+    <Image Include="Assets\texture\icon.png" />
+    <Image Include="Assets\texture\lensdirt.jpg" />
+    <Image Include="Assets\texture\multi.ico" />
+    <Image Include="Assets\texture\rock.jpg" />
+    <Image Include="Assets\texture\splash.png" />
+    <Image Include="Assets\texture\tree.png" />
+    <Image Include="Assets\texture\water_normals.jpg" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <!--
@@ -137,6 +145,37 @@
     the Windows App SDK Nuget package has not yet been restored.
   -->
   <ItemGroup>
+    <None Include="Assets\music\LtheoryTest01.fev" />
+    <None Include="Assets\music\LtheoryTest01_bank00.fsb" />
+    <None Include="Assets\music\LT_Music.fev" />
+    <None Include="Assets\music\System01.fsb" />
+    <None Include="Assets\script\Colors.lts" />
+    <None Include="Assets\script\Fonts.lts" />
+    <None Include="Assets\script\Icons.lts" />
+    <None Include="Assets\script\Widgets.lts" />
+    <None Include="Assets\shader\common\atlas.jsl" />
+    <None Include="Assets\shader\common\bezier.jsl" />
+    <None Include="Assets\shader\common\blend.jsl" />
+    <None Include="Assets\shader\common\color.jsl" />
+    <None Include="Assets\shader\common\cube.jsl" />
+    <None Include="Assets\shader\common\deferred.jsl" />
+    <None Include="Assets\shader\common\fdm.jsl" />
+    <None Include="Assets\shader\common\field.jsl" />
+    <None Include="Assets\shader\common\frag.jsl" />
+    <None Include="Assets\shader\common\global.jsl" />
+    <None Include="Assets\shader\common\lighting.jsl" />
+    <None Include="Assets\shader\common\math.jsl" />
+    <None Include="Assets\shader\common\noise.jsl" />
+    <None Include="Assets\shader\common\quat.jsl" />
+    <None Include="Assets\shader\common\raytracing.jsl" />
+    <None Include="Assets\shader\common\scattering.jsl" />
+    <None Include="Assets\shader\common\smaa.jsl" />
+    <None Include="Assets\shader\common\softparticle.jsl" />
+    <None Include="Assets\shader\common\texturing.jsl" />
+    <None Include="Assets\shader\common\ui.jsl" />
+    <None Include="Assets\shader\common\vert.jsl" />
+    <None Include="Assets\texture\SMAA_AreaTex.bin" />
+    <None Include="Assets\texture\SMAA_SearchTex.bin" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +197,57 @@
     <ProjectReference Include="..\NeuronCore\NeuronCore.vcxproj">
       <Project>{5b93b2aa-ed67-495e-858c-3e984781f2db}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\gamedata\grammar\activity.txt" />
+    <Text Include="Assets\gamedata\grammar\adjective.txt" />
+    <Text Include="Assets\gamedata\grammar\armor.txt" />
+    <Text Include="Assets\gamedata\grammar\bigram.txt" />
+    <Text Include="Assets\gamedata\grammar\bird.txt" />
+    <Text Include="Assets\gamedata\grammar\color.txt" />
+    <Text Include="Assets\gamedata\grammar\consonant.txt" />
+    <Text Include="Assets\gamedata\grammar\default.txt" />
+    <Text Include="Assets\gamedata\grammar\digit.txt" />
+    <Text Include="Assets\gamedata\grammar\digits.txt" />
+    <Text Include="Assets\gamedata\grammar\digitsletters.txt" />
+    <Text Include="Assets\gamedata\grammar\element.txt" />
+    <Text Include="Assets\gamedata\grammar\grade.txt" />
+    <Text Include="Assets\gamedata\grammar\lettercap.txt" />
+    <Text Include="Assets\gamedata\grammar\letterscap.txt" />
+    <Text Include="Assets\gamedata\grammar\name.txt" />
+    <Text Include="Assets\gamedata\grammar\namepost.txt" />
+    <Text Include="Assets\gamedata\grammar\namepre.txt" />
+    <Text Include="Assets\gamedata\grammar\noun.txt" />
+    <Text Include="Assets\gamedata\grammar\nounex.txt" />
+    <Text Include="Assets\gamedata\grammar\number.txt" />
+    <Text Include="Assets\gamedata\grammar\oretype.txt" />
+    <Text Include="Assets\gamedata\grammar\oretypepost.txt" />
+    <Text Include="Assets\gamedata\grammar\person.txt" />
+    <Text Include="Assets\gamedata\grammar\prefix.txt" />
+    <Text Include="Assets\gamedata\grammar\qualifier.txt" />
+    <Text Include="Assets\gamedata\grammar\random.txt" />
+    <Text Include="Assets\gamedata\grammar\scientist.txt" />
+    <Text Include="Assets\gamedata\grammar\shipprefix.txt" />
+    <Text Include="Assets\gamedata\grammar\shiptype.txt" />
+    <Text Include="Assets\gamedata\grammar\snake.txt" />
+    <Text Include="Assets\gamedata\grammar\station.txt" />
+    <Text Include="Assets\gamedata\grammar\stationmidfix.txt" />
+    <Text Include="Assets\gamedata\grammar\stationpost.txt" />
+    <Text Include="Assets\gamedata\grammar\stationpre.txt" />
+    <Text Include="Assets\gamedata\grammar\stationsuffix.txt" />
+    <Text Include="Assets\gamedata\grammar\sub.txt" />
+    <Text Include="Assets\gamedata\grammar\substance.txt" />
+    <Text Include="Assets\gamedata\grammar\system.txt" />
+    <Text Include="Assets\gamedata\grammar\systemnumeric.txt" />
+    <Text Include="Assets\gamedata\grammar\systempost.txt" />
+    <Text Include="Assets\gamedata\grammar\systempre.txt" />
+    <Text Include="Assets\gamedata\grammar\systempre1.txt" />
+    <Text Include="Assets\gamedata\grammar\systempre2.txt" />
+    <Text Include="Assets\gamedata\grammar\systempre3.txt" />
+    <Text Include="Assets\gamedata\grammar\systemsuffix.txt" />
+    <Text Include="Assets\gamedata\grammar\systemword.txt" />
+    <Text Include="Assets\gamedata\grammar\vowel.txt" />
+    <Text Include="Assets\gamedata\grammar\weapon.txt" />
   </ItemGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>false</VcpkgEnableManifest>
@@ -214,4 +304,3 @@
     <Error Condition="!Exists('..\packages\Microsoft.Windows.SDK.BuildTools.MSIX.1.7.260316102\build\Microsoft.Windows.SDK.BuildTools.MSIX.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.SDK.BuildTools.MSIX.1.7.260316102\build\Microsoft.Windows.SDK.BuildTools.MSIX.targets'))" />
   </Target>
 </Project>
-
