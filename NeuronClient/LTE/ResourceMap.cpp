@@ -4,14 +4,18 @@
 
 #include "Debug.h"
 
-namespace {
-  struct ResourceMapImpl : public ResourceMapT {
+namespace
+{
+  struct ResourceMapImpl : ResourceMapT
+  {
     Map<String, String> pathMap;
 
-    void AddDirectory(String const& path, String const& alias) {
+    void AddDirectory(const String& path, const String& alias) override
+    {
       Vector<String> elements = OS_ListDir(path);
-      for (size_t i = 0; i < elements.size(); ++i) {
-        String const& element = elements[i];
+      for (size_t i = 0; i < elements.size(); ++i)
+      {
+        const String& element = elements[i];
         if (element == "." || element == "..")
           continue;
 
@@ -23,16 +27,13 @@ namespace {
       }
     }
 
-    void AddFile(String const& path, String const& alias) {
-      pathMap[alias] = path;
-    }
+    void AddFile(const String& path, const String& alias) override { pathMap[alias] = path; }
 
-    bool Exists(String const& path) const {
-      return pathMap.contains(path);
-    }
+    bool Exists(const String& path) const override { return pathMap.contains(path); }
 
-    String Get(String const& path) const {
-      String const* result = pathMap.get(path);
+    String Get(const String& path) const override
+    {
+      const String* result = pathMap.get(path);
       if (!result)
         dbg | "Bad lookup : " | path | endl;
       if (result)
@@ -42,6 +43,4 @@ namespace {
   };
 }
 
-ResourceMap ResourceMap_Create() {
-  return new ResourceMapImpl;
-}
+ResourceMap ResourceMap_Create() { return new ResourceMapImpl; }

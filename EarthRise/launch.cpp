@@ -1,3 +1,4 @@
+#include "NeuronCore.h"
 #include "Module/PhysicsEngine.h"
 #include "Module/SoundEngine.h"
 
@@ -17,7 +18,8 @@
 #include "LTE/Timer.h"
 #endif
 
-struct Launcher : public Program {
+struct Launcher : Program
+{
   String appName;
   ScriptFunction initialize;
   ScriptFunction update;
@@ -25,7 +27,9 @@ struct Launcher : public Program {
   Module physicsEngine;
   Module soundEngine;
 
-  Launcher(String const& appName) : appName(appName) {
+  Launcher(const String& appName)
+    : appName(appName)
+  {
     if (!OS_IsDir("resource"))
       OS_ChangeDir("../");
     window = Window_Create("App Launcher", V2U(1920, 1080), true, false);
@@ -33,11 +37,10 @@ struct Launcher : public Program {
     Renderer_Initialize();
   }
 
-  void OnInitialize() {
-    Launch();
-  }
+  void OnInitialize() override { Launch(); }
 
-  void Launch() {
+  void Launch()
+  {
     physicsEngine = nullptr;
     soundEngine = nullptr;
     physicsEngine = CreatePhysicsEngine();
@@ -53,7 +56,8 @@ struct Launcher : public Program {
     dbg | "LTSL Compile Time: " | timer.GetElapsed() | endl;
 #endif
 
-    if (!main) {
+    if (!main)
+    {
       printf("ERROR: Launcher failed to load script %s\n", appName.c_str());
       deleted = true;
       return;
@@ -64,25 +68,27 @@ struct Launcher : public Program {
               system, Type_Get<T> returns different static storage in the exe
               vs the dll, so type equality comparisons fail when they shouldn't.
               I am not going to fix this right now. */
-    ScriptType app = *(ScriptType*)main->returnType->GetAux().data;
+    ScriptType app = *static_cast<ScriptType*>(main->returnType->GetAux().data);
     initialize = app->GetFunction("Initialize");
     update = app->GetFunction("Update");
     instance.Construct(app->type);
     main->VoidCall(instance.data);
 
     if (initialize)
-      initialize->VoidCall(0, instance);
+      initialize->VoidCall(nullptr, instance);
     if (!update)
       deleted = true;
   }
 
-  void OnUpdate() {
+  void OnUpdate() override
+  {
     if (Keyboard_Pressed(Key_F1))
       SaveScreenshot();
     if (Keyboard_Pressed(Key_F2))
       Profiler_Auto(1.0f);
 
-    if (Keyboard_Pressed(Key_W) && Keyboard_Control()) {
+    if (Keyboard_Pressed(Key_W) && Keyboard_Control())
+    {
       deleted = true;
       instance.Clear();
       return;
@@ -95,7 +101,7 @@ struct Launcher : public Program {
       Launch();
 
     if (update)
-      update->VoidCall(0, instance);
+      update->VoidCall(nullptr, instance);
 
     if (physicsEngine)
       physicsEngine->Update();
@@ -103,12 +109,15 @@ struct Launcher : public Program {
       soundEngine->Update();
   }
 
-  void SaveScreenshot() {
+  void SaveScreenshot()
+  {
     String prefix = OS_GetUserDataPath() + "screenshot/";
     OS_CreatePath(prefix);
-    for (uint i = 0;; ++i) {
+    for (uint i = 0;; ++i)
+    {
       String path = prefix + ToString(i) + ".png";
-      if (!OS_FileExists(path)) {
+      if (!OS_FileExists(path))
+      {
         Texture_ScreenCapture()->SaveTo(path);
         return;
       }
@@ -116,23 +125,21 @@ struct Launcher : public Program {
   }
 };
 
-int main(int argc, char const* argv[]) {
-  if (argc != 2) {
+int main(int argc, const char* argv[])
+{
+  if (argc != 2)
+  {
     printf("ERROR: Launcher expects one argument (application name)\n");
     return 0;
   }
 
+  wchar_t filename[MAX_PATH];
+  GetModuleFileNameW(nullptr, filename, MAX_PATH);
+  auto path = std::wstring(filename);
+  path = path.substr(0, path.find_last_of('\\'));
+
+  FileSys::SetHomeDirectory(path);
+
   Launcher(argv[1]).Execute();
   return 0;
 }
-
-#if 0
-#ifdef LIBLT_WINDOWS
-  #pragma comment(linker, "/SUBSYSTEM:windows")
-  #include <windows.h>
-  int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrev, PSTR cmd, int show) {
-    char const* argv[] = { "program" };
-    return main(0, argv);
-  }
-#endif
-#endif

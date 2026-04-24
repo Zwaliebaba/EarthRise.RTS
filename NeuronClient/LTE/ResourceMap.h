@@ -3,20 +3,17 @@
 
 #include "Reference.h"
 
-struct ResourceMapT : public RefCounted {
-  virtual ~ResourceMapT() {}
+struct ResourceMapT : RefCounted
+{
+  ~ResourceMapT() override = default;
 
-  virtual void AddDirectory(
-    String const& path,
-    String const& alias = "") = 0;
+  virtual void AddDirectory(const String& path, const String& alias = "") = 0;
 
-  virtual void AddFile(
-    String const& path,
-    String const& alias = "") = 0;
+  virtual void AddFile(const String& path, const String& alias = "") = 0;
 
-  virtual bool Exists(String const& path) const = 0;
+  virtual bool Exists(const String& path) const = 0;
 
-  virtual String Get(String const& path) const = 0;
+  virtual String Get(const String& path) const = 0;
 };
 
 LT_API ResourceMap ResourceMap_Create();

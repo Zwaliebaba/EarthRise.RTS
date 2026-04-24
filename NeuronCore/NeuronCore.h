@@ -72,6 +72,7 @@
 using namespace winrt;
 
 #include "Debug.h"
+#include "FileSys.h"
 #include "GameMath.h"
 
 #include "NeuronHelper.h"

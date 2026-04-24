@@ -11,7 +11,7 @@ struct RefCounted : public NullBase<RefCounted> {
 
   RefCounted() : refCount(0) {}
 
-  ~RefCounted() {
+  virtual ~RefCounted() {
     LTE_ASSERT(refCount == 0);
   }
 

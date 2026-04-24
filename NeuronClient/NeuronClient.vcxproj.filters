@@ -2156,8 +2156,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="vcpkg.json" />
+    <None Include="packages.config">
+      <Filter>Project Files</Filter>
+    </None>
+    <None Include="vcpkg.json">
+      <Filter>Project Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -2294,6 +2298,9 @@
     </Filter>
     <Filter Include="Module\SoundEngine">
       <UniqueIdentifier>{1e1c6f1b-de8d-422b-9d32-f70403e46fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Files">
+      <UniqueIdentifier>{48cb7ddd-0bf3-4c03-9149-83804a62856b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
