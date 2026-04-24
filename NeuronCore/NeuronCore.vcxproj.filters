@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="FileSys.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="TasksCore.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ASyncLoader.h" />
+    <ClInclude Include="DataReader.h" />
+    <ClInclude Include="DataWriter.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="FileSys.h" />
+    <ClInclude Include="NeuronCore.h" />
+    <ClInclude Include="NeuronHelper.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="TasksCore.h" />
+    <ClInclude Include="TimerCore.h" />
+    <ClInclude Include="GameMath.h">
+      <Filter>GameMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MathCommon.h">
+      <Filter>GameMath</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameMath">
+      <UniqueIdentifier>{783815e8-db95-4856-bad6-737f00daaace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project Files">
+      <UniqueIdentifier>{9796f441-b089-41e3-bd65-f87f9d63bb37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <Filter>Project Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

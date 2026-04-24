@@ -1,0 +1,11 @@
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/lib/glew32.lib
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/bin/glew32.dll
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/lib/pkgconfig/glew.pc
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/include/GL/wglew.h
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/include/GL/glew.h
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/include/GL/glxew.h
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/include/GL/eglew.h
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/lib/cmake/glew/glew-targets.cmake
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/lib/cmake/glew/glew-targets-release.cmake
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/lib/cmake/glew/glew-config.cmake
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/glew_x64-windows/lib/cmake/glew/CopyImportedTargetProperties.cmake

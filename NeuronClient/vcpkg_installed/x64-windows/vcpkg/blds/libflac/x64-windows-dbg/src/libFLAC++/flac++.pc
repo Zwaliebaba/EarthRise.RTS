@@ -1,0 +1,11 @@
+prefix=C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/libflac_x64-windows/debug
+exec_prefix=C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/libflac_x64-windows/debug
+libdir=C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/libflac_x64-windows/debug/lib
+includedir=C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/pkgs/libflac_x64-windows/debug/include
+
+Name: FLAC++
+Description: Free Lossless Audio Codec Library (C++ API)
+Version: 1.5.0
+Requires: flac
+Libs: -L${libdir} -lFLAC++
+Cflags: -I${includedir}

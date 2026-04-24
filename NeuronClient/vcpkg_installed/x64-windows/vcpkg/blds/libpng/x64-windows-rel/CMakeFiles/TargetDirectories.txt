@@ -1,0 +1,7 @@
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/png_genfiles.dir
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/png_shared.dir
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/edit_cache.dir
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/rebuild_cache.dir
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/list_install_components.dir
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/install.dir
+C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/libpng/x64-windows-rel/CMakeFiles/install/local.dir
