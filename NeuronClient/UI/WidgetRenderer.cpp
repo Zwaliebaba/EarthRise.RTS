@@ -119,7 +119,7 @@ namespace {
 
     Type const& vertexFormat = glyphs[0].glyph->GetVertexFormat();
     renderer.vertexBuffer.clear();
-    renderer.vertexBuffer.reserve(4 * glyphs.size() * vertexFormat->size);
+    renderer.vertexBuffer.resize(4 * glyphs.size() * vertexFormat->size, 0);
 
     for (size_t i = 0; i < glyphs.size(); ++i) {
       uchar* pBuffer = renderer.vertexBuffer.data() + 4 * i * vertexFormat->size;

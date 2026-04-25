@@ -37,8 +37,12 @@ namespace
 
     ~ThreadImpl() override
     {
-      if (!finished)
-        Terminate();
+      if (thread && thread->joinable()) {
+        if (finished)
+          thread->join();
+        else
+          Terminate();
+      }
       job->OnEnd();
     }
 

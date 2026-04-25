@@ -12,6 +12,7 @@
 #include "Texture2D.h"
 #include "UniString.h"
 #include "Viewport.h"
+#include "FileSys.h"
 
 #include "Debug.h"
 
@@ -164,7 +165,7 @@ namespace {
       }
 
       /* Create the FT face. */ {
-        String realPath = "resource/font/" + path;
+        String realPath = Neuron::FileSys::GetHomeDirectoryA() + "Font\\" + String_Replace(path, '/', '\\');
         if (FT_New_Face(ft, realPath.c_str(), 0, &face)) {
           Log_Error("FreeType -- Failed to load font " + realPath);
           return;

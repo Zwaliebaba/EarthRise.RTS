@@ -9,7 +9,7 @@ add_executable(EarthRise
 
 # NeuronClient PUBLIC-links GLEW / Freetype / SFML, so they propagate here.
 target_link_libraries(EarthRise PRIVATE
-  NeuronClient
+  "$<LINK_LIBRARY:WHOLE_ARCHIVE,NeuronClient>"
   ${EARTHRISE_SFML_MAIN_LIBRARY}
 )
 

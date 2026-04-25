@@ -1,11 +1,17 @@
 #include "ResourceMap.h"
 #include "Map.h"
 #include "OS.h"
+#include "String.h"
 
 #include "Debug.h"
 
 namespace
 {
+  String NormalizeResourcePath(const String& path)
+  {
+    return String_Lower(String_Replace(path, '/', '\\'));
+  }
+
   struct ResourceMapImpl : ResourceMapT
   {
     Map<String, String> pathMap;
@@ -27,15 +33,16 @@ namespace
       }
     }
 
-    void AddFile(const String& path, const String& alias) override { pathMap[alias] = path; }
+    void AddFile(const String& path, const String& alias) override { pathMap[NormalizeResourcePath(alias)] = path; }
 
-    bool Exists(const String& path) const override { return pathMap.contains(path); }
+    bool Exists(const String& path) const override { return pathMap.contains(NormalizeResourcePath(path)); }
 
     String Get(const String& path) const override
     {
-      const String* result = pathMap.get(path);
+      String normalizedPath = NormalizeResourcePath(path);
+      const String* result = pathMap.get(normalizedPath);
       if (!result)
-        dbg | "Bad lookup : " | path | endl;
+        dbg | "Bad lookup : " | normalizedPath | endl;
       if (result)
         return *result;
       return String();
