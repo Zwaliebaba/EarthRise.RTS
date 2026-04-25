@@ -441,7 +441,8 @@ namespace {
       if (cached)
         return cached;
 
-      AutoPtr<Array<uchar> > fileData = Location_Resource(kDefaultSoundPath + filename)->Read();
+      std::unique_ptr<Array<uchar> > fileData(
+        Location_Resource(kDefaultSoundPath + filename)->Read().release());
       if (!fileData)
         return nullptr;
 

@@ -205,7 +205,7 @@ namespace LTE
 
   String LocationT::ReadAscii() const
   {
-    AutoPtr<Array<uchar>> arr = Read();
+    std::unique_ptr<Array<uchar> > arr(Read().release());
     String str;
     if (!arr)
       return str;

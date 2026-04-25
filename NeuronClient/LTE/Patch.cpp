@@ -5,16 +5,19 @@
 #include "Location.h"
 #include "ProgramLog.h"
 
+#include <memory>
+#include <utility>
+#include <vector>
+
 namespace {
   struct PatchEntry {
     Location loc;
-    AutoPtr<Diff> diff;
+    std::unique_ptr<Diff> diff;
 
     bool Apply() const {
-      AutoPtr<Array<uchar> > srcData = loc->Exists()
-        ? loc->Read()
-        : AutoPtr<Array<uchar> >(new Array<uchar>);
-      AutoPtr<Array<uchar> > dstData = diff->Inflate(*srcData);
+      std::unique_ptr<Array<uchar> > srcData(
+        loc->Exists() ? loc->Read().release() : new Array<uchar>);
+      std::unique_ptr<Array<uchar> > dstData(diff->Inflate(*srcData));
       if (!dstData) {
         Log_Error("Source " + loc->ToString() + " not found");
         return false;
@@ -24,25 +27,24 @@ namespace {
   };
 
   struct PatchImpl : public Patch {
-    Vector<PatchEntry> entries;
+    std::vector<PatchEntry> entries;
 
     void Add(Location const& target, Location const& patchFile) {
-      AutoPtr<Array<uchar> > srcData = target->Exists()
-        ? target->Read()
-        : AutoPtr<Array<uchar> >(new Array<uchar>);
-      AutoPtr<Array<uchar> > dstData = patchFile->Read();
+      std::unique_ptr<Array<uchar> > srcData(
+        target->Exists() ? target->Read().release() : new Array<uchar>);
+      std::unique_ptr<Array<uchar> > dstData(patchFile->Read().release());
 
       PatchEntry e;
       e.loc = target->Clone();
-      e.diff = Diff_Create(*srcData, *dstData);
-      entries << e;
+      e.diff.reset(Diff_Create(*srcData, *dstData).release());
+      entries.push_back(std::move(e));
     }
 
     bool Apply() const {
-      Array< AutoPtr<Array<uchar> > > backups(entries.size());
+      std::vector<std::unique_ptr<Array<uchar> > > backups(entries.size());
 
       for (size_t i = 0; i < entries.size(); ++i) {
-        backups[i] = entries[i].loc->Read();
+        backups[i].reset(entries[i].loc->Read().release());
         if (!entries[i].Apply()) {
           Log_Warning("Patch application failed, attempting to restore");
           for (size_t j = 0; j < i; ++j) {

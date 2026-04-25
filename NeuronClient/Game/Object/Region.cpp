@@ -8,7 +8,6 @@
 
 #include "Game/Attribute/Traits.h"
 
-#include "LTE/AutoPtr.h"
 #include "LTE/Grammar.h"
 #include "LTE/Graph.h"
 #include "LTE/Hash.h"
@@ -16,6 +15,8 @@
 #include "LTE/RNG.h"
 #include "LTE/Script.h"
 #include "LTE/Tuple.h"
+
+#include <memory>
 
 const uint kMaxChildren = 1;//4;
 const uint kPlanetCount = 1;
@@ -164,7 +165,7 @@ DefineFunction(Object_Region) {
     Vector< Tuple2<size_t, size_t> > connections;
     const size_t kConnectivity = 2;
     for (size_t i = 0; i < kConnectivity; ++i) {
-      AutoPtr<Graph<ObjectT*>> graph = new Graph<ObjectT*>;
+      std::unique_ptr<Graph<ObjectT*> > graph(new Graph<ObjectT*>);
       for (size_t j = 0; j < childObjects.size(); ++j) {
         graph->Add(childObjects[j]);
         V3 p1 = childObjects[j]->GetPos();
@@ -174,7 +175,7 @@ DefineFunction(Object_Region) {
         }
       }
 
-      AutoPtr<Graph<ObjectT*>> mst = graph->ComputeMST();
+      std::unique_ptr<Graph<ObjectT*> > mst(graph->ComputeMST());
       for (size_t j = 0; j < mst->edges.size(); ++j) {
         size_t i1 = mst->edges[j].src;
         size_t i2 = mst->edges[j].dst;

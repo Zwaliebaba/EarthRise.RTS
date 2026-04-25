@@ -25,15 +25,18 @@ Initial low-risk recommendations implemented:
 - Replaced the lone active `RingBuffer<T>` use in `ObjectType_Trail` with local `std::vector<SegmentData>` storage plus an explicit current index; `RingBuffer.h` remains for compatibility/reflection until removal is safe.
 - Fixed `Array<T>` equality to compare elements instead of `size()` raw bytes, added `Array<T>::empty()`, and added standard-style range/`AsStdVector()` accessors to `Stack<T>`.
 - Fixed `Tuple3` and `Tuple4` comparison bugs where `z` was compared against itself instead of the other tuple.
+- Started Phase 2 local ownership cleanup by replacing implementation-local `AutoPtr` ownership with `std::unique_ptr` in region graph generation, XAudio2 wave loading, SMAA texture data loading, texture file loading, location ASCII reads, serializer staging buffers, and collision mesh acceleration structures.
+- Replaced `DiffImpl`'s manually deleted `Vector<DiffBlock*>` storage with `std::vector<std::unique_ptr<DiffBlock>>`, removing the matching `deleteElements()` call site.
+- Continued Phase 2 by replacing private `AutoPtr` storage with `std::unique_ptr` in patch application state, query spatial partitions, and thread ownership; active `deleteElements()` usage is now gone outside the compatibility wrappers themselves.
 
 Still intentionally deferred:
 
 - Broad replacement of `String`, `Vector`, `Array`, `Map`, `Reference`, or `Pointer` with standard types.
 - Reflected field migration to standard containers.
-- Ownership rewrites from `AutoPtr`/`Reference` to `std::unique_ptr` or `std::shared_ptr`.
+- Broad ownership rewrites from `AutoPtr`/`Reference` to `std::unique_ptr` or `std::shared_ptr`.
 - Serialization and script metadata changes.
 - Remaining `.t` access inside wrapper internals, `Type`, list-link plumbing, and raw tuple vertex fields where `.get()` would not be equivalent or the type has no accessor yet.
-- Removing `RingBuffer.h`, rewriting reflected `Stack<T>`/`Array<T>` fields, or changing `Array<T>` buffer transfer semantics.
+- Removing `RingBuffer.h`, rewriting reflected `Stack<T>`/`Array<T>` fields, migrating public `AutoPtr` APIs such as `Location::Read` and `Diff_Create`, or changing `Array<T>` buffer transfer semantics.
 
 ## Search Summary
 

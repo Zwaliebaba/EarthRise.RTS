@@ -405,10 +405,11 @@ void Texture_Generate(
 
 DefineFunction(Texture_LoadFrom) {
   sf::Image image;
-  AutoPtr< Array<uchar> > arr = args.source->Read();
+  std::unique_ptr<Array<uchar> > arr(args.source->Read().release());
   if (!arr)
     Log_Critical("Failed to load texture from " + args.source->ToString());
-  image.loadFromMemory(arr->data(), arr->size());
+  if (!image.loadFromMemory(arr->data(), arr->size()))
+    Log_Critical("Failed to decode texture from " + args.source->ToString());
 
   return Texture_Create(
     image.getSize().x,

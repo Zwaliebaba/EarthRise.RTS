@@ -6,6 +6,8 @@
 #include "Hash.h"
 
 #include <cstring>
+#include <memory>
+#include <vector>
 
 struct DiffBlock {
   BASE_TYPE(DiffBlock)
@@ -64,13 +66,9 @@ DERIVED_IMPLEMENT(IndirectBlock)
 
 namespace LTE {
   struct DiffImpl : public Diff {
-    Vector<DiffBlock*> blocks;
+    std::vector<std::unique_ptr<DiffBlock> > blocks;
     size_t srcSize;
     size_t dstSize;
-
-    ~DiffImpl() {
-      blocks.deleteElements();
-    }
 
     Array<uchar>* Inflate(const Array<uchar>& source) {
       if (source.size() != srcSize)
@@ -122,11 +120,13 @@ namespace LTE {
 
       if (indirectLength) {
         if (currentBlock.size()) {
-          output->blocks << new DirectBlock(currentBlock);
+          output->blocks.push_back(
+            std::make_unique<DirectBlock>(currentBlock));
           currentBlock.clear();
         }
 
-        output->blocks << new IndirectBlock(indirectOffset, indirectLength);
+        output->blocks.push_back(
+          std::make_unique<IndirectBlock>(indirectOffset, indirectLength));
         index += indirectLength;
       } else
         for (size_t i = 0; i < blockSize && index < dstData.size(); ++i)
@@ -137,7 +137,8 @@ namespace LTE {
       currentBlock << dstData[index++];
 
     if (currentBlock.size()) {
-      output->blocks << new DirectBlock(currentBlock);
+      output->blocks.push_back(
+        std::make_unique<DirectBlock>(currentBlock));
       currentBlock.clear();
     }
 

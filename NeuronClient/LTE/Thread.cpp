@@ -1,12 +1,12 @@
 #include "Thread.h"
 
-#include "AutoPtr.h"
 #include "Job.h"
 #include "Lock.h"
 
 #include "SFML/System.hpp"
 
 #include <Windows.h>
+#include <memory>
 #include <thread>
 
 #undef GetJob
@@ -23,7 +23,7 @@ namespace
   struct ThreadImpl : ThreadT
   {
     Job job;
-    AutoPtr<std::thread> thread;
+    std::unique_ptr<std::thread> thread;
     bool finished;
 
     ThreadImpl(const Job& job)
@@ -32,7 +32,7 @@ namespace
     {
       ScopedLock lock(GetThreadLock());
       job->OnBegin();
-      thread = new std::thread(&ThreadImpl::Run, this);
+      thread.reset(new std::thread(&ThreadImpl::Run, this));
     }
 
     ~ThreadImpl() override

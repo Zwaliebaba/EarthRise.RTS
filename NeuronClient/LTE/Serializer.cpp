@@ -6,6 +6,8 @@
 
 #include "Debug.h"
 
+#include <memory>
+
 namespace {
   typedef Map<void*, int> IdMapT;
   typedef Map<int, void*> ResourceMapT;
@@ -41,7 +43,7 @@ namespace {
   {
     Location const& location;
     int version;
-    AutoPtr< Array<uchar> > buffer;
+    std::unique_ptr<Array<uchar> > buffer;
     ResourceMap resources;
     size_t cursor;
     bool good;
@@ -51,7 +53,7 @@ namespace {
       cursor(0),
       good(true)
     {
-      buffer = location->Read();
+      buffer.reset(location->Read().release());
       if (buffer)
         Read(version);
       else
@@ -155,7 +157,7 @@ namespace {
     Location const& location;
     int version;
 
-    AutoPtr< Array<uchar> > buffer;
+    std::unique_ptr<Array<uchar> > buffer;
     ResourceMap resources;
     size_t cursor;
     bool good;
@@ -166,7 +168,7 @@ namespace {
       cursor(0),
       good(true)
     {
-      buffer = new Array<uchar>(16);
+      buffer.reset(new Array<uchar>(16));
       Write(this->version);
     }
 

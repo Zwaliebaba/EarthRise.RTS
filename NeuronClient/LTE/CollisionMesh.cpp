@@ -1,13 +1,14 @@
 #include "CollisionMesh.h"
 
 #include "Array.h"
-#include "AutoPtr.h"
 #include "Bound.h"
 #include "Matrix.h"
 #include "Mesh.h"
 #include "SpatialPartition.h"
 #include "SpatialSignature.h"
 #include "Sphere.h"
+
+#include <memory>
 
 const bool kUseHashGrid = false;
 const bool kUseSpatialSignatures = true;
@@ -126,8 +127,8 @@ namespace {
     Bound3 box;
     Array<V3> vertices;
     Array<Bound3> boxes;
-    AutoPtr<SpatialPartition> partition;
-    AutoPtr<SpatialSignature> signature;
+    std::unique_ptr<SpatialPartition> partition;
+    std::unique_ptr<LTE::SpatialSignature> signature;
 
     CollisionMeshImpl(Mesh const& sourceMesh) {
       Mesh cleaned = sourceMesh->RemoveDegeneracies();
@@ -147,18 +148,18 @@ namespace {
       resMult *= pow((float)triangles, 1.f / 3.f);
 
       if (kUseHashGrid)
-        partition = SpatialPartition_Hash(span / 10.f, triangles);
+        partition.reset(SpatialPartition_Hash(span / 10.f, triangles));
       else
-        partition = SpatialPartition_Uniform(box,
+        partition.reset(SpatialPartition_Uniform(box,
           Max((size_t)(resMult.x * kGridResolution), (size_t)1),
           Max((size_t)(resMult.y * kGridResolution), (size_t)1),
-          Max((size_t)(resMult.z * kGridResolution), (size_t)1));
+          Max((size_t)(resMult.z * kGridResolution), (size_t)1)));
 
       if (kUseSpatialSignatures)
-        signature = SpatialSignature_Grid(box,
+        signature.reset(LTE::SpatialSignature_Grid(box,
           (size_t)(resMult.x * kSignatureResolution),
           (size_t)(resMult.y * kSignatureResolution),
-          (size_t)(resMult.z * kSignatureResolution));
+          (size_t)(resMult.z * kSignatureResolution)));
 
       for (size_t i = 0; i < triangles; ++i) {
         PartitionAddData ad;

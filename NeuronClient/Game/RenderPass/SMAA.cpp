@@ -25,10 +25,10 @@ namespace {
       weightPass(Shader_Create("smaa_2.jsl", "smaa_2.jsl")),
       blendPass(Shader_Create("smaa_3.jsl", "smaa_3.jsl"))
     {
-      AutoPtr<Array<uchar> > areaTexData =
-        Location_Texture("SMAA_AreaTex.bin")->Read();
-      AutoPtr<Array<uchar> > searchTexData =
-        Location_Texture("SMAA_SearchTex.bin")->Read();
+      std::unique_ptr<Array<uchar> > areaTexData(
+        Location_Texture("SMAA_AreaTex.bin")->Read().release());
+      std::unique_ptr<Array<uchar> > searchTexData(
+        Location_Texture("SMAA_SearchTex.bin")->Read().release());
 
       areaTex = Texture_Create(
         AREATEX_WIDTH,

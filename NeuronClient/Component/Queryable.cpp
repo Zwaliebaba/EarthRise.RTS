@@ -7,11 +7,12 @@
 
 #include "Module/PhysicsEngine.h"
 
-#include "LTE/AutoPtr.h"
 #include "LTE/Ray.h"
 #include "LTE/SpatialPartition.h"
 #include "LTE/StackFrame.h"
 #include "LTE/Vector.h"
+
+#include <memory>
 
 const size_t kPartitionLevels = 2;
 const size_t kPartitionBuckets = 4096;
@@ -86,7 +87,7 @@ namespace {
 
 struct ComponentQueryableImpl {
   Vector<void*> queryVector;
-  AutoPtr<SpatialPartition> partition[kPartitionLevels];
+  std::unique_ptr<SpatialPartition> partition[kPartitionLevels];
 
   short queryVersion;
   bool dirty;
@@ -103,8 +104,8 @@ struct ComponentQueryableImpl {
 
     if (!partition[0])
       for (size_t i = 0; i < kPartitionLevels; ++i)
-        partition[i] = SpatialPartition_Hash(V3(kSpatialGridSizes[i]),
-            (i == 0 ? kPartitionStaticMult : 1) * kPartitionBuckets);
+        partition[i].reset(SpatialPartition_Hash(V3(kSpatialGridSizes[i]),
+            (i == 0 ? kPartitionStaticMult : 1) * kPartitionBuckets));
 
     for (size_t i = 1; i < kPartitionLevels; ++i)
       partition[i]->Clear();

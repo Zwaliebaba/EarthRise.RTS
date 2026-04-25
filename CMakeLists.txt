@@ -45,6 +45,19 @@ find_package(GLEW                  REQUIRED)
 find_package(Freetype              REQUIRED)
 find_package(SFML 3 CONFIG REQUIRED COMPONENTS System Window Graphics Network)
 
+option(EARTHRISE_ENABLE_D3D12 "Build DirectX 12 renderer scaffolding" ON)
+
+if (EARTHRISE_ENABLE_D3D12)
+  find_program(EARTHRISE_DXC_EXECUTABLE NAMES dxc dxc.exe
+    DOC "DirectX Shader Compiler executable")
+
+  if (EARTHRISE_DXC_EXECUTABLE)
+    message(STATUS "EarthRise DXC: ${EARTHRISE_DXC_EXECUTABLE}")
+  else()
+    message(STATUS "EarthRise DXC: not found; generated shader header build steps are disabled")
+  endif()
+endif()
+
 # sfml-main is shipped as a plain static library (not a CMake target).
 find_library(EARTHRISE_SFML_MAIN_LIBRARY
   NAMES sfml-main sfml-main-d
