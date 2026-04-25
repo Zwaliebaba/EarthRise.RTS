@@ -275,6 +275,10 @@ struct Type {
   operator bool() const { return t != 0; }
   operator TypeT*() const { return t; }
 
+  TypeT* get() const { return t; }
+
+  void reset(TypeT* t = nullptr) { (*this) = t; }
+
   Type& operator=(TypeT* t) {
     if (t) Mutable(t)->RefCountIncrement();
     Release();
@@ -327,10 +331,10 @@ struct Type {
 
   template <class StreamT>
   friend void _ToStream(StreamT& stream, Type const& t) {
-    if (!t.t)
+    if (!t.get())
       stream << "null";
     else
-      ToStream(stream, *t.t);
+      ToStream(stream, *t.get());
   }
 };
 

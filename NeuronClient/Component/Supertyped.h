@@ -23,7 +23,7 @@ AutoComponent(Supertyped)
   }
 
   ItemT* GetSupertype() const {
-    return Supertyped.type.t;
+    return Supertyped.type.get();
   }
 };
 

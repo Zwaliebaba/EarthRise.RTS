@@ -525,7 +525,7 @@ struct ObjectT : public RefCounted {
   #undef X
 
   #define X(x) Pointer<const Component##x> Get##x() const {                    \
-    return ((ObjectT*)this)->Get##x().t;                                       \
+    return ((ObjectT*)this)->Get##x().get();                                   \
   }
   COMPONENT_X
   #undef X

@@ -200,7 +200,7 @@ namespace {
         controller = new ShipAffector;
         controller->lookTarget = self->piloting->GetLook();
         controller->upTarget = self->piloting->GetUp();
-        self->GetAffectable()->affectors.push(controller.t);
+        self->GetAffectable()->affectors.push(controller.get());
       }
 
       controller->isFiring = false;

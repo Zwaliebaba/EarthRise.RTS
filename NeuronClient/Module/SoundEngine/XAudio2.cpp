@@ -1,9 +1,12 @@
 #include "Module/SoundEngine.h"
 
+#include "Game/Camera.h"
+#include "Game/Object.h"
 #include "LTE/Array.h"
 #include "LTE/AutoPtr.h"
 #include "LTE/Location.h"
 #include "LTE/Map.h"
+#include "LTE/Math.h"
 #include "LTE/ProgramLog.h"
 #include "LTE/Vector.h"
 
@@ -14,12 +17,11 @@
 #include <objbase.h>
 #include <cstring>
 #include <xaudio2.h>
+#include <x3daudio.h>
 
 namespace {
   uint const kProceduralSampleRate = 44100;
   String const kDefaultSoundPath = "sound/";
-
-  bool gLogged3DUnimplemented = false;
 
   struct SoundEngineXAudio2Impl;
 
@@ -139,6 +141,39 @@ namespace {
     return true;
   }
 
+  DecodedWaveData DownmixToMono(DecodedWaveData const& decoded) {
+    if (decoded.channels == 1)
+      return decoded;
+
+    DecodedWaveData mono;
+    mono.channels = 1;
+    mono.sampleRate = decoded.sampleRate;
+    mono.sampleFrames = decoded.sampleFrames;
+    mono.samples.resize(decoded.sampleFrames);
+
+    for (uint frame = 0; frame < decoded.sampleFrames; ++frame) {
+      float sample = 0;
+      for (uint channel = 0; channel < decoded.channels; ++channel)
+        sample += decoded.samples[frame * decoded.channels + channel];
+      mono.samples[frame] = sample / (float)decoded.channels;
+    }
+
+    return mono;
+  }
+
+  X3DAUDIO_VECTOR ToX3D(V3 const& v) {
+    X3DAUDIO_VECTOR result;
+    result.x = (FLOAT)v.x;
+    result.y = (FLOAT)v.y;
+    result.z = (FLOAT)v.z;
+    return result;
+  }
+
+  V3 SafeNormalize(V3 const& v, V3 const& fallback) {
+    float length = Length(v);
+    return length > 0.0001f ? v / length : fallback;
+  }
+
   struct SoundXAudio2Callback : public IXAudio2VoiceCallback {
     SoundXAudio2Impl* owner;
 
@@ -164,14 +199,19 @@ namespace {
     uint sampleRate;
     uint sampleFrames;
     IXAudio2SourceVoice* sourceVoice;
+    Object carrier;
+    V3 offset;
+    float distanceScale;
     bool deleted;
     bool finished;
     bool looped;
     bool playing;
+    bool spatial;
     float duration;
     float pan;
     float pitch;
     float volume;
+    Vector<float> matrix;
 
     SoundXAudio2Impl(SoundEngineXAudio2Impl* engine, bool looped = false) :
       engine(engine),
@@ -180,10 +220,13 @@ namespace {
       sampleRate(kProceduralSampleRate),
       sampleFrames(0),
       sourceVoice(nullptr),
+      offset(0),
+      distanceScale(1000),
       deleted(false),
       finished(true),
       looped(looped),
       playing(false),
+      spatial(false),
       duration(0),
       pan(0),
       pitch(1),
@@ -196,10 +239,13 @@ namespace {
 
     bool Initialize(Array<float> const& buffer);
     bool Initialize(DecodedWaveData const& decoded);
+    void ConfigureSpatial(Object const& carrier, V3 const& offset, float distanceDiv);
     void Shutdown();
     bool SubmitBuffer(uint playBeginFrames);
     void ApplyPan();
+    void ApplyPitch(float ratio);
     void RefreshFinishedState();
+    void UpdateSpatial();
     bool ShouldCollect() const {
       return deleted || finished;
     }
@@ -282,8 +328,10 @@ namespace {
       if (pitch > XAUDIO2_MAX_FREQ_RATIO)
         pitch = XAUDIO2_MAX_FREQ_RATIO;
       this->pitch = pitch;
-      if (sourceVoice)
-        sourceVoice->SetFrequencyRatio(pitch);
+      if (spatial)
+        UpdateSpatial();
+      else
+        ApplyPitch(pitch);
     }
 
     void SetVolume(float volume) {
@@ -298,8 +346,10 @@ namespace {
   struct SoundEngineXAudio2Impl : public SoundEngine {
     IXAudio2* xaudio;
     IXAudio2MasteringVoice* masteringVoice;
+    X3DAUDIO_HANDLE x3d;
     bool comInitialized;
     bool ready;
+    bool spatialReady;
     uint outputChannels;
     Vector<Sound> activeSounds;
     Map<String, DecodedWaveData> waveCache;
@@ -309,8 +359,11 @@ namespace {
       masteringVoice(nullptr),
       comInitialized(false),
       ready(false),
+      spatialReady(false),
       outputChannels(0)
     {
+      memset(x3d, 0, sizeof(x3d));
+
       HRESULT result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
       if (result == S_OK || result == S_FALSE)
         comInitialized = true;
@@ -334,6 +387,15 @@ namespace {
       XAUDIO2_VOICE_DETAILS details;
       masteringVoice->GetVoiceDetails(&details);
       outputChannels = details.InputChannels ? details.InputChannels : 1;
+
+      DWORD channelMask = 0;
+      if (SUCCEEDED(masteringVoice->GetChannelMask(&channelMask)) && channelMask) {
+        result = X3DAudioInitialize(channelMask, X3DAUDIO_SPEED_OF_SOUND, x3d);
+        if (SUCCEEDED(result))
+          spatialReady = true;
+        else
+          Log_Warning(Stringize() | "X3DAudioInitialize failed (" | (int)result | ")");
+      }
 
       result = xaudio->StartEngine();
       if (FAILED(result)) {
@@ -429,19 +491,31 @@ namespace {
       float distanceDiv,
       bool looped)
     {
-      if (!gLogged3DUnimplemented) {
-        gLogged3DUnimplemented = true;
-        Log_Warning("XAudio2 3D playback is not implemented yet; falling back to a silent sound");
+      Sound sound = new SoundXAudio2Impl(this, looped);
+      SoundXAudio2Impl* impl = sound.Cast<SoundXAudio2Impl>();
+      DecodedWaveData const* decoded = LoadWave(filename);
+      if (!decoded) {
+        sound->SetVolume(volume);
+        return sound;
       }
 
-      Sound sound = new SoundXAudio2Impl(this, looped);
-      sound->SetVolume(volume);
+      DecodedWaveData mono = DownmixToMono(*decoded);
+      impl->ConfigureSpatial(carrier, offset, distanceDiv);
+      if (!impl->Initialize(mono)) {
+        sound->SetVolume(volume);
+        return sound;
+      }
+
+      impl->SetVolume(volume);
+      impl->SetPlaying(true);
+      activeSounds << sound;
       return sound;
     }
 
     void Update() {
       for (size_t i = 0; i < activeSounds.size(); ++i) {
         SoundXAudio2Impl* sound = activeSounds[i].Cast<SoundXAudio2Impl>();
+        sound->UpdateSpatial();
         sound->RefreshFinishedState();
         if (!sound->ShouldCollect())
           continue;
@@ -509,7 +583,10 @@ namespace {
     finished = false;
     SetVolume(volume);
     SetPitch(pitch);
-    SetPan(pan);
+    if (spatial)
+      UpdateSpatial();
+    else
+      SetPan(pan);
     return true;
   }
 
@@ -558,8 +635,18 @@ namespace {
     finished = false;
     SetVolume(volume);
     SetPitch(pitch);
-    SetPan(pan);
+    if (spatial)
+      UpdateSpatial();
+    else
+      SetPan(pan);
     return true;
+  }
+
+  void SoundXAudio2Impl::ConfigureSpatial(Object const& carrier, V3 const& offset, float distanceDiv) {
+    this->carrier = carrier;
+    this->offset = offset;
+    this->distanceScale = Max(1.0f, distanceDiv * 1000.0f);
+    this->spatial = true;
   }
 
   void SoundXAudio2Impl::Shutdown() {
@@ -634,6 +721,17 @@ namespace {
       matrix.data());
   }
 
+  void SoundXAudio2Impl::ApplyPitch(float ratio) {
+    if (!sourceVoice)
+      return;
+
+    if (ratio <= 0.01f)
+      ratio = 0.01f;
+    if (ratio > XAUDIO2_MAX_FREQ_RATIO)
+      ratio = XAUDIO2_MAX_FREQ_RATIO;
+    sourceVoice->SetFrequencyRatio(ratio);
+  }
+
   void SoundXAudio2Impl::RefreshFinishedState() {
     if (!sourceVoice || looped || finished)
       return;
@@ -644,6 +742,77 @@ namespace {
       finished = true;
       playing = false;
     }
+  }
+
+  void SoundXAudio2Impl::UpdateSpatial() {
+    if (!spatial || !sourceVoice || !engine)
+      return;
+
+    if (carrier && carrier->IsDeleted()) {
+      Delete();
+      return;
+    }
+
+    if (!engine->spatialReady || !engine->masteringVoice || !engine->outputChannels) {
+      ApplyPan();
+      ApplyPitch(pitch);
+      return;
+    }
+
+    Camera camera = Camera_Get();
+    V3 listenerPos = camera ? (V3)camera->GetPos() : V3(0);
+    V3 listenerVelocity = camera ? camera->GetVelocity() : V3(0);
+    V3 listenerLook = camera ? camera->GetLook() : V3(0, 0, 1);
+    V3 listenerUp = camera ? camera->GetUp() : V3(0, 1, 0);
+
+    V3 emitterPos = offset;
+    V3 emitterVelocity = V3(0);
+    if (carrier) {
+      emitterPos = (V3)carrier->GetPos()
+        + carrier->GetRight() * offset.x
+        + carrier->GetUp() * offset.y
+        + carrier->GetLook() * offset.z;
+      emitterVelocity = carrier->GetVelocity();
+    }
+
+    X3DAUDIO_LISTENER listener;
+    memset(&listener, 0, sizeof(listener));
+    listener.Position = ToX3D(listenerPos);
+    listener.Velocity = ToX3D(listenerVelocity);
+    listener.OrientFront = ToX3D(SafeNormalize(listenerLook, V3(0, 0, 1)));
+    listener.OrientTop = ToX3D(SafeNormalize(listenerUp, V3(0, 1, 0)));
+
+    X3DAUDIO_EMITTER emitter;
+    memset(&emitter, 0, sizeof(emitter));
+    emitter.Position = ToX3D(emitterPos);
+    emitter.Velocity = ToX3D(emitterVelocity);
+    emitter.OrientFront = ToX3D(V3(0, 0, 1));
+    emitter.OrientTop = ToX3D(V3(0, 1, 0));
+    emitter.ChannelCount = channels;
+    emitter.CurveDistanceScaler = distanceScale;
+    emitter.DopplerScaler = 1.0f;
+
+    matrix.resize(channels * engine->outputChannels, 0.0f);
+
+    X3DAUDIO_DSP_SETTINGS dsp;
+    memset(&dsp, 0, sizeof(dsp));
+    dsp.SrcChannelCount = channels;
+    dsp.DstChannelCount = engine->outputChannels;
+    dsp.pMatrixCoefficients = matrix.data();
+
+    X3DAudioCalculate(
+      engine->x3d,
+      &listener,
+      &emitter,
+      X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER,
+      &dsp);
+
+    sourceVoice->SetOutputMatrix(
+      engine->masteringVoice,
+      channels,
+      engine->outputChannels,
+      matrix.data());
+    ApplyPitch(pitch * dsp.DopplerFactor);
   }
 }
 

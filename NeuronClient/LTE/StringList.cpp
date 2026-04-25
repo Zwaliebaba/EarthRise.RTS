@@ -85,7 +85,7 @@ namespace {
 
       /* Parse the current line. */ {
         StringList list = StringList_ParseLine(line);
-        StringListList* l = (StringListList*)list.t;
+        StringListList* l = (StringListList*)list.get();
         for (size_t i = 0; i < l->elements.size(); ++i)
           current.push(l->elements[i]);
       }
@@ -98,7 +98,7 @@ namespace {
 
         if (nextIndent > indent) {
           StringList list = StringList_ParseBlock(tokenizer, nextIndent);
-          StringListList* l = (StringListList*)list.t;
+          StringListList* l = (StringListList*)list.get();
           for (size_t i = 0; i < l->elements.size(); ++i)
             current.push(l->elements[i]);
         }
@@ -124,9 +124,9 @@ StringList StringList_Load(Location const& location) {
 
 void StringList_Print(StringList const& list) {
   if (list->IsAtom())
-    std::cout << ((StringListAtom*)list.t)->value;
+    std::cout << ((StringListAtom*)list.get())->value;
   else {
-    StringListList* l = (StringListList*)list.t;
+    StringListList* l = (StringListList*)list.get();
     std::cout << "(";
     for (size_t i = 0; i < l->elements.size(); ++i) {
       if (i) std::cout << " ";

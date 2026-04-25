@@ -46,6 +46,14 @@ struct Vector : public NullBase<Vector<T> > {
     return v;
   }
 
+  std::vector<T>& AsStdVector() {
+    return v;
+  }
+
+  std::vector<T> const& AsStdVector() const {
+    return v;
+  }
+
   T& operator[](size_t index) {
     return get(index);
   }

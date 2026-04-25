@@ -208,8 +208,8 @@ namespace LTE {
          list->Get(0)->GetSize() == 2)
     {
       list = original->Clone();
-      ((StringListList*)list.t)->elements[0] = original->Get(0)->Get(0);
-      ((StringListList*)list.t)->elements.insert(1, original->Get(0)->Get(1));
+      ((StringListList*)list.get())->elements[0] = original->Get(0)->Get(0);
+      ((StringListList*)list.get())->elements.insert(1, original->Get(0)->Get(1));
     }
 
     String const& name = list->IsAtom()

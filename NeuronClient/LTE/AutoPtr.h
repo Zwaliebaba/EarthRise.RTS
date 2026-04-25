@@ -76,12 +76,27 @@ struct AutoPtr : public NullBase<AutoPtr<T> > {
     return t;
   }
 
+  T* get() const {
+    return t;
+  }
+
+  T* release() {
+    T* result = t;
+    t = nullptr;
+    return result;
+  }
+
+  void reset(T* t = nullptr) {
+    delete this->t;
+    this->t = t;
+  }
+
   template <class StreamT>
   friend void _ToStream(StreamT& stream, AutoPtr const& t) {
-    if (!t.t)
+    if (!t.get())
       stream << "null";
     else
-      ToStream(stream, *t.t);
+      ToStream(stream, *t.get());
   }
 
   FIELDS {

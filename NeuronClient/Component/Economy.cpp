@@ -7,15 +7,16 @@
 
 #include "Game/Tasks.h"
 
-#include "LTE/HashSet.h"
 #include "LTE/Map.h"
 #include "LTE/StackFrame.h"
+
+#include <unordered_set>
 
 namespace {
   void CacheItem(
     ComponentEconomy* economy,
     Item const& item,
-    HashSet<HashT>& itemSet)
+    std::unordered_set<HashT>& itemSet)
   {
     HashT hash = item->GetHash();
     if (!itemSet.contains(hash)) {
@@ -39,7 +40,7 @@ namespace {
     ComponentEconomy* economy,
     Object const& o,
     ComponentCargo* cargo,
-    HashSet<HashT>& itemSet)
+    std::unordered_set<HashT>& itemSet)
   {
     /* TODO : Looting. */
     for (CargoIter it = cargo->elements.begin();
@@ -51,7 +52,7 @@ namespace {
     ComponentEconomy* economy,
     Object const& o,
     ComponentMarket* market,
-    HashSet<HashT>& itemSet)
+    std::unordered_set<HashT>& itemSet)
   {
     economy->nodes.push(o);
     for (MarketDataMap::iterator it = market->elements.begin();
@@ -62,7 +63,7 @@ namespace {
   void CacheZone(
     ComponentEconomy* economy,
     Object const& zone,
-    HashSet<HashT>& itemSet)
+    std::unordered_set<HashT>& itemSet)
   {
     ComponentResources* res = zone->GetResources();
     if (res) {
@@ -77,7 +78,7 @@ namespace {
   void CacheObject(
     ComponentEconomy* economy,
     Object const& object,
-    HashSet<HashT>& itemSet)
+    std::unordered_set<HashT>& itemSet)
   {
     Pointer<ComponentCargo> cargo = object->GetCargo();
     if (cargo)
@@ -98,7 +99,7 @@ namespace {
 
 void ComponentEconomy::Run(ObjectT* self, UpdateState&) {
   SFRAME("Economy Caching");
-  static HashSet<HashT> itemSet;
+  static std::unordered_set<HashT> itemSet;
   itemSet.clear();
 
   nodes.clear();

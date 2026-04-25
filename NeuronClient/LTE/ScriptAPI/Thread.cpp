@@ -64,6 +64,6 @@ FreeFunction(Data, Thread_GetResult,
   "Get the return value (if any) of 'thread'",
   Thread, thread)
 {
-  ScriptedJob* job = (ScriptedJob*)thread->GetJob().t;
+  ScriptedJob* job = (ScriptedJob*)thread->GetJob().get();
   return Data(job->function->returnType, job->returnValue);
 } FunctionAlias(Thread_GetResult, GetResult);

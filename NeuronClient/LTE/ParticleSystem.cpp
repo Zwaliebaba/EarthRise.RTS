@@ -170,7 +170,7 @@ namespace {
 }
 
 DefineFunction(ParticleSystem_Add) {
-  ((ParticleSystemImpl*)args.particleSystem.t)
+  ((ParticleSystemImpl*)args.particleSystem.get())
     ->particles[args.particle].push(Particle(
     args.position,
     args.velocity,

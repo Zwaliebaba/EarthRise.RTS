@@ -2,7 +2,6 @@
 
 #include "AutoClass.h"
 #include "CubeMap.h"
-#include "HashMap.h"
 #include "List.h"
 #include "Matrix.h"
 #include "Pool.h"
@@ -11,6 +10,8 @@
 #include "Texture2D.h"
 #include "Texture3D.h"
 #include "V4.h"
+
+#include <unordered_map>
 
 namespace {
   AutoClass(Cell,
@@ -28,7 +29,7 @@ namespace {
     virtual void Set(int varIndex, ShaderT* shader) = 0;
   };
 
-  typedef HashMap<int, ShaderVar*> VarMapT;
+  typedef std::unordered_map<int, ShaderVar*> VarMapT;
 
   template <class T>
   struct ShaderVarImpl : public ShaderVar {

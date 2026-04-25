@@ -18,7 +18,7 @@ bool ComponentDamager::Hit(
   if (!collidable || !dest->CanCollide(self))
     return false;
 
-  if (source != dest->GetRoot().t) {
+  if (source != dest->GetRoot().get()) {
     collidable->Collide(dest, self, position, position);
 
     float scale = 2.0f * source->GetRadius();

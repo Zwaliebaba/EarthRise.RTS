@@ -2,56 +2,20 @@
 #define LTE_HashMap_h__
 
 #include <functional>
+#include <unordered_map>
 
-#if defined(LIBLT_WINDOWS)
-  #include <unordered_map>
+template <class KeyT, class ValueT, class HasherT>
+struct HashMapT {
+  typedef std::unordered_map<KeyT, ValueT, HasherT> result;
+};
 
-  template <class KeyT, class ValueT, class HasherT>
-  struct HashMapT {
-    typedef std::unordered_map<KeyT, ValueT, HasherT> result;
-  };
+template <class T>
+inline size_t DefaultHash(T const& t) {
+  return std::hash<T>(t);
+}
 
-  template <class T>
-  inline size_t DefaultHash(T const& t) {
-    return std::hash<T>(t);
-  }
-
-  template <class T>
-  struct DefaultHasher : public std::hash<T> {};
-
-#elif defined(LIBLT_MACOS)
-  #include <unordered_map>
-
-  template <class KeyT, class ValueT, class HasherT>
-  struct HashMapT {
-    typedef std::unordered_map<KeyT, ValueT, HasherT> result;
-  };
-
-  template <class T>
-  inline size_t DefaultHash(T const& t) {
-    return std::hash<T>(t);
-  }
-
-  template <class T>
-  struct DefaultHasher : public std::hash<T> {};
-
-#else
-  #include <tr1/unordered_map>
-
-  template <class KeyT, class ValueT, class HasherT>
-  struct HashMapT {
-    typedef std::tr1::unordered_map<KeyT, ValueT, HasherT> result;
-  };
-
-  template <class T>
-  inline size_t DefaultHash(T const& t) {
-    return std::tr1::hash<T>(t);
-  }
-
-  template <class T>
-  struct DefaultHasher : public std::tr1::hash<T> {};
-
-#endif
+template <class T>
+struct DefaultHasher : public std::hash<T> {};
 
 namespace LTE {
   template <class KeyT, class ValueT, class HasherT = DefaultHasher<KeyT> >

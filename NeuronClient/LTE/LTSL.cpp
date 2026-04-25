@@ -29,7 +29,7 @@ namespace {
   }
 
   void RewriteBinaryOp(StringList& list, Vector<String> const& ops) {
-    StringListList* l = (StringListList*)list.t;
+    StringListList* l = (StringListList*)list.get();
     for (int i = 0; i + 2 < (int)l->elements.size(); ++i) {
       if (IsBinaryOp(l->elements[i + 1], ops)) {
         l->elements[i] = new StringListList(Vector<StringList>(
@@ -64,7 +64,7 @@ namespace {
   }
 
   void Rewrite(StringList& list) {
-    StringListList* l = (StringListList*)list.t;
+    StringListList* l = (StringListList*)list.get();
     for (size_t i = 0; i < l->elements.size(); ++i) {
       if (l->elements[i]->IsAtom())
         RewriteAtom(l->elements[i]);

@@ -23,7 +23,7 @@ void ComponentAssets::Add(ObjectT* self, Object const& asset) {
 
 void ComponentAssets::Remove(ObjectT* self, Object const& asset) {
   Pointer<ComponentAsset> as = asset->GetAsset();
-  LTE_ASSERT(as->owner.t == self);
+  LTE_ASSERT(as->owner.get() == self);
   as->owner = nullptr;
   elements.remove(asset);
 }

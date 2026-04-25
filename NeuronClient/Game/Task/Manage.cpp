@@ -61,7 +61,7 @@ namespace {
     TaskManage() {}
 
     TaskManage(Project const& project) :
-      project(project.t)
+      project(project.get())
       {}
 
     ~TaskManage() {

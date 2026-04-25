@@ -47,11 +47,11 @@ AutoClass(Tuple3,
   }
 
   friend bool operator==(Tuple3 const& a, Tuple3 const& b) {
-    return a.x == b.x && a.y == b.y && a.z == a.z;
+    return a.x == b.x && a.y == b.y && a.z == b.z;
   }
 
   friend bool operator!=(Tuple3 const& a, Tuple3 const& b) {
-    return a.x != b.x || a.y != b.y || a.z != a.z;
+    return a.x != b.x || a.y != b.y || a.z != b.z;
   }
 
   size_t size() const {
@@ -69,11 +69,11 @@ AutoClass(Tuple4,
   Tuple4() {}
 
   friend bool operator==(Tuple4 const& a, Tuple4 const& b) {
-    return a.x == b.x && a.y == b.y && a.z == a.z && a.w == b.w;
+    return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
   }
 
   friend bool operator!=(Tuple4 const& a, Tuple4 const& b) {
-    return a.x != b.x || a.y != b.y || a.z != a.z || a.w != b.w;
+    return a.x != b.x || a.y != b.y || a.z != b.z || a.w != b.w;
   }
 
   size_t size() const {

@@ -109,7 +109,7 @@ namespace {
 
       buffer->Unbind();
       RenderStyle_Pop();
-      state->depth = buffer.t;
+      state->depth = buffer.get();
     }
   };
 }

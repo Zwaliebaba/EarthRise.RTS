@@ -207,7 +207,7 @@ float ObjectT::GetMaxRange() const {
 
 Pointer<ObjectT> ObjectT::GetContainerRoot() const {
   ObjectT* context = GetContainer();
-  return context ? context->GetContainerRoot().t : (ObjectT*)this;
+  return context ? context->GetContainerRoot().get() : (ObjectT*)this;
 }
 
 Pointer<ObjectT const> ObjectT::GetRegion() const {

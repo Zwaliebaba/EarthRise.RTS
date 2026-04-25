@@ -367,7 +367,7 @@ void Texture_Generate(
   IncrementalGenerateFromShader(
     self->GetWidth(),
     self->GetHeight(),
-    shader.t, segmented, maxJobTime);
+    shader.get(), segmented, maxJobTime);
   self->Unbind();
   Renderer_PopAllBuffers();
 
@@ -392,7 +392,7 @@ void Texture_Generate(
   IncrementalGenerateFromShader(
     source1->GetWidth(),
     source2->GetHeight(),
-    shader.t, segmented, maxJobTime);
+    shader.get(), segmented, maxJobTime);
   source2->Unbind();
   source1->Unbind();
   Renderer_PopAllBuffers();

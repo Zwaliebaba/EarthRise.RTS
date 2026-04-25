@@ -203,7 +203,7 @@ namespace {
       Matrix const& otherWorld,
       V3* contactNormal) const
     {
-      CollisionMeshImpl const& other = *(CollisionMeshImpl const*)m.t;
+      CollisionMeshImpl const& other = *(CollisionMeshImpl const*)m.get();
 
       /* As a heuristic, we collide the object with the smaller bounding
          surface area against the object with the larger. */

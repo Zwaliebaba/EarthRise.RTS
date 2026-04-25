@@ -36,7 +36,7 @@ Function Function_Create(String const& name) {
   GetFunctionList().push(self);
   GetFunctionMap()[name].push(self);
 
-  return self.t;
+  return self.get();
 }
 
 FunctionT::~FunctionT() {

@@ -39,7 +39,7 @@ namespace {
 
     void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
       if (RandExp() < dt) {
-        Blueprint* bp = (Blueprint*)args.blueprint.t;
+        Blueprint* bp = (Blueprint*)args.blueprint.get();
         self->GetRoot()->AddItem(bp->assemblyChip, 1);
       }
     }

@@ -54,7 +54,7 @@ namespace LTE {
       mst->nodes = nodes;
 
       Vector<Edge> queue = edges;
-      std::sort(queue.v.begin(), queue.v.end());
+      std::sort(queue.begin(), queue.end());
 
       struct SetArray {
         Array<int> setID;

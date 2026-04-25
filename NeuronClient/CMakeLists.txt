@@ -17,4 +17,11 @@ target_link_libraries(NeuronClient PUBLIC
   SFML::Network
 )
 
+if (WIN32)
+  target_link_libraries(NeuronClient PUBLIC
+    ole32
+    xaudio2
+  )
+endif()
+
 target_precompile_headers(NeuronClient PRIVATE pch.h)

@@ -14,9 +14,10 @@
 #include "LTE/Renderable.h"
 #include "LTE/Renderer.h"
 #include "LTE/RenderStyle.h"
-#include "LTE/RingBuffer.h"
 #include "LTE/ShaderInstance.h"
 #include "LTE/View.h"
+
+#include <vector>
 
 typedef ObjectWrapper
   < Component_Attachable
@@ -43,7 +44,20 @@ AutoClassDerived(Trail, TrailBaseT,
   DERIVED_TYPE_EX(Trail)
   POOLED_TYPE
 
-  RingBuffer<SegmentData> trail;
+  std::vector<SegmentData> trail;
+  size_t trailIndex;
+
+  SegmentData& GetTrailCurrent() {
+    return trail[trailIndex % trail.size()];
+  }
+
+  SegmentData& GetTrailRelative(size_t offset) {
+    return trail[(trailIndex + offset) % trail.size()];
+  }
+
+  SegmentData const& GetTrailRelative(size_t offset) const {
+    return trail[(trailIndex + offset) % trail.size()];
+  }
 
   struct RenderComponent : public RenderableT {
     DERIVED_TYPE(RenderComponent, RenderableT)
@@ -89,14 +103,14 @@ AutoClassDerived(Trail, TrailBaseT,
       float totalLength = 0;
 
       for (size_t i = 0; i < self->trail.size(); ++i) {
-        SegmentData const& segment = self->trail.GetRelative(i + 1);
+        SegmentData const& segment = self->GetTrailRelative(i + 1);
 
         size_t indexOffset = vertexArray.size();
         Position const& p = segment.p;
         float const& opacity = segment.opacity;
 
         if (i + 1 < self->trail.size()) {
-          SegmentData const& lastSegment = self->trail.GetRelative(i + 2);
+          SegmentData const& lastSegment = self->GetTrailRelative(i + 2);
           Position const& pLast = lastSegment.p;
           direction = pLast - p;
         }
@@ -136,7 +150,8 @@ AutoClassDerived(Trail, TrailBaseT,
 
   Trail() :
     length(0),
-    age(0)
+    age(0),
+    trailIndex(0)
   {
     Drawable.renderable = (Renderable)(new RenderComponent(this));
   }
@@ -147,6 +162,7 @@ AutoClassDerived(Trail, TrailBaseT,
 
     if (!trail.size()) {
       trail.resize(length);
+      trailIndex = 0;
       Position pos = GetPos();
       for (size_t i = 0; i < length; ++i) {
         SegmentData& segment = trail[i];
@@ -158,15 +174,15 @@ AutoClassDerived(Trail, TrailBaseT,
     bool faded = true;
     float delta = 1.0f / (float)(length - 1);
     for (size_t i = 0; i < length; ++i) {
-      SegmentData& segment = trail.GetRelative(i);
+      SegmentData& segment = GetTrailRelative(i);
       segment.opacity += delta;
       if (segment.opacity > 0)
         faded = false;
     }
 
     if (parent && parent->CanMove()) {
-      trail.Advance();
-      SegmentData& segment = trail.GetCurrent();
+      trailIndex++;
+      SegmentData& segment = GetTrailCurrent();
       segment.p = GetPos();
       segment.opacity = 0;
     } else if (faded) {

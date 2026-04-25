@@ -108,7 +108,10 @@ struct Array : public NullBase<Array<T> > {
       return false;
     if (!one.data() || !two.data())
       return !one.data() && !two.data();
-    return memcmp(one.data(), two.data(), one.size()) == 0;
+    for (size_t i = 0; i < one.size(); ++i)
+      if (!(one[i] == two[i]))
+        return false;
+    return true;
   }
 
   Iterator begin() {
@@ -119,6 +122,10 @@ struct Array : public NullBase<Array<T> > {
     delete[] buffer;
     buffer = 0;
     _size = 0;
+  }
+
+  bool empty() const {
+    return _size == 0;
   }
 
   T* data() const {

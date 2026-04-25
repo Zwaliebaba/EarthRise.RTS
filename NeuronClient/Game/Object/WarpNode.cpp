@@ -259,7 +259,7 @@ namespace {
       slot->allocated = false;
 
       /* Check if siblings can be merged. */
-      RailSlot parent = slot->parent.t;
+      RailSlot parent = slot->parent.get();
       if (parent) {
         bool childAllocated = false;
         for (size_t i = 0; i < parent->children.size(); ++i) {
@@ -428,7 +428,7 @@ AutoClassDerived(WarpNode, WarpNodeBaseT,
       // Distance distance = Length(message.object->GetPos() - GetPos());
       // float cost = distance / kRailForce;
       Navigable.nodes.push(NavigableNode(message.object, 0));
-      WarpNode& other = *(WarpNode*)message.object.t;
+      WarpNode& other = *(WarpNode*)message.object.get();
 
       if (other.controller)
         controller = other.controller;

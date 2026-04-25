@@ -3,7 +3,6 @@
 #include "Array.h"
 #include "Color.h"
 #include "DrawState.h"
-#include "HashMap.h"
 #include "Map.h"
 #include "ProgramLog.h"
 #include "Renderer.h"
@@ -15,6 +14,8 @@
 #include "FileSys.h"
 
 #include "Debug.h"
+
+#include <unordered_map>
 
 #include <FreeType/freetype.h>
 #include FT_FREETYPE_H
@@ -30,7 +31,7 @@ TypeAlias(Reference<FontT>, Font);
 
 namespace {
   typedef Map<String, Font> FontCache;
-  typedef HashMap<uint32, float> KerningMap;
+  typedef std::unordered_map<uint32, float> KerningMap;
 
   FontCache& GetFontCache() {
     static FontCache cache;
@@ -291,9 +292,9 @@ namespace {
 
     /* Kerning caching. */
     float GetKerning(TextGlyph const* prev, TextGlyph const* curr) const {
-      float* k = prev->kerning.get(curr->codepoint);
-      if (k)
-        return *k;
+      KerningMap::const_iterator it = prev->kerning.find(curr->codepoint);
+      if (it != prev->kerning.end())
+        return it->second;
 
       FT_Vector kern;
       FT_Get_Kerning(
@@ -343,7 +344,7 @@ DefineFunction(Font_Get) {
   if (!font) {
     Reference<FontImpl> self = new FontImpl;
     self->Create(args.path);
-    font = self.t;
+    font = self.get();
   }
   return font;
 }

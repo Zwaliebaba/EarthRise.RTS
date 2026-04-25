@@ -1,6 +1,5 @@
 #include "Profiler.h"
 #include "Array.h"
-#include "HashMap.h"
 #include "Job.h"
 #include "Lock.h"
 #include "Map.h"
@@ -16,6 +15,8 @@
 #include "V3.h"
 
 #include "Module/Settings.h"
+
+#include <unordered_map>
 
 // #define USE_TELEMETRY
 
@@ -134,7 +135,7 @@ namespace {
   struct ProfilingModule : public ModuleT {
     StackFrame* currentFrame;
     Stack<char const*> segments;
-    HashMap<size_t, StackFrame*> frameMap;
+    std::unordered_map<size_t, StackFrame*> frameMap;
 
     bool active;
     bool flushes;

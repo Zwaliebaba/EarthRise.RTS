@@ -51,8 +51,32 @@ struct Stack {
     elements.clear();
   }
 
+  std::vector<T>& AsStdVector() {
+    return elements;
+  }
+
+  std::vector<T> const& AsStdVector() const {
+    return elements;
+  }
+
+  typename std::vector<T>::iterator begin() {
+    return elements.begin();
+  }
+
+  typename std::vector<T>::const_iterator begin() const {
+    return elements.begin();
+  }
+
   T const* data() const {
-    return &elements[0];
+    return elements.data();
+  }
+
+  typename std::vector<T>::iterator end() {
+    return elements.end();
+  }
+
+  typename std::vector<T>::const_iterator end() const {
+    return elements.end();
   }
 
   bool empty() const {

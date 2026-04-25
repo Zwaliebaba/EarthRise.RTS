@@ -97,7 +97,7 @@ FreeFunction(Widget, Widget_GetParent,
   "Return the parent of 'widget'",
   Widget, widget)
 {
-  return widget->parent.t;
+  return widget->parent.get();
 } FunctionAlias(Widget_GetParent, GetParent);
 
 #define X(x)                                                                   \

@@ -40,7 +40,9 @@ namespace {
     String file;
 
     Settings() {
-      LoadFrom(*this, Location_File(GetPath()), kSettingsVersion);
+      Location location = Location_File(GetPath());
+      if (location->Exists())
+        LoadFrom(*this, location, kSettingsVersion);
       if (!root)
         root = new SettingsNode("Settings");
     }

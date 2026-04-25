@@ -5,32 +5,32 @@
 namespace LTE {
   template <class T>
   bool operator==(AutoPtr<T> const& a, Pointer<T> const& b) {
-    return a.t == b.t;
+    return a.get() == b.get();
   }
 
   template <class T>
   bool operator==(Pointer<T> const& a, AutoPtr<T> const& b) {
-    return a.t == b.t;
+    return a.get() == b.get();
   }
 
   template <class T>
   bool operator!=(AutoPtr<T> const& a, Pointer<T> const& b) {
-    return a.t != b.t;
+    return a.get() != b.get();
   }
 
   template <class T>
   bool operator!=(Pointer<T> const& a, AutoPtr<T> const& b) {
-    return a.t != b.t;
+    return a.get() != b.get();
   }
 
   template <class T>
   bool operator< (AutoPtr<T> const& a, Pointer<T> const& b) {
-    return a.t < b.t;
+    return a.get() < b.get();
   }
 
   template <class T>
   bool operator< (Pointer<T> const& a, AutoPtr<T> const& b) {
-    return a.t < b.t;
+    return a.get() < b.get();
   }
 }
 

@@ -43,7 +43,7 @@ namespace {
 
     void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
       if (10.0 * RandExp() < dt) {
-        Item item = Item_Blueprint_Derived(args.blueprint.t);
+        Item item = Item_Blueprint_Derived(args.blueprint.get());
         self->GetRoot()->AddItem(item, 1);
         Sound_Play3D("techlab/complete.wav", self, 0, 1, 0.05f);
 

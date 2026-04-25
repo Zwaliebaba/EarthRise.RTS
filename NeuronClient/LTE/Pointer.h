@@ -99,12 +99,20 @@ struct Pointer : public NullBase<Pointer<T> > {
     return static_cast<T2 const*>(t);
   }
 
+  T* get() const {
+    return t;
+  }
+
+  void reset(T* t = nullptr) {
+    this->t = t;
+  }
+
   template <class StreamT>
   friend void _ToStream(StreamT& stream, Pointer const& t) {
-    if (!t.t)
+    if (!t.get())
       stream << "null";
     else
-      ToStream(stream, *t.t);
+      ToStream(stream, *t.get());
   }
 
   FIELDS {

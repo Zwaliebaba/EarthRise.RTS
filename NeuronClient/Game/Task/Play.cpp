@@ -100,7 +100,7 @@ namespace {
     }
 
     void ConfigureProject(Project const& project) {
-      project->management.manager = (ObjectT*)args.player.t;
+      project->management.manager = (ObjectT*)args.player.get();
       project->management.task = TaskInstance(Task_Manage(project));
       project->settings.feedback = 0.9f;
     }

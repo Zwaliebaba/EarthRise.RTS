@@ -150,17 +150,25 @@ struct Reference : public NullBase<Reference<T> > {
     return static_cast<T2 const*>(t);
   }
 
+  T* get() const {
+    return t;
+  }
+
   void Release() {
     if (t && Mutable(t)->RefCountDecrement())
       delete t;
   }
 
+  void reset(T* t = nullptr) {
+    (*this) = t;
+  }
+
   template <class StreamT>
   friend void _ToStream(StreamT& stream, Reference const& t) {
-    if (!t.t)
+    if (!t.get())
       stream << "null";
     else
-      ToStream(stream, *t.t);
+      ToStream(stream, *t.get());
   }
 
   FIELDS {

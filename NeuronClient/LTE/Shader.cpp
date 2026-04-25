@@ -19,6 +19,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <cstring>
 
 const String kVersionDirective = "#version 120\n";
 const uint kTextureUnits = 16;
@@ -41,6 +42,29 @@ namespace {
   ProgramMap& GetProgramCache() {
     static ProgramMap map;
     return map;
+  }
+
+  bool ShouldWarnMissingUniform(char const* name) {
+    char const* optionalUniforms[] = {
+      "center",
+      "color1",
+      "color2",
+      "decal",
+      "halfTexel",
+      "offset",
+      "orientation1",
+      "prepass",
+      "roughness",
+      "seed",
+      "texelScale",
+      "texture"
+    };
+
+    for (size_t i = 0; i < sizeof(optionalUniforms) / sizeof(optionalUniforms[0]); ++i)
+      if (!std::strcmp(name, optionalUniforms[i]))
+        return false;
+
+    return true;
   }
 
   /* Run a manual preprocessor on the shader code to support #include. */
@@ -253,7 +277,7 @@ namespace {
       int index = GL_GetUniformLocation(id, name);
       uniforms[name] = index;
 
-      if (warn && index < 0) {
+      if (warn && index < 0 && ShouldWarnMissingUniform(name)) {
         String warning = Stringize() |
           "Unused variable " | name | " in Shader(" | vertShader->path |
           ", " | fragShader->path | ")";

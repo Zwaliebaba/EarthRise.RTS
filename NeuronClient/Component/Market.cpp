@@ -76,8 +76,8 @@ void ComponentMarket::Run(ObjectT* self, UpdateState& state) {
       d.intervalDemand += state.quanta * d.bids[i]->volume;
 
     /* Fill orders. */ {
-      std::sort(d.asks.v.begin(), d.asks.v.end(), SortAsks);
-      std::sort(d.bids.v.begin(), d.bids.v.end(), SortBids);
+      std::sort(d.asks.begin(), d.asks.end(), SortAsks);
+      std::sort(d.bids.begin(), d.bids.end(), SortBids);
 
       size_t askIndex = 0;
       size_t bidIndex = 0;

@@ -246,7 +246,7 @@ namespace {
       /* Else, we need to find the fastest way to get there in-system. */
       else {
         if (!it.path) {
-          it.path = Path_Create(self->GetContainer().t, self, args.target);
+          it.path = Path_Create(self->GetContainer().get(), self, args.target);
           it.flying = true;
         }
 

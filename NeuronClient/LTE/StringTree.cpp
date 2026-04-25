@@ -1,6 +1,5 @@
 #include "StringTree.h" 
 #include "Location.h"
-#include "HashMap.h"
 #include "Map.h"
 #include "ProgramLog.h"
 #include "Tokenizer.h"

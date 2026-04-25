@@ -18,7 +18,7 @@ namespace LTE {
     ScriptT() : hash(0) {}
 
     bool DependsOn(Script const& script) const {
-      if (script.t == this)
+      if (script.get() == this)
         return true;
       for (size_t i = 0; i < dependencies.size(); ++i)
         if (dependencies[i]->DependsOn(script))

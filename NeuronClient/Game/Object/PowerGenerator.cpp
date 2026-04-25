@@ -88,7 +88,7 @@ AutoClassDerived(PowerGenerator, PowerGeneratorBaseT,
     capacitor = Min(capacitance, capacitor + chargeRate * state.dt);
 
     double totalRequest = 0;
-    CollectRequests(parent.t, totalRequest);
+    CollectRequests(parent.get(), totalRequest);
 
     if (totalRequest > 0) {
       double output = Supertyped.type->GetCapability().Power;
@@ -102,7 +102,7 @@ AutoClassDerived(PowerGenerator, PowerGeneratorBaseT,
       if (mult > 1)
         mult = Pow(mult, kEfficiencyFactor);
       double changeSpeed = 1.0 - Exp(-kChangeSpeed * state.dt);
-      Allocate(parent.t, mult, changeSpeed);
+      Allocate(parent.get(), mult, changeSpeed);
     }
 
     boost = false;

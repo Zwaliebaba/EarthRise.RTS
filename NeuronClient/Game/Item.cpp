@@ -21,7 +21,7 @@ Object ItemT::Instantiate(ObjectT* parent) {
 }
 
 bool ItemT::IsType(Item const& type) const {
-  if (this == type.t)
+  if (this == type.get())
     return true;
   ItemT* super = GetSuperType();
   return super ? super->IsType(type) : false;

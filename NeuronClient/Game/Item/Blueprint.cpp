@@ -98,7 +98,7 @@ Item Item_Blueprint(DataRef const& properties) { AUTO_FRAME;
 
 Item Item_Blueprint_Derived(Reference<Blueprint> const& source) { AUTO_FRAME;
   Reference<Blueprint> self = new Blueprint;
-  self->parent = source.t;
+  self->parent = source.get();
   self->metatype = source->metatype;
   Metatype_Mutate(self->metatype);
 

@@ -44,7 +44,7 @@ AutoClassDerivedEmpty(Scanner, ScannerBaseT)
       Position myPos = parent->GetPos();
       for (int i = 0; i < kSamples; ++i) {
         if (!iterator.HasMore()) {
-          iterator = Object_GetInteriorObjects(GetContainer().t);
+          iterator = Object_GetInteriorObjects(GetContainer().get());
           if (!iterator.HasMore())
             break;
         }
@@ -137,12 +137,12 @@ FreeFunction(ScannerOutput, Object_GetScannerOutput,
   Object, scanner,
   uint, bands)
 {
-  Object root = scanner->GetRoot().t;
+  Object root = scanner->GetRoot().get();
   ScannerOutput output(bands);
   Position pos = root->GetPos();
   V3 look = root->GetLook();
 
-  GatherSignalsInterior(output, pos, look, root->GetContainer().t);
+  GatherSignalsInterior(output, pos, look, root->GetContainer().get());
 
   for (size_t i = 0; i < output.bands.size(); ++i)
     output.bands[i] += kNoise * RandExp();

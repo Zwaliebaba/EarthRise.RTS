@@ -28,7 +28,7 @@ namespace {
     TaskProduce() {}
 
     float GetDuration() const {
-      return ((AssemblyChip*)args.chip.t)->duration;
+      return ((AssemblyChip*)args.chip.get())->duration;
     }
 
     Icon GetIcon() const {
@@ -36,7 +36,7 @@ namespace {
     }
 
     void GetInputs(Vector<ItemDelta>& inputs) const {
-      AssemblyChip* chip = (AssemblyChip*)args.chip.t;
+      AssemblyChip* chip = (AssemblyChip*)args.chip.get();
       inputs.push(ItemDelta(chip, nullptr, 1));
 
       for (size_t i = 0; i < chip->requirements.size(); ++i)
@@ -54,7 +54,7 @@ namespace {
     }
 
     void GetOutput(Vector<ItemDelta>& outputs) const {
-      AssemblyChip* chip = (AssemblyChip*)args.chip.t;
+      AssemblyChip* chip = (AssemblyChip*)args.chip.get();
       outputs.push(ItemDelta(chip->item, nullptr, 1));
     }
 
@@ -69,7 +69,7 @@ namespace {
     void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
       TaskProduceInstance& it = data.Convert<TaskProduceInstance>();
       Pointer<ObjectT> root = self->GetRoot();
-      AssemblyChip* chip = (AssemblyChip*)args.chip.t;
+      AssemblyChip* chip = (AssemblyChip*)args.chip.get();
 
       if (!it.inProgress) {
         if (!root->GetItemCount(chip))

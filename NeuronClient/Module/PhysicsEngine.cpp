@@ -5,13 +5,14 @@
 #include "Module/FrameTimer.h"
 
 #include "LTE/CollisionMesh.h"
-#include "LTE/HashMap.h"
 #include "LTE/Matrix.h"
 #include "LTE/Mesh.h"
 #include "LTE/Renderable.h"
 #include "LTE/StackFrame.h"
 #include "LTE/Transform.h"
 #include "LTE/Vector.h"
+
+#include <unordered_map>
 
 /* TODO : Should multithread the creation of collision meshes. */
 
@@ -57,7 +58,7 @@ struct PhysicsEngineImpl : public PhysicsEngine {
       {}
   };
 
-  typedef HashMap<size_t, Entry> MeshMapT;
+  typedef std::unordered_map<size_t, Entry> MeshMapT;
   MeshMapT meshes;
 
   bool CheckCollision(

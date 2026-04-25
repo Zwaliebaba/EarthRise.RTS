@@ -1,7 +1,6 @@
 #include "Type.h"
 #include "Data.h"
 #include "Field.h"
-#include "HashSet.h"
 #include "Function.h"
 #include "Map.h"
 #include "Pointer.h"
@@ -10,6 +9,7 @@
 #include "Vector.h"
 
 #include <iostream>
+#include <unordered_set>
 
 String const kAutoPtrName = "AutoPtr";
 String const kHandleName = "Handle";
@@ -46,8 +46,8 @@ Type Type_Create(String const& name, size_t size) {
   Reference<TypeImpl> self = new TypeImpl;
 
   static size_t GUIDIndex = 0;
-  GetTypeList().push((TypeT*)self.t);
-  GetTypeMap()[name] = (TypeT*)self.t;
+  GetTypeList().push((TypeT*)self.get());
+  GetTypeMap()[name] = (TypeT*)self.get();
 
   self->name = name;
   self->size = size;
@@ -65,7 +65,7 @@ Type Type_Create(String const& name, size_t size) {
   self->destruct = 0;
   self->mapper = 0;
   self->toString = 0;
-  return self.t;
+  return self.get();
 }
 
 TypeT::~TypeT() {
@@ -236,7 +236,7 @@ void Type_Print(
   void* base,
   Type const& type,
   int indent,
-  HashSet<void*>& visited,
+  std::unordered_set<void*>& visited,
   uint maxDepth)
 {
   if (!maxDepth)
@@ -266,10 +266,10 @@ void Type_Print(
   struct Mapper : public FieldMapper {
     void* base;
     int indent;
-    HashSet<void*>& visited;
+    std::unordered_set<void*>& visited;
     uint depth;
 
-    Mapper(void* base, int indent, HashSet<void*>& visited, uint depth) :
+    Mapper(void* base, int indent, std::unordered_set<void*>& visited, uint depth) :
       base(base),
       indent(indent),
       visited(visited),
@@ -310,7 +310,7 @@ void Type_Print(
 }
 
 void Type_Print(void* base, Type const& type, uint maxDepth) {
-  HashSet<void*> visited;
+  std::unordered_set<void*> visited;
   Type_Print(base, type, 0, visited, maxDepth);
 }
 

@@ -63,7 +63,7 @@ FreeFunction(Object, Object_GetContainer,
   "Return the container within which 'object' exists",
   Object, object)
 {
-  return object->GetContainer().t;
+  return object->GetContainer().get();
 } FunctionAlias(Object_GetContainer, GetContainer);
 
 FreeFunction(DistanceT, Object_GetDistance,
@@ -113,7 +113,7 @@ FreeFunction(Object, Object_GetRoot,
   "Return the root object of 'object'",
   Object, object)
 {
-  return object->GetRoot().t;
+  return object->GetRoot().get();
 } FunctionAlias(Object_GetRoot, GetRoot);
 
 FreeFunction(uint, Object_GetSeed,
@@ -134,7 +134,7 @@ FreeFunction(Object, Object_GetSystem,
   "Return the system within which 'object' exists",
   Object, object)
 {
-  return (ObjectT*)object->GetSystem().t;
+  return (ObjectT*)object->GetSystem().get();
 } FunctionAlias(Object_GetSystem, GetSystem);
 
 FreeFunction(Traits, Object_GetTraits,

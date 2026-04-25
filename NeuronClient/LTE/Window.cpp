@@ -210,5 +210,5 @@ void Window_Pop() {
 
 void Window_Push(Window const& window) {
   GetStack().push(window);
-  Viewport_Push(((WindowImpl*)window.t)->viewport);
+  Viewport_Push(((WindowImpl*)window.get())->viewport);
 }
