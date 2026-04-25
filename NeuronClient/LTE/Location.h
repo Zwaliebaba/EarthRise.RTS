@@ -39,23 +39,23 @@ namespace LTE {
     String, file)
 
   inline Location Location_Font(String const& name) {
-    return Location_Resource("font/" + name);
+    return Location_Resource("font\\" + name);
   }
 
   inline Location Location_GameData(String const& name) {
-    return Location_Resource("gamedata/" + name);
+    return Location_Resource("gamedata\\" + name);
   }
 
   inline Location Location_Script(String const& name) {
-    return Location_Resource("script/" + name);
+    return Location_Resource("script\\" + name);
   }
 
   inline Location Location_Shader(String const& name) {
-    return Location_Resource("shader/" + name);
+    return Location_Resource("shader\\" + name);
   }
 
   inline Location Location_Texture(String const& name) {
-    return Location_Resource("texture/" + name);
+    return Location_Resource("texture\\" + name);
   }
 }
 

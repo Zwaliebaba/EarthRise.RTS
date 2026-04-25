@@ -1,8 +1,0 @@
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/glew.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/glew_s.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/uninstall.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/edit_cache.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/rebuild_cache.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/list_install_components.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/install.dir
-C:/Users/zwali/source/repos/EarthRise.RTS/NeuronClient/vcpkg_installed/x64-windows/vcpkg/blds/glew/x64-windows-rel/CMakeFiles/install/local.dir

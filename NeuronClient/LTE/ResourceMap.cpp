@@ -21,7 +21,7 @@ namespace
 
         String fullPath = path + element;
         if (OS_IsDir(fullPath))
-          AddDirectory(fullPath + "/", alias + element + "/");
+          AddDirectory(fullPath + "\\", alias + element + "\\");
         else if (OS_IsFile(fullPath))
           AddFile(fullPath, alias + element);
       }
