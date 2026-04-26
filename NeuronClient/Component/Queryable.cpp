@@ -201,7 +201,7 @@ struct ComponentQueryableImpl {
 
     float marchDistance = tMax * rayMagnitude;
 
-    LTE_ASSERT(marchDistance < 100000);
+    DEBUG_ASSERT(marchDistance < 100000);
 
     /* TODO : High-precision querying. */
     for (size_t i = 0; i < kPartitionLevels; ++i)

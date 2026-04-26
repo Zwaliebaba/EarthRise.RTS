@@ -4,11 +4,15 @@
 #include "Note.h"
 #include "LTE/Reference.h"
 
-namespace Audio {
-  struct GeneratorT : public RefCounted {
-    virtual ~GeneratorT() {}
-    virtual double Get(Note const& note, double t) const = 0;
+namespace Audio
+{
+  struct GeneratorT : RefCounted
+  {
+    ~GeneratorT() override {}
+    virtual double Get(const Note& note, double t) const = 0;
   };
+
+  using Generator = Reference<GeneratorT>;
 }
 
 #endif

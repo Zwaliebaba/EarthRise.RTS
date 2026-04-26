@@ -6,7 +6,7 @@
 
 void ComponentExplodable::Run(ObjectT* self, UpdateState& state) {
   ComponentIntegrity* it = self->GetIntegrity();
-  LTE_ASSERT(it);
+  DEBUG_ASSERT(it);
 
   if (!exploded && it->health <= 0) {
     exploded = true;

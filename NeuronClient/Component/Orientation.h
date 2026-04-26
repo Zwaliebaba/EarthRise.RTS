@@ -39,7 +39,7 @@ AutoClass(ComponentOrientation,
     }
   }
 
-  LT_API void Rotate(V3 const& lookUpRight);
+  void Rotate(V3 const& lookUpRight);
 };
 
 AutoComponent(Orientation)

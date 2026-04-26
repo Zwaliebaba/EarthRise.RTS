@@ -7,7 +7,7 @@ void ComponentHistory::Run(ObjectT* self, UpdateState& state) {
 
 DefineFunction(Object_AddHistory) {
   ComponentHistory* history = args.object->GetHistory();
-  LTE_ASSERT(history != nullptr);
+  DEBUG_ASSERT(history != nullptr);
   history->elements.push(args.event);
 }
 

@@ -89,7 +89,7 @@ Mesh RenderableT::GetCollisionMesh() const {
   return nullptr;
 }
 
-LT_API Renderable Renderable_Union(
+Renderable Renderable_Union(
   Renderable const& a,
   Renderable const& b)
 {

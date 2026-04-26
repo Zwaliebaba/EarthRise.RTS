@@ -7,8 +7,8 @@
 #include "LTE/StackFrame.h"
 
 void ComponentMotion::Run(ObjectT* self, UpdateState& state) { AUTO_FRAME;
-  LTE_ASSERT(force.IsFinite());
-  LTE_ASSERT(torque.IsFinite());
+  DEBUG_ASSERT(force.IsFinite());
+  DEBUG_ASSERT(torque.IsFinite());
 
   /* Notify the collidable component that we're not a passive object, since
      we've got the ability to move. */
@@ -39,8 +39,8 @@ void ComponentMotion::Run(ObjectT* self, UpdateState& state) { AUTO_FRAME;
   torque = 0;
   speed = Length(velocity);
 
-  LTE_ASSERT(velocity.IsFinite());
-  LTE_ASSERT(velocityA.IsFinite());
+  DEBUG_ASSERT(velocity.IsFinite());
+  DEBUG_ASSERT(velocityA.IsFinite());
 }
 
 VoidFreeFunction(Object_ApplyForce,

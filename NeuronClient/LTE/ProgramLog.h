@@ -13,14 +13,14 @@ namespace LTE {
     };
   }
 
-  LT_API void Log_Critical(String const& entry);
-  LT_API void Log_Error(String const& entry);
-  LT_API void Log_Event(String const& entry);
-  LT_API void Log_Message(String const& entry);
-  LT_API void Log_Warning(String const& entry);
+  void Log_Critical(String const& entry);
+  void Log_Error(String const& entry);
+  void Log_Event(String const& entry);
+  void Log_Message(String const& entry);
+  void Log_Warning(String const& entry);
 
-  LT_API size_t Log_GetEntries();
-  LT_API String const& Log_GetEntry(int index);
+  size_t Log_GetEntries();
+  String const& Log_GetEntry(int index);
 }
 
 #endif

@@ -68,7 +68,7 @@ struct kdres *kd_nearest3f(struct kdtree *tree, float x, float y, float z);
  *
  * This function returns a pointer to a result set, with at most N elements,
  * which can be manipulated with the kd_res_* functions.
- * The returned pointer can be null as an indication of an error. Otherwise
+ * The returned pointer can be null as an indication of an Fatal. Otherwise
  * a valid result set is always returned which may contain 0 or more elements.
  * The result set must be deallocated with kd_res_free after use.
  */
@@ -83,7 +83,7 @@ struct kdres *kd_nearest_n3f(struct kdtree *tree, float x, float y, float z);
  *
  * This function returns a pointer to a result set, which can be manipulated
  * by the kd_res_* functions.
- * The returned pointer can be null as an indication of an error. Otherwise
+ * The returned pointer can be null as an indication of an Fatal. Otherwise
  * a valid result set is always returned which may contain 0 or more elements.
  * The result set must be deallocated with kd_res_free after use.
  */

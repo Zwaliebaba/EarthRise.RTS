@@ -7,7 +7,7 @@ namespace Network {
   struct Client {
   };
 
-  LT_API Client* Client_Create();
+  Client* Client_Create();
 }
 
 #endif

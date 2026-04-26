@@ -6,7 +6,7 @@
 #include "Mesh.h"
 #include "V3.h"
 
-LT_API Mesh Mesh_Billboard(
+Mesh Mesh_Billboard(
   float minU = -1,
   float maxU =  1,
   float minV = -1,
@@ -24,9 +24,9 @@ DeclareFunction(Mesh_BoxSphere, Mesh,
   uint, resolution,
   bool, closed)
 
-LT_API Mesh Mesh_Cone(uint slices);
+Mesh Mesh_Cone(uint slices);
 
-LT_API Mesh Mesh_Cylinder(uint slices);
+Mesh Mesh_Cylinder(uint slices);
 
 DeclareFunction(Mesh_Plane, Mesh,
   V3, origin,
@@ -37,13 +37,13 @@ DeclareFunction(Mesh_Plane, Mesh,
 
 DeclareFunctionNoParams(Mesh_Quad, Mesh)
 
-LT_API Mesh Mesh_SkirtedPlane(int cellsX, int cellsY);
+Mesh Mesh_SkirtedPlane(int cellsX, int cellsY);
 
 DeclareFunction(Mesh_Sphere, Mesh,
   uint, slices,
   uint, stacks)
 
-LT_API Mesh Mesh_Tetrahedron();
+Mesh Mesh_Tetrahedron();
 
 /* F(height, angle) */
 template <class fOfHeightAngle>

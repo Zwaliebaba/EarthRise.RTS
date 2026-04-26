@@ -12,12 +12,11 @@
 #include "LTE/Matrix.h"
 #include "LTE/Vector.h"
 
-bool ComponentDockable::CanDock(ObjectT* self, Object const& docker) {
-  return docked >= capacity;
-}
+bool ComponentDockable::CanDock(ObjectT* self, const Object& docker) { return docked >= capacity; }
 
-void ComponentDockable::Dock(ObjectT* self, Object const& docker) {
-  LTE_ASSERT(!hangars.isEmpty());
+void ComponentDockable::Dock(ObjectT* self, const Object& docker)
+{
+  DEBUG_ASSERT(!hangars.isEmpty());
   self->AddInterior(docker);
 
   Position newPos = hangars.random().Sample(RandV3());
@@ -34,8 +33,9 @@ void ComponentDockable::Dock(ObjectT* self, Object const& docker) {
   motion->torque = 0;
 }
 
-void ComponentDockable::Undock(ObjectT* self, Object const& docker) {
-  LTE_ASSERT(!ports.isEmpty());
+void ComponentDockable::Undock(ObjectT* self, const Object& docker)
+{
+  DEBUG_ASSERT(!ports.isEmpty());
   self->RemoveInterior(docker);
   self->GetContainer()->AddInterior(docker);
 

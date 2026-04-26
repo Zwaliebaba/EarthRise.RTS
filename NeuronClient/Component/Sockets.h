@@ -16,16 +16,16 @@ AutoClass(ComponentSockets,
 
   ComponentSockets() {}
 
-  LT_API bool Plug(ObjectT* self, Item const& type);
-  LT_API bool Plug(ObjectT* self, Item const& type, uint slot);
-  LT_API bool Plug(ObjectT* self, Object const& type);
-  LT_API bool Plug(ObjectT* self, Object const& object, uint slot);
-  LT_API void Unplug(ObjectT* self, uint slot);
+  bool Plug(ObjectT* self, Item const& type);
+  bool Plug(ObjectT* self, Item const& type, uint slot);
+  bool Plug(ObjectT* self, Object const& type);
+  bool Plug(ObjectT* self, Object const& object, uint slot);
+  void Unplug(ObjectT* self, uint slot);
 };
 
 AutoComponent(Sockets)
   void SetSupertype(Item const& type) {
-    LTE_ASSERT(type->GetSockets());
+    DEBUG_ASSERT(type->GetSockets());
     Sockets.sockets = *type->GetSockets();
     Sockets.instances.resize(Sockets.sockets.size(), nullptr);
 

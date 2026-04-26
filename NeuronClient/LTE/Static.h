@@ -5,6 +5,6 @@
 
 /* TODO : Static serialization. */
 
-LT_API Data& Static_Get(String const& name);
+Data& Static_Get(String const& name);
 
 #endif

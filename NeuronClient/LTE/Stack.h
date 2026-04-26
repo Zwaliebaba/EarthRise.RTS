@@ -38,12 +38,12 @@ struct Stack {
   }
 
   T& back() {
-    LTE_ASSERT(elements.size());
+    DEBUG_ASSERT(elements.size());
     return elements.back();
   }
 
   T const& back() const {
-    LTE_ASSERT(elements.size());
+    DEBUG_ASSERT(elements.size());
     return elements.back();
   }
 
@@ -84,12 +84,12 @@ struct Stack {
   }
 
   void pop() {
-    LTE_ASSERT(elements.size());
+    DEBUG_ASSERT(elements.size());
     elements.pop_back();
   }
 
   Stack& push(const T& t) {
-    LTE_ASSERT(elements.size() < MaxElements);
+    DEBUG_ASSERT(elements.size() < MaxElements);
     elements.push_back(t);
     return *this;
   }

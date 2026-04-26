@@ -35,11 +35,11 @@ struct DrawState : Pushable<DrawState>
   void Flip() { Swap(primary, secondary); }
 };
 
-LT_API const Data& DrawState_Get(const String& name);
-LT_API void DrawState_Inject(const Shader& shader);
+const Data& DrawState_Get(const String& name);
+void DrawState_Inject(const Shader& shader);
 
-LT_API void DrawState_Link(const Shader& shader);
-LT_API void DrawState_Link(const ShaderInstance& shaderState);
+void DrawState_Link(const Shader& shader);
+void DrawState_Link(const ShaderInstance& shaderState);
 
 DeclareFunctionNoParams(DrawState_Clear, void)
 

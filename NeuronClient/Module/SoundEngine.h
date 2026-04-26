@@ -9,11 +9,11 @@
 #include "Game/Common.h"
 
 struct SoundEngine : public ModuleT {
-  LT_API SoundEngine();
-  LT_API virtual ~SoundEngine();
+  SoundEngine();
+  virtual ~SoundEngine();
 
-  LT_API void Pop();
-  LT_API void Push();
+  void Pop();
+  void Push();
 
   virtual Sound Play(Array<float> const& buffer) = 0;
 
@@ -28,10 +28,10 @@ struct SoundEngine : public ModuleT {
     bool looped) = 0;
 };
 
-LT_API SoundEngine* GetSoundEngine();
-LT_API SoundEngine* SoundEngine_Default();
-LT_API SoundEngine* SoundEngine_XAudio2();
-LT_API SoundEngine* SoundEngine_Null();
+SoundEngine* GetSoundEngine();
+SoundEngine* SoundEngine_Default();
+SoundEngine* SoundEngine_XAudio2();
+SoundEngine* SoundEngine_Null();
 
 inline Sound Sound_Play2D(
   String const& name,

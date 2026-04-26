@@ -34,58 +34,58 @@
 struct ShaderInstanceT : public RefCounted {
   struct ShaderInstanceData* d;
 
-  LT_API ShaderInstanceT(Shader const& shader);
-  LT_API ~ShaderInstanceT();
+  ShaderInstanceT(Shader const& shader);
+  ~ShaderInstanceT();
 
-  LT_API ShaderInstance Clone() const;
+  ShaderInstance Clone() const;
 
-  LT_API void Begin();
-  LT_API void End();
+  void Begin();
+  void End();
 
-  LT_API Shader const& GetShader() const;
-  LT_API bool HasBlending() const;
-  LT_API bool HasState(RenderStateSwitch) const;
-  LT_API void Remove(char const* name);
+  Shader const& GetShader() const;
+  bool HasBlending() const;
+  bool HasState(RenderStateSwitch) const;
+  void Remove(char const* name);
 
   /* Immediate value setters. */
-  LT_API ShaderInstanceT& SetCubeMap(
+  ShaderInstanceT& SetCubeMap(
     char const* name,
     Generic<CubeMap, void> const& e);
-  LT_API ShaderInstanceT& SetCubeMap(
+  ShaderInstanceT& SetCubeMap(
     int index,
     Generic<CubeMap, void> const& e);
 
-  LT_API ShaderInstanceT& SetFloat(char const* name, GenericFloat const& f);
-  LT_API ShaderInstanceT& SetFloat(int index, GenericFloat const& f);
+  ShaderInstanceT& SetFloat(char const* name, GenericFloat const& f);
+  ShaderInstanceT& SetFloat(int index, GenericFloat const& f);
 
-  LT_API ShaderInstanceT& SetFloat2(char const* name, GenericV2 const& v);
-  LT_API ShaderInstanceT& SetFloat2(int index, GenericV2 const& v);
+  ShaderInstanceT& SetFloat2(char const* name, GenericV2 const& v);
+  ShaderInstanceT& SetFloat2(int index, GenericV2 const& v);
 
-  LT_API ShaderInstanceT& SetFloat3(char const* name, GenericV3 const& v);
-  LT_API ShaderInstanceT& SetFloat3(int index, GenericV3 const& v);
+  ShaderInstanceT& SetFloat3(char const* name, GenericV3 const& v);
+  ShaderInstanceT& SetFloat3(int index, GenericV3 const& v);
 
-  LT_API ShaderInstanceT& SetFloat4(char const* name, GenericV4 const& v);
-  LT_API ShaderInstanceT& SetFloat4(int index, GenericV4 const& v);
+  ShaderInstanceT& SetFloat4(char const* name, GenericV4 const& v);
+  ShaderInstanceT& SetFloat4(int index, GenericV4 const& v);
 
-  LT_API ShaderInstanceT& SetInt(char const* name, GenericInt const& i);
-  LT_API ShaderInstanceT& SetInt(int index, GenericInt const& i);
+  ShaderInstanceT& SetInt(char const* name, GenericInt const& i);
+  ShaderInstanceT& SetInt(int index, GenericInt const& i);
 
-  LT_API ShaderInstanceT& SetMatrix(char const* name, Generic<Matrix const*, void> const& m);
-  LT_API ShaderInstanceT& SetMatrix(int index, Generic<Matrix const*, void> const& m);
+  ShaderInstanceT& SetMatrix(char const* name, Generic<Matrix const*, void> const& m);
+  ShaderInstanceT& SetMatrix(int index, Generic<Matrix const*, void> const& m);
 
-  LT_API ShaderInstanceT& SetState(RenderStateSwitch state);
+  ShaderInstanceT& SetState(RenderStateSwitch state);
 
-  LT_API ShaderInstanceT& SetTexture2D(
+  ShaderInstanceT& SetTexture2D(
     char const* name,
     Generic<Texture2D, void> const& t);
-  LT_API ShaderInstanceT& SetTexture2D(
+  ShaderInstanceT& SetTexture2D(
     int index,
     Generic<Texture2D, void> const& t);
 
-  LT_API ShaderInstanceT& SetTexture3D(
+  ShaderInstanceT& SetTexture3D(
     char const* name,
     Generic<Texture3D, void> const& t);
-  LT_API ShaderInstanceT& SetTexture3D(
+  ShaderInstanceT& SetTexture3D(
     int index,
     Generic<Texture3D, void> const& t);
 

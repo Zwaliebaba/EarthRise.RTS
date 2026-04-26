@@ -14,7 +14,7 @@ AutoClass(ComponentHistory,
 
   ComponentHistory() {}
 
-  LT_API void Run(ObjectT*, UpdateState&);
+  void Run(ObjectT*, UpdateState&);
 };
 
 AutoComponent(History)

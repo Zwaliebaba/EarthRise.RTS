@@ -47,13 +47,13 @@ void StackFrame_Push(
   int line,
   char const* annotation)
 {
-  LTE_ASSERT(depth + 1 < kMaxStackDepth);
+  DEBUG_ASSERT(depth + 1 < kMaxStackDepth);
   frames[depth++] = StackFrameT(func, file, line, annotation);
   Profiler_Push(annotation);
 }
 
 void StackFrame_Pop() {
-  LTE_ASSERT(depth > 0);
+  DEBUG_ASSERT(depth > 0);
   depth--;
   Profiler_Pop();
 }

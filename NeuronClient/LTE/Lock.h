@@ -23,6 +23,6 @@ struct ScopedLock {
   }
 };
 
-LT_API Lock Lock_Create();
+Lock Lock_Create();
 
 #endif

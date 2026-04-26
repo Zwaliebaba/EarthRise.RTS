@@ -6,11 +6,11 @@
 #include "Game/Common.h"
 
 struct PhysicsEngine : public ModuleT {
-  LT_API PhysicsEngine();
-  LT_API virtual ~PhysicsEngine();
+  PhysicsEngine();
+  virtual ~PhysicsEngine();
 
-  LT_API void Push();
-  LT_API void Pop();
+  void Push();
+  void Pop();
 
   virtual bool CheckCollision(
     ObjectT* object1,
@@ -25,8 +25,8 @@ struct PhysicsEngine : public ModuleT {
     V3* normalOut = nullptr) = 0;
 };
 
-LT_API PhysicsEngine* CreatePhysicsEngine();
-LT_API PhysicsEngine* CreatePhysicsEngineNull();
-LT_API PhysicsEngine* GetPhysicsEngine();
+PhysicsEngine* CreatePhysicsEngine();
+PhysicsEngine* CreatePhysicsEngineNull();
+PhysicsEngine* GetPhysicsEngine();
 
 #endif

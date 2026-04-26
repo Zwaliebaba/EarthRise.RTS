@@ -4,18 +4,13 @@
 
 #include <fstream>
 
-namespace Audio {
+namespace Audio
+{
   template <class T>
-  void WriteData(std::ofstream& stream, const T& t) {
-    stream.write((char const*)&t, sizeof(T));
-  }
+  void WriteData(std::ofstream& stream, const T& t) { stream.write(reinterpret_cast<const char*>(&t), sizeof(T)); }
 
   template <class SampleType>
-  void WAV_Write_Template(
-    char const* outFile,
-    Array<SampleType> const& buf,
-    int sampleRate,
-    short channels)
+  void WAV_Write_Template(const char* outFile, const Array<SampleType>& buf, int sampleRate, short channels)
   {
     size_t bufSize = buf.size() * sizeof(SampleType);
     std::ofstream stream(outFile, std::ios::binary);
@@ -45,15 +40,11 @@ namespace Audio {
     WriteData<short>(stream, 8 * sizeof(SampleType));
 
     stream.write("data", 4);
-    stream.write((char const*)&bufSize, 4);
-    stream.write((char const*)buf.data(), bufSize);
+    stream.write((const char*)&bufSize, 4);
+    stream.write(reinterpret_cast<const char*>(buf.data()), bufSize);
   }
 
-  void WAV_Write(
-    char const* outFile,
-    Array<int> const& buf,
-    int sampleRate,
-    short channels)
+  void WAV_Write(const char* outFile, const Array<int>& buf, int sampleRate, short channels)
   {
     WAV_Write_Template(outFile, buf, sampleRate, channels);
   }

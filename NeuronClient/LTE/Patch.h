@@ -11,7 +11,7 @@ namespace LTE {
     virtual bool Apply() const = 0;
   };
 
-  LT_API Patch* Patch_Create();
+  Patch* Patch_Create();
 }
 
 #endif

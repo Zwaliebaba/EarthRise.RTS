@@ -24,19 +24,19 @@ struct ObjectT : RefCounted
   Object children;
   bool deleted;
 
-  LT_API ObjectT();
-  LT_API ~ObjectT() override;
+  ObjectT();
+  ~ObjectT() override;
 
   /* Common Operations. */
-  LT_API bool CanMove() const;
+  bool CanMove() const;
 
-  LT_API void Delete();
+  void Delete();
 
-  LT_API virtual Capability GetCapability() const;
+  virtual Capability GetCapability() const;
 
-  LT_API Pointer<ObjectT> GetRoot();
+  Pointer<ObjectT> GetRoot();
 
-  LT_API Pointer<const ObjectT> GetRoot() const;
+  Pointer<const ObjectT> GetRoot() const;
 
   /* Pure. */
   virtual ObjectType GetType() const = 0;
@@ -70,27 +70,27 @@ struct ObjectT : RefCounted
 
   virtual Quantity GetUses() const { return 0; }
 
-  LT_API virtual Icon GetIcon() const;
+  virtual Icon GetIcon() const;
 
-  LT_API virtual Widget GetWidget(const Player& self);
+  virtual Widget GetWidget(const Player& self);
 
-  LT_API float GetMaxRange() const;
+  float GetMaxRange() const;
 
-  LT_API float GetMinRange() const;
+  float GetMinRange() const;
 
-  LT_API virtual const Traits& GetTraits() const;
+  virtual const Traits& GetTraits() const;
 
-  LT_API virtual Quantity GetValue() const;
+  virtual Quantity GetValue() const;
 
-  LT_API virtual void OnCreate();
+  virtual void OnCreate();
 
-  LT_API virtual void OnDeath();
+  virtual void OnDeath();
 
-  LT_API virtual void OnDestroy();
+  virtual void OnDestroy();
 
   virtual void OnUpdate(UpdateState& state) {}
 
-  LT_API void Update(UpdateState& state);
+  void Update(UpdateState& state);
 
   /* Drawing. */
   virtual void OnDraw(DrawState* state) {}
@@ -110,7 +110,7 @@ struct ObjectT : RefCounted
   }
 
   /* Asset. */
-  LT_API virtual const Player& GetOwner() const;
+  virtual const Player& GetOwner() const;
 
   virtual void SetOwner(const Player&) { NOT_IMPLEMENTED }
 
@@ -120,14 +120,14 @@ struct ObjectT : RefCounted
   virtual void RemoveAsset(const Object& asset) { NOT_IMPLEMENTED }
 
   /* Attachable. */
-  LT_API virtual const Transform& GetLocalTransform() const;
+  virtual const Transform& GetLocalTransform() const;
 
   virtual void SetLocalTransform(const Transform& transform) { NOT_IMPLEMENTED }
 
   /* BoundingBox. */
-  LT_API Position GetCenter() const;
-  LT_API V3 GetExtent() const;
-  LT_API float GetRadius() const;
+  Position GetCenter() const;
+  V3 GetExtent() const;
+  float GetRadius() const;
 
   /* Cargo. */
   virtual bool AddItem(const Item& item, Quantity quantity, bool force = false) { return false; }
@@ -153,7 +153,7 @@ struct ObjectT : RefCounted
   /* Cullable. */
   virtual float GetCullDistanceMult() const { return 1.0f; }
 
-  LT_API Position GetDockLocation(const Object& docker) const;
+  Position GetDockLocation(const Object& docker) const;
 
   /* Dockable. */
   virtual bool CanDock(const Object& docker) { return false; }
@@ -163,15 +163,15 @@ struct ObjectT : RefCounted
   virtual void Undock(const Object& docker) { NOT_IMPLEMENTED }
 
   /* Drawable. */
-  LT_API Bound3 GetLocalBound() const;
-  LT_API Bound3D GetGlobalBound() const;
+  Bound3 GetLocalBound() const;
+  Bound3D GetGlobalBound() const;
 
-  LT_API virtual Renderable GetRenderable() const;
+  virtual Renderable GetRenderable() const;
 
-  LT_API Pointer<ObjectT> GetContainerRoot() const;
-  LT_API Pointer<const ObjectT> GetRegion() const;
-  LT_API Pointer<const ObjectT> GetSystem() const;
-  LT_API Pointer<const Universe> GetUniverse() const;
+  Pointer<ObjectT> GetContainerRoot() const;
+  Pointer<const ObjectT> GetRegion() const;
+  Pointer<const ObjectT> GetSystem() const;
+  Pointer<const Universe> GetUniverse() const;
 
   /* Integrity. */
   virtual ItemT* GetDataDamaged() const { return nullptr; }
@@ -194,9 +194,9 @@ struct ObjectT : RefCounted
 
   Health GetTotalDamage() const { return GetTotalMaxHealth() - GetTotalHealth(); }
 
-  LT_API Damage ApplyDamage(Damage damage);
-  LT_API Health GetTotalHealth() const;
-  LT_API Health GetTotalMaxHealth() const;
+  Damage ApplyDamage(Damage damage);
+  Health GetTotalHealth() const;
+  Health GetTotalMaxHealth() const;
 
   /* Log. */
   virtual void AddLogMessage(const String& message, float importance = 0) { NOT_IMPLEMENTED }
@@ -211,7 +211,7 @@ struct ObjectT : RefCounted
   virtual void RemoveMarketBid(const Order&) { NOT_IMPLEMENTED }
 
   /* Messaging. */
-  LT_API virtual void Broadcast(Data& message);
+  virtual void Broadcast(Data& message);
 
   virtual void OnMessage(Data& message) {}
 
@@ -260,7 +260,7 @@ struct ObjectT : RefCounted
 
   virtual V3 GetVelocityA() const { return 0; }
 
-  LT_API float GetImpactTime(const ObjectT* source, float speed, Position& hitPoint) const;
+  float GetImpactTime(const ObjectT* source, float speed, Position& hitPoint) const;
 
   virtual bool IsMovable() const { return false; }
 
@@ -270,11 +270,11 @@ struct ObjectT : RefCounted
   virtual void SetName(const String& name) { NOT_IMPLEMENTED }
 
   /* Parent. */
-  LT_API void AddChild(const Object& child);
+  void AddChild(const Object& child);
 
-  LT_API void Attach(const Object& child, const Transform& transform);
+  void Attach(const Object& child, const Transform& transform);
 
-  LT_API void RemoveChild(const Object& child);
+  void RemoveChild(const Object& child);
 
   /* Pluggable. */
   virtual float GetPowerFraction() const { return 0; }
@@ -289,22 +289,22 @@ struct ObjectT : RefCounted
 
   virtual void ModOpinion(const Object&, float) {}
 
-  LT_API bool Dislikes(const Object&) const;
+  bool Dislikes(const Object&) const;
 
-  LT_API bool Likes(const Object&) const;
+  bool Likes(const Object&) const;
 
   /* Orientation. */
-  LT_API V3 GetLook() const;
+  V3 GetLook() const;
 
-  LT_API V3 GetUp() const;
+  V3 GetUp() const;
 
-  LT_API V3 GetRight() const;
+  V3 GetRight() const;
 
-  LT_API Position GetPos() const;
+  Position GetPos() const;
 
-  LT_API V3 GetScale() const;
+  V3 GetScale() const;
 
-  LT_API virtual const Transform& GetTransform() const;
+  virtual const Transform& GetTransform() const;
 
   virtual void SetLook(const V3& look) { NOT_IMPLEMENTED }
 
@@ -349,9 +349,9 @@ struct ObjectT : RefCounted
   /* Thrustable. */
   float GetMaxThrust() const { return GetCapability().Motion; }
 
-  LT_API float GetMaxTorque() const;
+  float GetMaxTorque() const;
 
-  LT_API bool InRange(const ObjectT* other, Distance distance, bool precise = false) const;
+  bool InRange(const ObjectT* other, Distance distance, bool precise = false) const;
 
   /* Component Access. */
   bool HasComponent(ComponentType type) const

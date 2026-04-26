@@ -384,6 +384,6 @@ AutoClass(V3T,
   }
 };
 
-LT_API V3 RandV3(float min = 0, float max = 1);
+V3 RandV3(float min = 0, float max = 1);
 
 #endif

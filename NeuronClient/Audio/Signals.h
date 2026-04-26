@@ -4,33 +4,21 @@
 #include "Signal.h"
 #include "Note.h"
 
-namespace Audio {
+namespace Audio
+{
+  Signal Signal_ASR(double a, double s, double r);
 
-  LT_API Signal Signal_ASR(double a, double s, double r);
+  Signal Signal_Compress(const Signal& input, double factor);
 
-  LT_API Signal Signal_Compress(Signal const& input, double factor);
+  Signal Signal_Delay(const Signal& input, uint ticks, double amp, double feedback);
 
-  LT_API Signal Signal_Delay(
-    Signal const& input,
-    uint ticks,
-    double amp,
-    double feedback);
+  Signal Signal_Instrument(const Generator& generator, const Pattern& pattern, const Signal& envelope = nullptr);
 
-  LT_API Signal Signal_Instrument(
-    Generator const& generator,
-    Pattern const& pattern,
-    Signal const& envelope = nullptr);
+  Signal Signal_Lowpass(const Signal& input);
 
-  LT_API Signal Signal_Lowpass(Signal const& input);
+  Signal Signal_Product(const Signal& a, const Signal& b);
 
-  LT_API Signal Signal_Product(Signal const& a, Signal const& b);
-
-  LT_API Signal Signal_Sum(
-    Signal const& a,
-    Signal const& b,
-    double mixA = 1,
-    double mixB = 1);
-
+  Signal Signal_Sum(const Signal& a, const Signal& b, double mixA = 1, double mixB = 1);
 }
 
 #endif

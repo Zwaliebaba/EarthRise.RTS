@@ -44,7 +44,7 @@ struct Texture3DT : public RefCounted {
   FIELDS {}
 };
 
-LT_API Texture3D Texture3D_Create(
+Texture3D Texture3D_Create(
   uint width,
   uint height,
   uint depth,

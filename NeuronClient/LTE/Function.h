@@ -18,11 +18,11 @@ struct FunctionT : public RefCounted {
 
   FunctionT() {}
 
-  LT_API ~FunctionT();
+  ~FunctionT();
 
-  LT_API Data& GetAux(); 
+  Data& GetAux(); 
 
-  LT_API String GetSignature() const;
+  String GetSignature() const;
 
   template <class StreamT>
   friend void _ToStream(StreamT& s, FunctionT const& t) {
@@ -32,14 +32,14 @@ struct FunctionT : public RefCounted {
   }
 };
 
-LT_API Function Function_Create(String const& name);
+Function Function_Create(String const& name);
 
-LT_API void Function_AddAlias(String const& source, String const& alias);
-LT_API Vector<Function> const& Function_Find(String const& name);
-LT_API Vector<Function> const& Function_GetList();
+void Function_AddAlias(String const& source, String const& alias);
+Vector<Function> const& Function_Find(String const& name);
+Vector<Function> const& Function_GetList();
 
 #define DefineConversion(Name, SourceType, DestType)                           \
-  LT_API void Name(SourceType const&, DestType&);                              \
+  void Name(SourceType const&, DestType&);                              \
                                                                                \
   inline void Name##_Call(TypeT*, void const* in, void* out) {                 \
     Name(*(SourceType const*)in, *(DestType*)out);                             \

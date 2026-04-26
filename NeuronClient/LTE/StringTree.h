@@ -65,13 +65,13 @@ AutoClassDerived(StringTreeT, RefCounted,
   }
 };
 
-LT_API StringTree StringTree_Create(String const& data, int& line);
+StringTree StringTree_Create(String const& data, int& line);
 
 inline StringTree StringTree_Create(String const& data) {
   int line = 0;
   return StringTree_Create(data, line);
 }
 
-LT_API StringTree StringTree_Load(Location const& location);
+StringTree StringTree_Load(Location const& location);
 
 #endif

@@ -10,7 +10,7 @@ namespace LTE {
     virtual Array<uchar>* Inflate(Array<uchar> const& source) = 0;
   };
 
-  LT_API AutoPtr<Diff> Diff_Create(
+  AutoPtr<Diff> Diff_Create(
     Array<uchar> const& srcData,
     Array<uchar> const& dstData,
     size_t blockSize = 16);

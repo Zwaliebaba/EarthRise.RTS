@@ -76,7 +76,7 @@ struct Pointer : public NullBase<Pointer<T> > {
   T& operator*() const {
 #ifdef DEBUG_POINTERS
     if (!t)
-      error("Attempt to dereference null pointer.");
+      Fatal("Attempt to dereference null pointer.");
 #endif
     return *t;
   }
@@ -84,7 +84,7 @@ struct Pointer : public NullBase<Pointer<T> > {
   T* operator->() const {
 #ifdef DEBUG_POINTERS
     if (!t)
-      error("Attempt to dereference null pointer.");
+      Fatal("Attempt to dereference null pointer.");
 #endif
     return t;
   }

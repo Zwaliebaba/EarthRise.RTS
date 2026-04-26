@@ -43,7 +43,7 @@ void IntHandler(int value)
 
 void SegHandler(int value)
 {
-  error("Access Violation");
+  Fatal("Access Violation");
   StackFrame_Print();
   exit(0);
 }
@@ -220,7 +220,7 @@ void OS_WriteDump(const String& path)
   HANDLE hFile = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 
   HMODULE h = LoadLibrary(_T("DbgHelp.dll"));
-  LTE_ASSERT(h);
+  DEBUG_ASSERT(h);
   if (!h)
     return;
 

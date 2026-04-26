@@ -3,14 +3,9 @@
 
 #include "Common.h"
 
-namespace Audio {
-
-  LT_API void WAV_Write(
-    char const* outFile,
-    Array<int> const& buf,
-    int sampleRate,
-    short channels);
-
+namespace Audio
+{
+  void WAV_Write(const char* outFile, const Array<int>& buf, int sampleRate, short channels);
 }
 
 #endif

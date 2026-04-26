@@ -40,7 +40,7 @@ struct CubeMapT : public RefCounted {
   FIELDS {}
 };
 
-LT_API CubeMap CubeMap_Create(
+CubeMap CubeMap_Create(
   uint resolution,
   GL_TextureFormat::Enum format = GL_TextureFormat::RGBA8);
 

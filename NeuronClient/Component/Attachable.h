@@ -6,68 +6,66 @@
 #include "LTE/AutoClass.h"
 #include "LTE/Transform.h"
 
-AutoClass(ComponentAttachable,
-  Transform, transform,
-  short, parentVersion,
-  bool, moved)
+AutoClass(ComponentAttachable, Transform, transform, short, parentVersion, bool, moved)
 
-  ComponentAttachable() :
-    parentVersion(0),
-    moved(false)
-    {}
+  ComponentAttachable()
+    : parentVersion(0),
+      moved(false) {}
 
-  void SetPos(Position const& pos) {
+  void SetPos(const Position& pos)
+  {
     moved = true;
     transform.pos = pos;
   }
-  
-  void SetLook(V3 const& look) {
+
+  void SetLook(const V3& look)
+  {
     moved = true;
     transform.look = look;
   }
-  
-  void SetScale(V3 const& scale) {
+
+  void SetScale(const V3& scale)
+  {
     moved = true;
     transform.scale = scale;
   }
 
-  void SetTransform(Transform const& transform) {
+  void SetTransform(const Transform& transform)
+  {
     moved = true;
     this->transform = transform;
   }
-  
-  void SetUp(V3 const& up) {
+
+  void SetUp(const V3& up)
+  {
     moved = true;
     transform.up = up;
   }
 
-  void Run(ObjectT* self, UpdateState& state) {
-    UpdateTransform(self);
-  }
+  void Run(ObjectT* self, UpdateState& state) { UpdateTransform(self); }
 
-  LT_API void UpdateTransform(ObjectT* self);
+  void UpdateTransform(ObjectT* self);
 };
 
 AutoComponent(Attachable)
-  void OnUpdate(UpdateState& s) {
+
+  void OnUpdate(UpdateState& s)
+  {
     Attachable.Run(this, s);
     BaseT::OnUpdate(s);
   }
 
-  Transform const& GetLocalTransform() const {
-    return Attachable.transform;
-  }
+  const Transform& GetLocalTransform() const { return Attachable.transform; }
 
-  void SetSupertype(Item const& type) {
+  void SetSupertype(const Item& type)
+  {
     if (type->GetScale() > 0)
       Attachable.SetScale(V3(type->GetScale()));
 
     BaseT::SetSupertype(type);
   }
 
-  void SetLocalTransform(Transform const& transform) {
-    Attachable.SetTransform(transform);
-  }
+  void SetLocalTransform(const Transform& transform) { Attachable.SetTransform(transform); }
 };
 
 #endif

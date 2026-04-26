@@ -36,7 +36,7 @@ AutoClassDerived(PlayerImpl, PlayerT,
   void Pilot(Object const& object) {
     Unpilot();
     Pointer<ComponentPilotable> p = object->GetPilotable();
-    LTE_ASSERT(!p->pilot);
+    DEBUG_ASSERT(!p->pilot);
     p->pilot = this;
     piloting = object;
     container = object;
@@ -45,7 +45,7 @@ AutoClassDerived(PlayerImpl, PlayerT,
   void Unpilot() {
     if (piloting) {
       Pointer<ComponentPilotable> p = piloting->GetPilotable();
-      LTE_ASSERT(p);
+      DEBUG_ASSERT(p);
       container = nullptr;
       p->pilot = nullptr;
       piloting = nullptr;

@@ -27,7 +27,7 @@
         _remove();                                                             \
     }                                                                          \
                                                                                \
-    LT_API void _remove();                                                     \
+    void _remove();                                                     \
                                                                                \
   } __##name;                                                                  \
                                                                                \
@@ -37,10 +37,10 @@
       Iterator* nextIter;                                                      \
       Iterator* prevIter;                                                      \
                                                                                \
-      LT_API Iterator(name##_Link* cur = nullptr);                             \
-      LT_API Iterator(Iterator const& other);                                  \
-      LT_API ~Iterator();                                                      \
-      LT_API Iterator& operator=(Iterator const& other);                       \
+      Iterator(name##_Link* cur = nullptr);                             \
+      Iterator(Iterator const& other);                                  \
+      ~Iterator();                                                      \
+      Iterator& operator=(Iterator const& other);                       \
                                                                                \
       operator bool() {                                                        \
         return cur != nullptr;                                                 \

@@ -7,42 +7,44 @@
 #include "LTE/AutoPtr.h"
 #include "LTE/String.h"
 
-struct NLPOutputState {
+struct NLPOutputState
+{
   String output;
   bool newSentence;
   bool requiresSpace;
 
-  NLPOutputState() :
-    newSentence(true),
-    requiresSpace(false)
-    {}
+  NLPOutputState()
+    : newSentence(true),
+      requiresSpace(false) {}
 };
 
-struct NLPToken {
+struct NLPToken
+{
   virtual ~NLPToken() {}
   virtual void ToString(NLPOutputState& state) const = 0;
 };
 
-struct NLPPhrase {
+struct NLPPhrase
+{
   NLPContext& context;
-  Vector<AutoPtr<NLPToken> > tokens;
+  Vector<AutoPtr<NLPToken>> tokens;
 
-  NLPPhrase(NLPContext& context) :
-    context(context)
-    {}
+  NLPPhrase(NLPContext& context)
+    : context(context) {}
 
-  NLPPhrase& operator<<(AutoPtr<NLPToken> token) {
+  NLPPhrase& operator<<(AutoPtr<NLPToken> token)
+  {
     tokens.push(token);
     return *this;
   }
 
-  LT_API String ToString() const;
+  String ToString() const;
 };
 
-LT_API AutoPtr<NLPToken> NLPTokenFullstop();
-LT_API AutoPtr<NLPToken> NLPTokenNoun(const String& noun, bool proper);
-LT_API AutoPtr<NLPToken> NLPTokenText(const String& text);
+AutoPtr<NLPToken> NLPTokenFullstop();
+AutoPtr<NLPToken> NLPTokenNoun(const String& noun, bool proper);
+AutoPtr<NLPToken> NLPTokenText(const String& text);
 
-LT_API void NLPQualifierTime(NLPPhrase& phrase);
+void NLPQualifierTime(NLPPhrase& phrase);
 
 #endif

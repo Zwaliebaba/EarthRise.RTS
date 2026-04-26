@@ -14,8 +14,8 @@ struct RenderStyleT : public RefCounted {
   virtual bool WillRender() const = 0;
 };
 
-LT_API RenderStyle RenderStyle_Get();
-LT_API void RenderStyle_Pop();
-LT_API void RenderStyle_Push(RenderStyle const&);
+RenderStyle RenderStyle_Get();
+void RenderStyle_Pop();
+void RenderStyle_Push(RenderStyle const&);
 
 #endif

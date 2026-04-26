@@ -112,7 +112,7 @@ AutoClassDerived(PowerGenerator, PowerGeneratorBaseT,
 DERIVED_IMPLEMENT(PowerGenerator)
 
 DefineFunction(Object_PowerGenerator) {
-  LTE_ASSERT(args.type->GetType() == ItemType_PowerGeneratorType);
+  DEBUG_ASSERT(args.type->GetType() == ItemType_PowerGeneratorType);
   Reference<PowerGenerator> self = new PowerGenerator;
   self->SetSupertype(args.type);
   return self;

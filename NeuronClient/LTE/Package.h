@@ -5,15 +5,15 @@
 #include "Reference.h"
 
 struct PackageT : public RefCounted {
-  LT_API ~PackageT();
+  ~PackageT();
 
-  LT_API void AddFunction(Function const& function);
-  LT_API void AddType(Type const& type);
-  LT_API Function GetFunction(String const& name) const;
-  LT_API Type GetType(String const& name) const;
+  void AddFunction(Function const& function);
+  void AddType(Type const& type);
+  Function GetFunction(String const& name) const;
+  Type GetType(String const& name) const;
 };
 
-LT_API Package Package_Create(String const& name);
-LT_API Package Package_Global();
+Package Package_Create(String const& name);
+Package Package_Global();
 
 #endif

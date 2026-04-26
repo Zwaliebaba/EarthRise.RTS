@@ -30,14 +30,14 @@ struct WindowT : public RefCounted {
   virtual void Update() = 0;
 };
 
-LT_API Window Window_Create(
+Window Window_Create(
   String const& title,
   V2U const& size,
   bool border,
   bool fullscreen);
 
-LT_API Window Window_Get();
-LT_API void Window_Pop();
-LT_API void Window_Push(Window const& window);
+Window Window_Get();
+void Window_Pop();
+void Window_Push(Window const& window);
 
 #endif

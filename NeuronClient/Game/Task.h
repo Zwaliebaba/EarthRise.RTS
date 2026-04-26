@@ -25,7 +25,7 @@ struct TaskT : public RefCounted {
 
   /* How many cycles of this task could be performed with the given
    * resources? */
-  LT_API Quantity CanPerform(Object const& owner) const;
+  Quantity CanPerform(Object const& owner) const;
 
   /* Is this task an act of friendliness or hostility towards the target?
    *  1.0 = Maximally Friendly (e.g. Repairing)
@@ -74,7 +74,7 @@ struct TaskT : public RefCounted {
   }
 
   /* What is the object receiving the action of this task? */
-  LT_API virtual Object GetTarget() const;
+  virtual Object GetTarget() const;
 
   /* How many credits does the task produce? */
   virtual Quantity GetValue() const {

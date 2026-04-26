@@ -164,6 +164,6 @@ AutoClass(V2T, T, x, T, y)
   friend V2T Sign(const V2T& v) { return V2T(Sign(v.x), Sign(v.y)); }
 };
 
-LT_API V2 RandV2(float min, float max);
+V2 RandV2(float min, float max);
 
 #endif

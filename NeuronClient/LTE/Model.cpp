@@ -42,7 +42,7 @@ Model ModelT::Add(
   ShaderInstance const& shader,
   bool collidable)
 {
-  LTE_ASSERT(geom);
+  DEBUG_ASSERT(geom);
   d.entries.push(Entry());
   Entry& e = d.entries.back();
   e.geometry = geom;
@@ -53,7 +53,7 @@ Model ModelT::Add(
 }
 
 Model ModelT::Add(Model const& model) {
-  LTE_ASSERT(model);
+  DEBUG_ASSERT(model);
   for (size_t i = 0; i < model->d.entries.size(); ++i)
     d.entries.push(model->d.entries[i]);
   UpdateVersion();
@@ -72,7 +72,7 @@ void ModelT::RenderPiece(size_t piece, DrawState* state) const {
 }
 
 Bound3 ModelT::GetBound() const {
-  LTE_ASSERT(d.entries.size());
+  DEBUG_ASSERT(d.entries.size());
   short currentVersion = GetVersion();
   if (d.cachedBoxVersion != currentVersion) {
     d.cachedBoxVersion = currentVersion;

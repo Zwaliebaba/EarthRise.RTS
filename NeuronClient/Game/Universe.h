@@ -33,6 +33,6 @@ struct Universe : public UniverseBaseT {
     {}
 };
 
-LT_API Universe* Universe_Get();
+Universe* Universe_Get();
 
 #endif

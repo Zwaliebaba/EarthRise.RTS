@@ -12,7 +12,7 @@ AutoClass(ComponentZoned,
 
   ComponentZoned() : fogDensity(0) {}
 
-  LT_API float GetContainment(ObjectT*, Position const&);
+  float GetContainment(ObjectT*, Position const&);
 };
 
 DeclareFunction(Object_GetZone, Object,

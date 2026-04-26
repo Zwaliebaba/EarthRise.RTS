@@ -43,7 +43,7 @@ struct Distribution : public VectorMap<T, float> {
   }
 
   void popMin() {
-    LTE_ASSERT(this->size() > 0);
+    DEBUG_ASSERT(this->size() > 0);
     this->removeIndex(getMinIndex());
   }
 

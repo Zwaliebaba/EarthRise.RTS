@@ -27,97 +27,97 @@ AutoClassDerived(MeshT, GeometryT,
     version(0)
     {}
 
-  LT_API ~MeshT();
+  ~MeshT();
 
   /* Geometry. */
-  LT_API void Draw() const;
+  void Draw() const;
 
-  LT_API Bound3 GetBound() const;
+  Bound3 GetBound() const;
 
-  LT_API Mesh GetCollisionMesh() const;
+  Mesh GetCollisionMesh() const;
 
-  LT_API short GetVersion() const;
+  short GetVersion() const;
 
-  LT_API bool Intersects(
+  bool Intersects(
     Ray const& r,
     float* tOut = nullptr,
     V3* normalOut = nullptr,
     V2* uvOut = nullptr) const;
 
-  LT_API V3 Sample() const;
+  V3 Sample() const;
 
   /* Vertex Manipulation. */
-  LT_API Mesh AddMesh(Mesh const&);
+  Mesh AddMesh(Mesh const&);
 
-  LT_API Mesh AddMesh(Mesh const& mesh, Matrix const& transform);
+  Mesh AddMesh(Mesh const& mesh, Matrix const& transform);
 
-  LT_API Mesh AddQuad(uint i1, uint i2, uint i3, uint i4);
+  Mesh AddQuad(uint i1, uint i2, uint i3, uint i4);
 
-  LT_API Mesh AddQuadR(int i1, int i2, int i3, int i4);
+  Mesh AddQuadR(int i1, int i2, int i3, int i4);
 
-  LT_API Mesh AddTriangle(uint i1, uint i2, uint i3);
+  Mesh AddTriangle(uint i1, uint i2, uint i3);
 
-  LT_API Mesh AddVertex(Vertex const& vertex);
+  Mesh AddVertex(Vertex const& vertex);
 
-  LT_API Mesh AddVertex(
+  Mesh AddVertex(
     V3 const& position,
     V3 const& normal,
     float u,
     float v);
 
-  LT_API Mesh Clear();
+  Mesh Clear();
 
-  LT_API Mesh Clone() const;
+  Mesh Clone() const;
 
   /* Computation. */
-  LT_API void ComputeDecomp(Vector<Mesh>& pieces) const;
+  void ComputeDecomp(Vector<Mesh>& pieces) const;
 
-  LT_API Mesh ComputeEdgeDistance(float edgeThresh);
+  Mesh ComputeEdgeDistance(float edgeThresh);
 
-  LT_API Mesh ComputeNormals();
+  Mesh ComputeNormals();
 
-  LT_API Mesh ComputePrincipleComponent() const;
+  Mesh ComputePrincipleComponent() const;
 
   /* Queries. */
-  LT_API uint* GetIndexPointer();
-  LT_API uint const* GetIndexPointer() const;
+  uint* GetIndexPointer();
+  uint const* GetIndexPointer() const;
 
-  LT_API uint GetIndices() const;
+  uint GetIndices() const;
 
-  LT_API uint GetTriangles() const;
+  uint GetTriangles() const;
 
-  LT_API Vertex* GetVertexPointer();
-  LT_API Vertex const* GetVertexPointer() const;
+  Vertex* GetVertexPointer();
+  Vertex const* GetVertexPointer() const;
 
-  LT_API V3 const* GetVertexNormalPointer() const;
+  V3 const* GetVertexNormalPointer() const;
 
-  LT_API float const* GetVertexTexCoordPointer() const;
+  float const* GetVertexTexCoordPointer() const;
 
-  LT_API uint GetVertices() const;
+  uint GetVertices() const;
 
   /* Geometric Operations. */
-  LT_API Mesh RemoveDegeneracies(float minTriArea = 1e-5f) const;
+  Mesh RemoveDegeneracies(float minTriArea = 1e-5f) const;
 
-  LT_API Mesh ReverseWinding();
+  Mesh ReverseWinding();
 
-  LT_API Mesh ShareVertices(float maxDistance = 1e-5f);
+  Mesh ShareVertices(float maxDistance = 1e-5f);
 
-  LT_API Mesh SmoothNormals(float distanceFactor = 0.1f);
+  Mesh SmoothNormals(float distanceFactor = 0.1f);
 
-  LT_API Mesh UnshareVertices(float minDotProduct = 0.8f);
+  Mesh UnshareVertices(float minDotProduct = 0.8f);
 
   /* Geometric Transformations. */
-  LT_API Mesh Transform(Matrix const& m);
+  Mesh Transform(Matrix const& m);
 
-  LT_API Mesh Translate(V3 const& translation);
-  LT_API Mesh TranslateToCenter();
+  Mesh Translate(V3 const& translation);
+  Mesh TranslateToCenter();
 
-  LT_API Mesh Rotate(V3 const& ypr);
+  Mesh Rotate(V3 const& ypr);
 
-  LT_API Mesh Scale(V3 const& scale);
+  Mesh Scale(V3 const& scale);
 
-  LT_API Mesh SetU(float u);
-  LT_API Mesh SetV(float v);
+  Mesh SetU(float u);
+  Mesh SetV(float v);
 
   template <class VertexFNType>
   Mesh Map(VertexFNType& fn) {

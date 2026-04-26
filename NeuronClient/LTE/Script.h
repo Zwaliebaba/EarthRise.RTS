@@ -40,7 +40,7 @@ namespace LTE {
 
     Type ResolveType(StringList const& name) const;
 
-    LT_API void Reload();
+    void Reload();
   };
 
   DeclareFunctionNoParams(Script_ClearCache, void)

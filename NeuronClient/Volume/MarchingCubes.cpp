@@ -75,11 +75,11 @@ void MarchingCubes::run( real iso ) {
 // init temporary structures (must set sizes before call)
 void MarchingCubes::init_temps() {
   if( !_ext_data )
-    LTE_ASSERT(_data = new real [_size_x * _size_y * _size_z]);
+    DEBUG_ASSERT(_data = new real [_size_x * _size_y * _size_z]);
 
-  LTE_ASSERT(_x_verts = new int  [_size_x * _size_y * _size_z]);
-  LTE_ASSERT(_y_verts = new int  [_size_x * _size_y * _size_z]);
-  LTE_ASSERT(_z_verts = new int  [_size_x * _size_y * _size_z]);
+  DEBUG_ASSERT(_x_verts = new int  [_size_x * _size_y * _size_z]);
+  DEBUG_ASSERT(_y_verts = new int  [_size_x * _size_y * _size_z]);
+  DEBUG_ASSERT(_z_verts = new int  [_size_x * _size_y * _size_z]);
 
   memset( _x_verts, -1, _size_x * _size_y * _size_z * sizeof( int ) ) ;
   memset( _y_verts, -1, _size_x * _size_y * _size_z * sizeof( int ) ) ;
@@ -93,8 +93,8 @@ void MarchingCubes::init_all () {
 
   _nverts = _ntrigs = 0 ;
   _Nverts = _Ntrigs = ALLOC_SIZE ;
-  LTE_ASSERT(_vertices = new MCVertex[_Nverts]);
-  LTE_ASSERT(_triangles = new Triangle[_Ntrigs]);
+  DEBUG_ASSERT(_vertices = new MCVertex[_Nverts]);
+  DEBUG_ASSERT(_triangles = new Triangle[_Ntrigs]);
 }
 
 //_____________________________________________________________________________
@@ -705,7 +705,7 @@ void MarchingCubes::add_triangle( const char* trig, char n, int v12 ) {
       if( _ntrigs >= _Ntrigs )
       {
         Triangle *temp = _triangles ;
-        LTE_ASSERT(_triangles = new Triangle[ 2*_Ntrigs ]);
+        DEBUG_ASSERT(_triangles = new Triangle[ 2*_Ntrigs ]);
         memcpy( _triangles, temp, _Ntrigs*sizeof(Triangle) ) ;
         delete[] temp ;
         _Ntrigs *= 2 ;
@@ -763,7 +763,7 @@ void MarchingCubes::test_MCVertex_addition() {
   if( _nverts >= _Nverts )
   {
     MCVertex *temp = _vertices ;
-    LTE_ASSERT(_vertices = new MCVertex[ _Nverts*2 ]);
+    DEBUG_ASSERT(_vertices = new MCVertex[ _Nverts*2 ]);
     memcpy( _vertices, temp, _Nverts*sizeof(MCVertex) ) ;
     delete[] temp ;
     _Nverts *= 2 ;

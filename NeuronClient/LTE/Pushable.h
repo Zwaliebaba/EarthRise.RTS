@@ -26,7 +26,7 @@ namespace LTE {
     }
 
     T* Push() {
-      LTE_ASSERT(GetStack().size() < 128);
+      DEBUG_ASSERT(GetStack().size() < 128);
       GetStack().push((T*)this);
       return (T*)this;
     }

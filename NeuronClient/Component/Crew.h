@@ -6,8 +6,7 @@
 #include "LTE/AutoClass.h"
 #include "LTE/Vector.h"
 
-AutoClass(ComponentCrew,
-  Vector<Item>, elements)
+AutoClass(ComponentCrew, Vector<Item>, elements)
 
   ComponentCrew() {}
 };

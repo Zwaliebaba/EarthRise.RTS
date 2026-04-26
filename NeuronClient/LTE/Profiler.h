@@ -8,9 +8,9 @@
 
 #ifdef ENABLE_PROFILING
 
-LT_API void Profiler_Flush();
-LT_API void Profiler_Pop();
-LT_API void Profiler_Push(char const* name);
+void Profiler_Flush();
+void Profiler_Pop();
+void Profiler_Push(char const* name);
 
 #else
 
@@ -25,6 +25,6 @@ DeclareFunction(Profiler_Auto, void,
 DeclareFunctionNoParams(Profiler_Start, void)
 DeclareFunctionNoParams(Profiler_Stop, void)
 
-LT_API void Profiler_SetFlushes(bool flushes);
+void Profiler_SetFlushes(bool flushes);
 
 #endif

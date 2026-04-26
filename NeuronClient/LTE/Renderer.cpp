@@ -585,7 +585,7 @@ namespace LTE {
       else if (field.type == Type_Get<V4>())
         components = 4;
       else
-        error("Vertex format must contain only float, vec2, vec3, or vec4 types");
+        Fatal("Vertex format must contain only float, vec2, vec3, or vec4 types");
 
       GL_VertexAttribPointer(
         i,
@@ -696,13 +696,13 @@ namespace LTE {
     uint guid,
     GL_TextureTarget::Enum target)
   {
-    LTE_ASSERT(index < kMaxColorAttachments);
+    DEBUG_ASSERT(index < kMaxColorAttachments);
     renderer.colorAttachment[index].push(Attachment(buffer, target, guid));
     Renderer_UpdateFramebuffer();
   }
 
   void Renderer_PopColorBuffer(uint index) {
-    LTE_ASSERT(index < kMaxColorAttachments);
+    DEBUG_ASSERT(index < kMaxColorAttachments);
     renderer.colorAttachment[index].pop();
     Renderer_UpdateFramebuffer();
   }

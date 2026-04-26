@@ -7,55 +7,50 @@
 #include "LTE/AutoClass.h"
 #include "LTE/Map.h"
 
-typedef Map<Item, Quantity> CargoMapT;
-typedef CargoMapT::iterator CargoIter;
-typedef CargoMapT::const_iterator CargoIterC;
+using CargoMapT = Map<Item, Quantity>;
+using CargoIter = CargoMapT::iterator;
+using CargoIterC = CargoMapT::const_iterator;
 
-AutoClass(ComponentCargo,
-  CargoMapT, elements,
-  Mass, currentMass,
-  Mass, capacity)
+AutoClass(ComponentCargo, CargoMapT, elements, Mass, currentMass, Mass, capacity)
 
-  ComponentCargo() :
-    currentMass(0),
-    capacity(0)
-    {}
+  ComponentCargo()
+    : currentMass(0),
+      capacity(0) {}
 
-  LT_API bool Add(Item const& item, Quantity count, bool force = false);
-  
-  Quantity GetCount(Item const& item) const {
-    Quantity const* count = elements.get(item);
+  bool Add(const Item& item, Quantity count, bool force = false);
+
+  Quantity GetCount(const Item& item) const
+  {
+    const Quantity* count = elements.get(item);
     return count ? *count : 0;
   }
 };
 
 AutoComponent(Cargo)
-  void SetSupertype(Item const& type) {
+
+  void SetSupertype(const Item& type)
+  {
     Cargo.capacity = type->GetCapability().Storage;
 
     BaseT::SetSupertype(type);
   }
 
-  bool AddItem(Item const& item, Quantity count, bool force = false) {
-    return item->GetStorageType() == StorageType_Cargo
-      ? Cargo.Add(item, count, force)
-      : BaseT::AddItem(item, count, force);
+  bool AddItem(const Item& item, Quantity count, bool force = false)
+  {
+    return item->GetStorageType() == StorageType_Cargo ? Cargo.Add(item, count, force) : BaseT::AddItem(item, count, force);
   }
 
-  Quantity GetItemCount(Item const& item) const {
-    return item->GetStorageType() == StorageType_Cargo
-      ? Cargo.GetCount(item)
-      : BaseT::GetItemCount(item);
-  }
- 
-  Mass GetUsedCapacity() const {
-    return Cargo.currentMass;
+  Quantity GetItemCount(const Item& item) const
+  {
+    return item->GetStorageType() == StorageType_Cargo ? Cargo.GetCount(item) : BaseT::GetItemCount(item);
   }
 
-  Quantity GetValue() const {
+  Mass GetUsedCapacity() const { return Cargo.currentMass; }
+
+  Quantity GetValue() const
+  {
     Quantity total = BaseT::GetValue();
-    for (CargoIterC it = Cargo.elements.begin();
-         it != Cargo.elements.end(); ++it)
+    for (CargoIterC it = Cargo.elements.begin(); it != Cargo.elements.end(); ++it)
       total += it->first->GetValue() * it->second;
     return total;
   }

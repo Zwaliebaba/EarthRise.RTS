@@ -6,48 +6,52 @@
 #include "LTE/AutoClass.h"
 #include "LTE/Map.h"
 
-typedef Map<Item, Quantity> DatabaseMapT;
-typedef DatabaseMapT::iterator DatabaseIter;
-typedef DatabaseMapT::const_iterator DatabaseIterC;
+using DatabaseMapT = Map<Item, Quantity>;
+using DatabaseIter = DatabaseMapT::iterator;
+using DatabaseIterC = DatabaseMapT::const_iterator;
 
-AutoClass(ComponentDatabase,
-  DatabaseMapT, elements)
+AutoClass(ComponentDatabase, DatabaseMapT, elements)
 
   ComponentDatabase() {}
 
-  ~ComponentDatabase() {
+  ~ComponentDatabase()
+  {
     // CRITICAL
     // for (DatabaseIter it = elements.begin(); it != elements.end(); ++it)
     //  it->first->copies -= it->second;
   }
 
-  void Mod(Item const& data, Quantity quantity) {
+  void Mod(const Item& data, Quantity quantity)
+  {
     // data->copies += quantity;
     Quantity& q = elements[data];
     q += quantity;
     if (q == 0)
       elements.erase(data);
   }
-  
-  Quantity GetCount(Item const& item) const {
-    Quantity const* count = elements.get(item);
+
+  Quantity GetCount(const Item& item) const
+  {
+    const Quantity* count = elements.get(item);
     return count ? *count : 0;
   }
 };
 
 AutoComponent(Database)
-  bool AddItem(Item const& item, Quantity count, bool force = false) {
-    if (item->GetStorageType() == StorageType_Database) {
+
+  bool AddItem(const Item& item, Quantity count, bool force = false)
+  {
+    if (item->GetStorageType() == StorageType_Database)
+    {
       Database.Mod(item, count);
       return true;
-    } else
-      return BaseT::AddItem(item, count, force);
+    }
+    return BaseT::AddItem(item, count, force);
   }
 
-  Quantity GetItemCount(Item const& item) const {
-    return item->GetStorageType() == StorageType_Database
-      ? Database.GetCount(item)
-      : BaseT::GetItemCount(item);
+  Quantity GetItemCount(const Item& item) const
+  {
+    return item->GetStorageType() == StorageType_Database ? Database.GetCount(item) : BaseT::GetItemCount(item);
   }
 };
 

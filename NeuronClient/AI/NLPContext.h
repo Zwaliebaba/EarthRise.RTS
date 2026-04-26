@@ -3,7 +3,8 @@
 
 #include "LTE/String.h"
 
-struct NLPContext {
+struct NLPContext
+{
   String selfPronoun;
 };
 

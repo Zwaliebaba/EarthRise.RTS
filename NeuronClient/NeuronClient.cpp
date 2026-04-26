@@ -34,7 +34,7 @@ void ClientEngine::Startup(const wchar_t* _gameName, Windows::Foundation::Size _
 
   if constexpr (SHOW_BORDER)
   {
-    style = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_EX_TOPMOST; 
+    style = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_EX_TOPMOST;
     windowWidthAdd = GetSystemMetrics(SM_CXSIZEFRAME) * 2.0f;
     windowHeightAdd = GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYSIZEFRAME) * 2.0f;
   }
@@ -48,18 +48,18 @@ void ClientEngine::Startup(const wchar_t* _gameName, Windows::Foundation::Size _
   const int windowWidth = _size.Width + windowWidthAdd;
   const int windowHeight = _size.Height + windowHeightAdd;
 
-  m_hwnd = CreateWindowEx(0, L"Neuron", _gameName, style, CW_USEDEFAULT, CW_USEDEFAULT, windowWidth,
-    windowHeight, nullptr, nullptr, m_instance, nullptr);
+  m_hwnd = CreateWindowEx(0, L"Neuron", _gameName, style, CW_USEDEFAULT, CW_USEDEFAULT, windowWidth, windowHeight, nullptr, nullptr,
+                          m_instance, nullptr);
 
   if (!m_hwnd)
   {
     LPTSTR lpMsgBuf;
     DWORD dw = GetLastError();
 
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr,
-      dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, nullptr);
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dw,
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, nullptr);
 
-    Fatal(L"CreateWindowEx failed with error {:d}: {:s}", dw, lpMsgBuf);
+    Fatal(L"CreateWindowEx failed with Fatal {:d}: {:s}", dw, lpMsgBuf);
   }
 
   RECT rc;
@@ -84,7 +84,7 @@ void ClientEngine::Shutdown()
     m_main->Shutdown();
     m_main = nullptr;
   }
-  
+
   Graphics::Core::Shutdown();
 
   CoreEngine::Shutdown();
@@ -96,7 +96,7 @@ Windows::Foundation::Point ClientEngine::OutputTopLeft()
   GetWindowRect(m_hwnd, &rc);
 
   // This is the top left of the window, not the client area, dont know why I have to add 3 (or 1 on my X64)
-  return { rc.left + windowWidthAdd, rc.top + windowHeightAdd };
+  return {rc.left + windowWidthAdd, rc.top + windowHeightAdd};
 }
 
 LRESULT CALLBACK WndProc(const HWND _hWnd, const UINT _message, WPARAM _wParam, const LPARAM _lParam)
@@ -123,12 +123,12 @@ LRESULT CALLBACK WndProc(const HWND _hWnd, const UINT _message, WPARAM _wParam, 
     break;
 
   case WM_PAINT:
-  {
-    PAINTSTRUCT ps;
-    BeginPaint(_hWnd, &ps);
-    EndPaint(_hWnd, &ps);
-    return 0;
-  }
+    {
+      PAINTSTRUCT ps;
+      BeginPaint(_hWnd, &ps);
+      EndPaint(_hWnd, &ps);
+      return 0;
+    }
 
   case WM_DISPLAYCHANGE:
     if (game)
@@ -232,8 +232,7 @@ LRESULT CALLBACK WndProc(const HWND _hWnd, const UINT _message, WPARAM _wParam, 
         ShowWindow(_hWnd, SW_SHOWNORMAL);
 
         const auto outputSize = ClientEngine::OutputSize();
-        SetWindowPos(_hWnd, HWND_TOP, 0, 0, outputSize.Width, outputSize.Height,
-          SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+        SetWindowPos(_hWnd, HWND_TOP, 0, 0, outputSize.Width, outputSize.Height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
       }
       else
       {
@@ -259,7 +258,7 @@ LRESULT CALLBACK WndProc(const HWND _hWnd, const UINT _message, WPARAM _wParam, 
 
   case WM_MENUCHAR:
     // A menu is active and the user presses a key that does not correspond
-    // to any mnemonic or accelerator key. Ignore so we don't produce an error beep.
+    // to any mnemonic or accelerator key. Ignore so we don't produce an Fatal beep.
     return MAKELRESULT(0, MNC_CLOSE);
   }
 

@@ -65,7 +65,7 @@ struct WidgetT : public RefCounted {
   }
 
 #define X(name, type)                                                          \
-  LT_API void name##Default(type& out);                                        \
+  void name##Default(type& out);                                        \
                                                                                \
   void name(type& out) {                                                       \
     name##Default(out);                                                        \
@@ -73,14 +73,14 @@ struct WidgetT : public RefCounted {
       components[i]->name(this, out);                                          \
   }                                                                            \
                                                                                \
-  LT_API type name();
+  type name();
   WIDGET_FUNCTION_X
 #undef X
 
-  LT_API void GetAlphaDefault(float&);
-  LT_API void GetColorDefault(Color&);
-  LT_API void GetPosDefault(V2&);
-  LT_API void GetSizeDefault(V2&);
+  void GetAlphaDefault(float&);
+  void GetColorDefault(Color&);
+  void GetPosDefault(V2&);
+  void GetSizeDefault(V2&);
 
   void Add(WidgetComponent const& component) {
     components.push(component);
@@ -143,13 +143,13 @@ struct WidgetT : public RefCounted {
     }
   }
 
-  LT_API void AddChild(Widget const&);
-  LT_API void Clear();
-  LT_API void Draw();
-  LT_API void PrePosition();
-  LT_API void PostPosition();
-  LT_API void RemoveChild(Widget const&);
-  LT_API void Update(WidgetUpdateState&);
+  void AddChild(Widget const&);
+  void Clear();
+  void Draw();
+  void PrePosition();
+  void PostPosition();
+  void RemoveChild(Widget const&);
+  void Update(WidgetUpdateState&);
 
   FIELDS {
     MAPFIELD(pos)

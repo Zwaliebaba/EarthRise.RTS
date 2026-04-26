@@ -10,7 +10,7 @@ AutoClass(ComponentPilotable,
 
   ComponentPilotable() {}
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(Pilotable)

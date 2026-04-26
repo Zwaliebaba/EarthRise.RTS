@@ -4,27 +4,27 @@
 #include "Common.h"
 
 namespace LTE {
-  LT_API const char* Key_Name(Key key);
+  const char* Key_Name(Key key);
 
-  LT_API void Keyboard_AddDown(Key key);
+  void Keyboard_AddDown(Key key);
 
-  LT_API void Keyboard_AddText(uchar c);
+  void Keyboard_AddText(uchar c);
 
-  LT_API void Keyboard_Block();
+  void Keyboard_Block();
 
-  LT_API bool Keyboard_Down(Key key);
+  bool Keyboard_Down(Key key);
 
-  LT_API Vector<Key> const& Keyboard_GetKeysPressed();
+  Vector<Key> const& Keyboard_GetKeysPressed();
 
-  LT_API bool Keyboard_IsBlocked();
+  bool Keyboard_IsBlocked();
 
-  LT_API void Keyboard_ModifyString(String& str, int& cursor);
+  void Keyboard_ModifyString(String& str, int& cursor);
 
-  LT_API bool Keyboard_Pressed(Key key);
+  bool Keyboard_Pressed(Key key);
 
-  LT_API bool Keyboard_Released(Key key);
+  bool Keyboard_Released(Key key);
 
-  LT_API void Keyboard_Update(bool hasFocus);
+  void Keyboard_Update(bool hasFocus);
 
   inline bool Keyboard_Alt() {
     return Keyboard_Down(Key_LAlt) || Keyboard_Down(Key_RAlt);

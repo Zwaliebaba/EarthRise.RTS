@@ -13,7 +13,7 @@ struct RenderableT : RefCounted
 
   virtual Bound3 GetBound() const { return Bound3(0); }
 
-  LT_API virtual Mesh GetCollisionMesh() const;
+  virtual Mesh GetCollisionMesh() const;
 
   virtual size_t GetHash() const { return 0; }
 
@@ -32,6 +32,6 @@ struct RenderableT : RefCounted
   FIELDS {}
 };
 
-LT_API Renderable Renderable_Union(const Renderable& a, const Renderable& b);
+Renderable Renderable_Union(const Renderable& a, const Renderable& b);
 
 #endif

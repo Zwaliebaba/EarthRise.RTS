@@ -57,26 +57,26 @@ struct Texture2DT : public RefCounted {
   FIELDS {}
 };
 
-LT_API Texture2D Texture_Atlas(Vector<Texture2D*> const& souces);
+Texture2D Texture_Atlas(Vector<Texture2D*> const& souces);
 
-LT_API Texture2D Texture_Create(
+Texture2D Texture_Create(
   uint width,
   uint height,
   GL_TextureFormat::Enum format = GL_TextureFormat::RGBA8,
   void const* data = nullptr);
 
-LT_API Texture2D Texture2D_Filter(
+Texture2D Texture2D_Filter(
   Texture2D const& texture,
   Shader const& shader);
 
-LT_API void Texture_Generate(
+void Texture_Generate(
   Texture2D const& source,
   Shader const& shader,
   bool generateMips = true,
   bool segmented = true,
   float maxJobTime = 1);
 
-LT_API void Texture_Generate(
+void Texture_Generate(
   Texture2D const& source1,
   Texture2D const& source2,
   Shader const& shader,

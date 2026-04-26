@@ -4,12 +4,10 @@
 #include "Common.h"
 #include "LTE/AutoClass.h"
 
-AutoClass(ComponentDetectable,
-  Time, detectionTime)
+AutoClass(ComponentDetectable, Time, detectionTime)
 
-  ComponentDetectable() :
-    detectionTime(60000000)
-    {}
+  ComponentDetectable()
+    : detectionTime(60000000) {}
 };
 
 AutoComponent(Detectable)

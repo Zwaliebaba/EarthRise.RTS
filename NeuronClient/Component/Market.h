@@ -84,12 +84,12 @@ AutoClass(ComponentMarket,
     return elements.get(item->GetHash());
   }
 
-  LT_API void AddAsk(ObjectT* self, Order const&);
-  LT_API void AddBid(ObjectT* self, Order const&);
-  LT_API void RemoveAsk(ObjectT* self, Order const&);
-  LT_API void RemoveBid(ObjectT* self, Order const&);
+  void AddAsk(ObjectT* self, Order const&);
+  void AddBid(ObjectT* self, Order const&);
+  void RemoveAsk(ObjectT* self, Order const&);
+  void RemoveBid(ObjectT* self, Order const&);
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(Market)

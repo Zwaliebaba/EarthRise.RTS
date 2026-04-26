@@ -64,7 +64,7 @@ namespace LTE {
 
     void Grow() {
       Arena* thisArena = new Arena;
-      LTE_ASSERT(thisArena);
+      DEBUG_ASSERT(thisArena);
       thisArena->elements[ArenaSize - 1].next = head;
       head = &thisArena->elements[0];
       thisArena->next = headArena;

@@ -23,7 +23,7 @@ namespace LTE {
       invert(false)
       {}
 
-    LT_API float Get() const;
+    float Get() const;
 
     virtual float GetRaw() const = 0;
 
@@ -56,25 +56,25 @@ namespace LTE {
     }
   };
 
-  LT_API Axis Axis_Button(Button const& button, bool inverted = false);
+  Axis Axis_Button(Button const& button, bool inverted = false);
 
-  LT_API Axis Axis_Capture();
+  Axis Axis_Capture();
 
-  LT_API Axis Axis_Joy(uint joystickIndex, JoystickAxis axix);
+  Axis Axis_Joy(uint joystickIndex, JoystickAxis axix);
 
-  LT_API Axis Axis_MouseX();
-  LT_API Axis Axis_MouseY();
+  Axis Axis_MouseX();
+  Axis Axis_MouseY();
 
-  LT_API Axis Axis_MouseDragX(MouseButton button);
-  LT_API Axis Axis_MouseDragY(MouseButton button);
+  Axis Axis_MouseDragX(MouseButton button);
+  Axis Axis_MouseDragY(MouseButton button);
 
-  LT_API Axis Axis_MouseWheel();
+  Axis Axis_MouseWheel();
 
-  LT_API Axis Axis_Product(Axis const& a, Axis const& b);
+  Axis Axis_Product(Axis const& a, Axis const& b);
 
-  LT_API Axis Axis_Range(Axis const& source, float minValue, float maxValue);
+  Axis Axis_Range(Axis const& source, float minValue, float maxValue);
 
-  LT_API Axis Axis_Sum(Axis const& a, Axis const& b);
+  Axis Axis_Sum(Axis const& a, Axis const& b);
 
   inline Axis Axis_DpadVertical() {
 #ifdef LIBLT_WINDOWS

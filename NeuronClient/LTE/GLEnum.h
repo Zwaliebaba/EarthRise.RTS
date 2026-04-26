@@ -389,7 +389,7 @@ namespace GL_TextureFormat
       return GL_DataFormat::UnsignedByte;
     case RGBA32F:
       return GL_DataFormat::Float;
-    default: error("Unsupported Texture Format");
+    default: Fatal("Unsupported Texture Format");
       return GL_DataFormat::UnsignedByte;
     }
   }
@@ -446,7 +446,7 @@ namespace GL_TextureFormat
       return GL_PixelFormat::RGBA;
     case RGBA32I:
       return GL_PixelFormat::RGBA;
-    default: error("Unsupported Texture Format");
+    default: Fatal("Unsupported Texture Format");
       return GL_PixelFormat::Red;
     }
   }
@@ -503,7 +503,7 @@ namespace GL_TextureFormat
       return 16;
     case RGBA32I:
       return 16;
-    default: error("Unsupported Texture Format");
+    default: Fatal("Unsupported Texture Format");
       return 0;
     }
   }

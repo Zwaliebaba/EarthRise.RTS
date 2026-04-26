@@ -25,9 +25,9 @@ DeclareFunctionArgBind(Item_AssemblyChip, Item,
   Item, blueprint,
   Item, source)
 
-LT_API Item Item_Blueprint(DataRef const& properties);
+Item Item_Blueprint(DataRef const& properties);
 
-LT_API Item Item_Blueprint_Derived(Reference<Blueprint> const& source);
+Item Item_Blueprint_Derived(Reference<Blueprint> const& source);
 
 DeclareFunction(Item_ColonyType, Item,
   String, name,
@@ -35,11 +35,11 @@ DeclareFunction(Item_ColonyType, Item,
   Task, task,
   Traits, traits)
 
-LT_API Item Item_Commodity(int id);
+Item Item_Commodity(int id);
 
-LT_API Item Item_Data_Damaged(Object const& object);
+Item Item_Data_Damaged(Object const& object);
 
-LT_API Item Item_Data_Destroyed(Object const& object);
+Item Item_Data_Destroyed(Object const& object);
 
 DeclareFunctionArgBind(Item_DroneBayType, Item,
   double, value,

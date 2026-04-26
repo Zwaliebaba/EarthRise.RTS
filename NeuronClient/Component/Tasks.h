@@ -14,8 +14,8 @@ AutoClass(ComponentTasks,
 
   ComponentTasks() {}
 
-  LT_API void Clear(ObjectT* self);
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Clear(ObjectT* self);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(Tasks)

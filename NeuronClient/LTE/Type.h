@@ -6,7 +6,7 @@
 #include "String.h"
 
 #define DECLARE_DEFAULT_REFLECTION(name)                                       \
-  LT_API Type _Type_Get(name const& t);
+  Type _Type_Get(name const& t);
 
 #define MAKE_DEFAULT_REFLECTION(T)                                             \
   Type _Type_Get(T const& t) {                                                 \
@@ -25,7 +25,7 @@
   }
 
 #define DeclareMetadata(T)                                                     \
-  LT_API friend Type _Type_Get(T const& t);
+  friend Type _Type_Get(T const& t);
 
 #define DefineMetadata(T)                                                      \
   Type _Type_Get(T const& t) {                                                 \
@@ -158,20 +158,20 @@ struct TypeT {
 
   TypeT() : refCount(0) {}
 
-  LT_API ~TypeT();
+  ~TypeT();
 
-  LT_API void AddConversion(ConversionType const& cast);
-  LT_API void AddDerived(Type const& type);
-  LT_API void AddField(Field const& field);
-  LT_API void AddFunction(Function const& fn);
+  void AddConversion(ConversionType const& cast);
+  void AddDerived(Type const& type);
+  void AddField(Field const& field);
+  void AddFunction(Function const& fn);
 
-  LT_API Data& GetAux();
-  LT_API Vector<String>& GetAliases();
-  LT_API Vector<ConversionType>& GetConversions();
-  LT_API Vector<Type>& GetDerived();
-  LT_API Vector<Field>& GetFields();
-  LT_API Vector<Function>& GetFunctions();
-  LT_API Type& GetPointeeType();
+  Data& GetAux();
+  Vector<String>& GetAliases();
+  Vector<ConversionType>& GetConversions();
+  Vector<Type>& GetDerived();
+  Vector<Field>& GetFields();
+  Vector<Function>& GetFunctions();
+  Type& GetPointeeType();
 
   void* Allocate() {
     return allocate(this);
@@ -226,7 +226,7 @@ struct TypeT {
   }
 
   bool RefCountDecrement() {
-    LTE_ASSERT(refCount > 0);
+    DEBUG_ASSERT(refCount > 0);
     return --refCount == 0;
   }
 
@@ -234,13 +234,13 @@ struct TypeT {
     refCount++;
   }
 
-  LT_API FieldType FindField(void* base, String const& name);
-  LT_API String GetAliasName() const;
-  LT_API FieldType GetField(void* base, size_t index);
-  LT_API size_t GetFieldCount(void* base);
-  LT_API bool HasField(void* base, String const& name);
-  LT_API bool IsPseudoPointer() const;
-  LT_API String ToString(void* buffer);
+  FieldType FindField(void* base, String const& name);
+  String GetAliasName() const;
+  FieldType GetField(void* base, size_t index);
+  size_t GetFieldCount(void* base);
+  bool HasField(void* base, String const& name);
+  bool IsPseudoPointer() const;
+  String ToString(void* buffer);
 
   template <class StreamT>
   friend void _ToStream(StreamT& s, TypeT const& t) {
@@ -251,12 +251,12 @@ struct TypeT {
   }
 };
 
-LT_API Type Type_Create(String const& name, size_t size);
+Type Type_Create(String const& name, size_t size);
 
-LT_API void Type_AddAlias(Type const& type, String const& alias);
-LT_API Type Type_Find(String const& name);
-LT_API Vector<Type> const& Type_GetList();
-LT_API void Type_Print(void* base, Type const& type, uint maxDepth);
+void Type_AddAlias(Type const& type, String const& alias);
+Type Type_Find(String const& name);
+Vector<Type> const& Type_GetList();
+void Type_Print(void* base, Type const& type, uint maxDepth);
 
 template <class T>
 void Type_Print(T const& t, uint maxDepth = 4) {
@@ -308,14 +308,14 @@ struct Type {
 
   TypeT* operator->() const {
 #ifdef DEBUG_POINTERS
-    if (!t) error("Attempt to access null reference");
+    if (!t) Fatal("Attempt to access null reference");
 #endif
     return t;
   }
 
   TypeT& operator*() const {
 #ifdef DEBUG_POINTERS
-    if (!t) error("Attempt to access null reference");
+    if (!t) Fatal("Attempt to access null reference");
 #endif
     return *t;
   }
@@ -471,8 +471,8 @@ inline Type _Type_Get(void* const& t) {
   return type;
 }
 
-LT_API Type _Type_Get(Type const& t);
-LT_API Type _Type_Get(TypeT const& t);
+Type _Type_Get(Type const& t);
+Type _Type_Get(TypeT const& t);
 
 #define X(x) DECLARE_DEFAULT_REFLECTION(x)
 PRIMITIVE_TYPE_X

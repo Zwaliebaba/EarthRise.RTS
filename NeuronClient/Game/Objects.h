@@ -29,7 +29,7 @@ DeclareFunction(Object_Custom, Object,
 
 DeclareFunctionNoParams(Object_DustFlecks, Object)
 
-LT_API Object Object_Dynamic(Generic<Renderable, void> const& renderable);
+Object Object_Dynamic(Generic<Renderable, void> const& renderable);
 
 DeclareFunction(Object_Explosion, Object,
   ExplosionType, type,
@@ -66,12 +66,12 @@ DeclareFunction(Object_PowerGenerator, Object,
 DeclareFunction(Object_ProductionLab, Object,
   Item, type)
 
-LT_API Object Object_Pulse(
+Object Object_Pulse(
   V3 const& velocity,
   V3 const& drift,
   float width);
 
-LT_API Object Object_Rail(
+Object Object_Rail(
   Position const& origin,
   V3 const& direction,
   V3 const& velocity);
@@ -106,7 +106,7 @@ DeclareFunction(Object_Star, Object,
 DeclareFunction(Object_Station, Object,
   Item, type)
 
-LT_API Object Object_Static(Generic<Renderable, void> const& renderable);
+Object Object_Static(Generic<Renderable, void> const& renderable);
 
 DeclareFunctionArgBind(Object_System, Object,
   Position, position,
@@ -117,9 +117,9 @@ typedef Object_System_Args SystemType;
 DeclareFunction(Object_TechLab, Object,
   Item, type)
 
-LT_API Object Object_Thruster(Item const& type, ObjectT* parent);
+Object Object_Thruster(Item const& type, ObjectT* parent);
 
-LT_API Object Object_Trail(
+Object Object_Trail(
   Object const& parent,
   int length,
   Color const& color,
@@ -146,7 +146,7 @@ DeclareFunction(Object_Weapon, Object,
 
 DeclareFunctionNoParams(Object_Wormhole, Object)
 
-LT_API void Object_Wormholes(ObjectT* a, ObjectT* b);
+void Object_Wormholes(ObjectT* a, ObjectT* b);
 
 DeclareFunction(Object_Zone, Object,
   Object, parent,

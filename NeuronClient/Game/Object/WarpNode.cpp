@@ -359,7 +359,7 @@ AutoClassDerived(WarpNode, WarpNodeBaseT, WarpNodeController, controller, bool, 
         RailSlot slot = controller->Enter(message.object, this, target);
 #if 0
         if (!slot)
-          debugprint;
+          DebugTrace;
 #endif
       }
     }

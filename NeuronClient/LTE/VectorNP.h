@@ -28,9 +28,9 @@ struct VectorNP : public NullBase<VectorNP> {
     capacity(0),
     size(0)
   {
-    LTE_ASSERT(type->assign);
-    LTE_ASSERT(type->construct);
-    LTE_ASSERT(type->destruct);
+    DEBUG_ASSERT(type->assign);
+    DEBUG_ASSERT(type->construct);
+    DEBUG_ASSERT(type->destruct);
   }
 
   VectorNP(VectorNP const& other) :
@@ -81,7 +81,7 @@ struct VectorNP : public NullBase<VectorNP> {
     if (!type)
       type = t.type;
 
-    LTE_ASSERT(t.type == type);
+    DEBUG_ASSERT(t.type == type);
     Reserve(size + 1);
 
     void* ptr = &buffer[size * type->size];
@@ -103,7 +103,7 @@ struct VectorNP : public NullBase<VectorNP> {
 
   template <class T>
   void Convert(Vector<T>& dest) const {
-    LTE_ASSERT(type == Type_Get<T>());
+    DEBUG_ASSERT(type == Type_Get<T>());
     dest.clear();
     dest.reserve(size);
     for (size_t i = 0; i < size; ++i)

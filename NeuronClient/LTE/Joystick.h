@@ -7,9 +7,9 @@ namespace LTE {
   struct Joystick {
     virtual ~Joystick() {}
 
-    LT_API static Joystick* Get(unsigned int index);
-    LT_API static uint GetButtonCount();
-    LT_API static uint GetCount();
+    static Joystick* Get(unsigned int index);
+    static uint GetButtonCount();
+    static uint GetCount();
 
     virtual float GetAxis(JoystickAxis axis) const = 0;
     virtual float GetAxisDelta(JoystickAxis axis) const = 0;

@@ -3,14 +3,15 @@
 
 #include "Reference.h"
 
-struct ModuleT : public RefCounted {
-  virtual ~ModuleT() {}
+struct ModuleT : RefCounted
+{
+  ~ModuleT() override {}
 
-  virtual char const* GetName() const = 0;
+  virtual const char* GetName() const = 0;
   virtual void Update() = 0;
 };
 
-LT_API void Module_RegisterGlobal(Module const& module);
-LT_API void Module_UpdateGlobal();
+void Module_RegisterGlobal(const Module& module);
+void Module_UpdateGlobal();
 
 #endif

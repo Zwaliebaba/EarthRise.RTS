@@ -90,8 +90,8 @@ AutoClass(Transform,
   }
 };
 
-LT_API Transform operator*(Transform const&, Transform const&);
-LT_API Transform Mix(Transform const&, Transform const&, double);
+Transform operator*(Transform const&, Transform const&);
+Transform Mix(Transform const&, Transform const&, double);
 
 DeclareFunctionNoParams(Transform_Identity, Transform)
 

@@ -3,6 +3,6 @@
 
 #include "LTE/RenderStyle.h"
 
-LT_API RenderStyle RenderStyle_Default(bool blended);
+RenderStyle RenderStyle_Default(bool blended);
 
 #endif

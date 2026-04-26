@@ -67,15 +67,15 @@ AutoClassDerived(WeaponType, WeaponTypeBase,
     return SocketType_Turret;
   }
 
-  LT_API Object Fire(
+  Object Fire(
     ObjectT* parent,
     Position const& origin,
     V3 const& heading,
     Object const& target);
 
-  LT_API float GetDPS() const;
+  float GetDPS() const;
 
-  LT_API Object Instantiate(ObjectT* parent);
+  Object Instantiate(ObjectT* parent);
 };
 
 #endif

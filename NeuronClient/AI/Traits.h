@@ -8,8 +8,7 @@
   X(Greedy)                                                                    \
   X(Intellectual)                                                              \
   X(Lawless)                                                                   \
-  X(Sociable)                                                                  \
-
+  X(Sociable)
 #define XLIST TRAITS_X
 #define XNAME Traits
 #define XSIZE 6

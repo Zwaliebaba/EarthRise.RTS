@@ -10,10 +10,10 @@ AutoClass(ComponentProximityTracker,
   float, maxDistance,
   int, frameCounter)
 
-  LT_API ComponentProximityTracker();
+  ComponentProximityTracker();
 
-  LT_API bool IsNearby(ObjectT* self);
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  bool IsNearby(ObjectT* self);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(ProximityTracker)

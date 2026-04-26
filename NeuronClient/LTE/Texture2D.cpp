@@ -81,8 +81,8 @@ namespace
 
     ~Texture2DImpl() override
     {
-      /* Deleting a texture that is bound to the framebuffer is an error. */
-      LTE_ASSERT(attachmentIndex == -1);
+      /* Deleting a texture that is bound to the framebuffer is an Fatal. */
+      DEBUG_ASSERT(attachmentIndex == -1);
       if (!Program_InStaticSection())
         GL_DeleteTexture(glBuffer);
     }
@@ -98,7 +98,7 @@ namespace
 
     void Unbind() override
     {
-      LTE_ASSERT(attachmentIndex >= 0);
+      DEBUG_ASSERT(attachmentIndex >= 0);
       Renderer_PopViewport();
       Renderer_PopColorBuffer(attachmentIndex);
       attachmentIndex = -1;
@@ -258,7 +258,7 @@ Texture2D Texture2D_Filter(const Texture2D& texture, const Shader& shader)
 
 Texture2D Texture_Atlas(const Vector<Texture2D>& textures)
 {
-  LTE_ASSERT(textures.size() > 0);
+  DEBUG_ASSERT(textures.size() > 0);
   uint width = textures[0]->GetWidth();
   uint height = textures[0]->GetHeight();
 
@@ -318,8 +318,8 @@ void Texture_Generate(const Texture2D& source1, const Texture2D& source2, const 
                       float maxJobTime)
 {
   AUTO_FRAME;
-  LTE_ASSERT(source1->GetWidth() == source2->GetWidth());
-  LTE_ASSERT(source1->GetHeight() == source2->GetHeight());
+  DEBUG_ASSERT(source1->GetWidth() == source2->GetWidth());
+  DEBUG_ASSERT(source1->GetHeight() == source2->GetHeight());
   Renderer_PushAllBuffers();
   source1->Bind(0);
   source2->Bind(1);

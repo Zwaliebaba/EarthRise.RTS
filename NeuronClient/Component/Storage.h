@@ -12,7 +12,7 @@ AutoClass(ComponentStorage,
 
   ComponentStorage() {}
 
-  LT_API Object Get(Object const& owner);
+  Object Get(Object const& owner);
 };
 
 AutoComponent(Storage)

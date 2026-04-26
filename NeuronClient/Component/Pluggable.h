@@ -20,9 +20,9 @@ AutoClass(ComponentPluggable,
     priority(1)
     {}
 
-  LT_API Socket const& GetSocket(ObjectT const* self) const;
+  Socket const& GetSocket(ObjectT const* self) const;
 
-  LT_API void UpdateJoint(ObjectT* self) const;
+  void UpdateJoint(ObjectT* self) const;
 };
 
 AutoComponent(Pluggable)

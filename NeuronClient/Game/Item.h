@@ -18,11 +18,11 @@ struct ItemT : public RefCounted {
 
   ItemID id;
 
-  LT_API ItemT();
+  ItemT();
 
 #define X(type, name, default)                                                 \
-  LT_API virtual type const& Get##name() const;                                \
-  LT_API virtual bool Has##name() const { return false; }
+  virtual type const& Get##name() const;                                \
+  virtual bool Has##name() const { return false; }
   ITEMPROPERTY_X
 #undef X
 
@@ -83,9 +83,9 @@ struct ItemT : public RefCounted {
   }
 
   /* Is the item a descendent of the given ancestor item? */
-  LT_API bool IsType(Item const& type) const;
+  bool IsType(Item const& type) const;
 
-  LT_API virtual Object Instantiate(ObjectT* parent = 0);
+  virtual Object Instantiate(ObjectT* parent = 0);
 
   FIELDS {
     MAPFIELD(id)

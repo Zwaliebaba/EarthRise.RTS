@@ -31,7 +31,7 @@ struct Array3D {
   }
 };
 
-LT_API Mesh Mesh_Volume(
+Mesh Mesh_Volume(
   Array3DFloat const& grid,
   Bound3 const& bound,
   float isoValue = 0);

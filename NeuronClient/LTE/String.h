@@ -74,7 +74,7 @@ namespace LTE {
       s << (std::string const&)t;
     }
 
-    LT_API static void MapFields(TypeT*, void*, FieldMapper&, void*);
+    static void MapFields(TypeT*, void*, FieldMapper&, void*);
     DeclareMetadata(String)
   };
 
@@ -167,7 +167,7 @@ namespace LTE {
     return result;
   }
 
-  LT_API HashT String_Hash(String const&);
+  HashT String_Hash(String const&);
 
   struct String_Hasher {
     HashT operator()(String const& self) const {
@@ -175,8 +175,8 @@ namespace LTE {
     }
   };
 
-  LT_API bool String_IsAlpha(String const& self);
-  LT_API bool String_IsNumeric(String const& self);
+  bool String_IsAlpha(String const& self);
+  bool String_IsNumeric(String const& self);
 
   inline String String_Lower(String const& self) {
     String result = self;
@@ -193,7 +193,7 @@ namespace LTE {
     return result;
   }
 
-  LT_API void String_Split(
+  void String_Split(
     Vector<String>& result,
     String const& self,
     char delim);

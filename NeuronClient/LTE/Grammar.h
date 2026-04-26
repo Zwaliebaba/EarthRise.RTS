@@ -37,7 +37,7 @@ namespace LTE {
 
     virtual Grammar* Add(GrammarRule* rule, String const& name) = 0;
 
-    LT_API static Grammar* Load(Location const& location);
+    static Grammar* Load(Location const& location);
 
     virtual String Generate(
       RNG const& rg,
@@ -45,9 +45,9 @@ namespace LTE {
       String const& tags = "") = 0;
   };
 
-  LT_API Grammar* Grammar_Create();
-  LT_API GrammarRule* Grammar_CreateRule();
-  LT_API Grammar* Grammar_Get();
+  Grammar* Grammar_Create();
+  GrammarRule* Grammar_CreateRule();
+  Grammar* Grammar_Get();
 }
 
 #endif

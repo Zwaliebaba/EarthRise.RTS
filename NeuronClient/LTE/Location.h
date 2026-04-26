@@ -10,8 +10,8 @@ namespace LTE {
   struct LocationT : public RefCounted {
     BASE_TYPE(LocationT)
 
-    LT_API HashT GetHash() const;
-    LT_API String ReadAscii() const;
+    HashT GetHash() const;
+    String ReadAscii() const;
 
     virtual Location Clone() const = 0;
     virtual bool Exists() const = 0;
@@ -27,9 +27,9 @@ namespace LTE {
   DeclareFunction(Location_File, Location,
     String, file)
 
-  LT_API Location Location_Memory(String const& str);
+  Location Location_Memory(String const& str);
 
-  LT_API Location Location_Memory(Array<uchar>* memory, bool ownsMemory = false);
+  Location Location_Memory(Array<uchar>* memory, bool ownsMemory = false);
 
   DeclareFunction(Location_Resource, Location,
     String, name)

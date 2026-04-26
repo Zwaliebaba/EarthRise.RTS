@@ -37,7 +37,7 @@ A prioritized review of the EarthRise.RTS codebase covering architecture, safety
 
 ### 1.1 Standardize header guards on `#pragma once`
 - **Where:** `NeuronClient/LTE/*.h` (≈165 headers, mixed styles).
-- **Why:** `.github/coding-standards.md:27` already specifies `#pragma once`; legacy `#ifndef` guards are inconsistent and error-prone.
+- **Why:** `.github/coding-standards.md:27` already specifies `#pragma once`; legacy `#ifndef` guards are inconsistent and Fatal-prone.
 - **Action:** Bulk-replace `#ifndef`/`#define`/`#endif` triplets with `#pragma once` across `NeuronClient/LTE`.
 
 ### 1.2 Document PCH inclusion policy
@@ -177,7 +177,7 @@ A prioritized review of the EarthRise.RTS codebase covering architecture, safety
 
 ### 7.2 Route script errors through the logger
 - **Where:** `NeuronClient/LTE/Expression.cpp:7-10`.
-- **Action:** Replace `std::cout` with `Neuron::DebugTrace`; return an error result instead of best-effort continuing; persist errors to a file alongside the source `.lts` path.
+- **Action:** Replace `std::cout` with `Neuron::DebugTrace`; return an Fatal result instead of best-effort continuing; persist errors to a file alongside the source `.lts` path.
 
 ---
 

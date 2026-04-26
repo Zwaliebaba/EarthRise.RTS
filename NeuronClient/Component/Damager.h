@@ -6,17 +6,11 @@
 #include "Game/Item/WeaponType.h"
 #include "LTE/AutoClass.h"
 
-AutoClass(ComponentDamager,
-  Reference<WeaponType>, type,
-  Object, source)
+AutoClass(ComponentDamager, Reference<WeaponType>, type, Object, source)
 
   ComponentDamager() {}
 
-  LT_API bool Hit(
-    ObjectT* self,
-    Object const& other,
-    Position const& position,
-    float dt);
+  bool Hit(ObjectT* self, const Object& other, const Position& position, float dt);
 };
 
 AutoComponent(Damager)

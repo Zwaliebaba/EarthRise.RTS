@@ -28,18 +28,18 @@ DeclareFunctionArgBind(Generator_Nebula, Generic<CubeMap>,
   V3, starDir,
   V4, offset)
 
-LT_API Generic<CubeMap> Generator_PlanetSkybox(Planet const* planet);
+Generic<CubeMap> Generator_PlanetSkybox(Planet const* planet);
 
-LT_API Generic<CubeMap> Generator_PlanetSurface(uint seed);
+Generic<CubeMap> Generator_PlanetSurface(uint seed);
 
 /* Texture2D. */
-LT_API Generic<Texture2D> Generator_LoadTexture2D(Location const& src);
+Generic<Texture2D> Generator_LoadTexture2D(Location const& src);
 
-LT_API Generic<Texture2D> Generator_NormalMap(
+Generic<Texture2D> Generator_NormalMap(
     Generic<Texture2D> const& source,
     float normalStrength = 0.1f);
 
-LT_API Generic<Texture2D> Generator_ShaderInstance(
+Generic<Texture2D> Generator_ShaderInstance(
     size_t width,
     size_t height,
     ShaderInstance const& shader);

@@ -8,7 +8,7 @@ struct UniStringIterator {
   char const* iter;
   char const* end;
 
-  LT_API void Advance();
+  void Advance();
 
   bool HasMore() const {
     return iter != end;
@@ -19,6 +19,6 @@ struct UniStringIterator {
   }
 };
 
-LT_API UniStringIterator UniString_Begin(String const& source);
+UniStringIterator UniString_Begin(String const& source);
 
 #endif

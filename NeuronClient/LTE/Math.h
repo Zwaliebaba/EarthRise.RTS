@@ -10,9 +10,9 @@
 #include <limits>
 #include <vector>
 
-LT_API uint V3ToColor32(V3 const& color, float alpha);
+uint V3ToColor32(V3 const& color, float alpha);
 
-LT_API String DecimalToString(uint decimal);
+String DecimalToString(uint decimal);
 
 /* Linear Algebra. */
 template <class PointT>
@@ -42,21 +42,21 @@ float ComputeImpact(
   }
 }
 
-LT_API void RotateBasis(V3& e1, V3& e2, V3& e3, V3 const& rot);
-LT_API void RotateTangentSpace(V3& e1, V3& e2, float angle);
+void RotateBasis(V3& e1, V3& e2, V3& e3, V3 const& rot);
+void RotateTangentSpace(V3& e1, V3& e2, float angle);
 
 struct DistanceNoise3D {
   float c1, c2, c3;
   std::vector<V3> points;
-  LT_API DistanceNoise3D(uint pointCount, float c1, float c2, float c3,
+  DistanceNoise3D(uint pointCount, float c1, float c2, float c3,
                          float min, float max);
-  LT_API float operator()(V3 const& v) const;
+  float operator()(V3 const& v) const;
 };
 
 struct VoronoiNoise3D {
   std::vector<V3> points;
-  LT_API VoronoiNoise3D(uint pointCount, float min, float max);
-  LT_API float operator()(V3 const& v) const;
+  VoronoiNoise3D(uint pointCount, float min, float max);
+  float operator()(V3 const& v) const;
 };
 
 /* Inlines. */
@@ -292,8 +292,8 @@ inline float ValueNoise(V4 const& p) {
   return ValueNoise4D(p);
 }
 
-LT_API float WorleyNoise2D(V2 const& p);
-LT_API float WorleyNoise3D(V3 const& p);
+float WorleyNoise2D(V2 const& p);
+float WorleyNoise3D(V3 const& p);
 
 template <class FnType, class VecType>
 float Fractal(FnType& function, VecType p, int octaves, float lac) {

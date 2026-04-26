@@ -12,11 +12,11 @@ struct RefCounted : public NullBase<RefCounted> {
   RefCounted() : refCount(0) {}
 
   virtual ~RefCounted() {
-    LTE_ASSERT(refCount == 0);
+    DEBUG_ASSERT(refCount == 0);
   }
 
   bool RefCountDecrement() {
-    LTE_ASSERT(refCount > 0);
+    DEBUG_ASSERT(refCount > 0);
     return --refCount == 0;
   }
 
@@ -122,7 +122,7 @@ struct Reference : public NullBase<Reference<T> > {
   T* operator->() const {
 #ifdef DEBUG_POINTERS
     if (!t)
-      error("Attempt to access null reference");
+      Fatal("Attempt to access null reference");
 #endif
     return t;
   }
@@ -130,7 +130,7 @@ struct Reference : public NullBase<Reference<T> > {
   T& operator*() const {
 #ifdef DEBUG_POINTERS
     if (!t)
-      error("Attempt to access null reference");
+      Fatal("Attempt to access null reference");
 #endif
     return *t;
   }

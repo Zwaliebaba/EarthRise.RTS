@@ -23,8 +23,8 @@ DefineFunction(Item_AssemblyChip) {
   ObjectT* context = inventor->piloting->GetContainer();
 
   /* TODO : Multiple resource requirements. */
-  LTE_ASSERT(context);
-  LTE_ASSERT(context->GetResources());
+  DEBUG_ASSERT(context);
+  DEBUG_ASSERT(context->GetResources());
   Item resource = context->GetResources()->elements.sample(rg->GetFloat());
   Quantity count = Max((Quantity)1, value / resource->GetValue());
   self->requirements.push(ItemQuantity(resource, count));

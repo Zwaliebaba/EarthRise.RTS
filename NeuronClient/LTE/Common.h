@@ -4,22 +4,36 @@
 #include "../Common.h"
 
 /* Container. */
-template <class T1> struct Array;
-template <class T1> struct AutoPtr;
-template <class T1> struct Distribution;
-template <class T1> struct List;
-template <class T1> struct Pointer;
-template <class T1> struct Reference;
-template <class T1> struct RingBuffer;
-template <class T1> struct Vector;
+template <class T1>
+struct Array;
+template <class T1>
+struct AutoPtr;
+template <class T1>
+struct Distribution;
+template <class T1>
+struct List;
+template <class T1>
+struct Pointer;
+template <class T1>
+struct Reference;
+template <class T1>
+struct RingBuffer;
+template <class T1>
+struct Vector;
 
-template <class T1, class T2> struct Map;
-template <class T1, class T2> struct Tuple2;
-template <class T1, class T2> struct VectorMap;
-template <class T1, class T2, class T3> struct Tuple3;
+template <class T1, class T2>
+struct Map;
+template <class T1, class T2>
+struct Tuple2;
+template <class T1, class T2>
+struct VectorMap;
+template <class T1, class T2, class T3>
+struct Tuple3;
 
-template <class T1, char const* (*)(int)> struct Enum;
-template <class T1, int MaxElements> struct Stack;
+template <class T1, char const* (*)(int)>
+struct Enum;
+template <class T1, int MaxElements>
+struct Stack;
 
 typedef Reference<struct ListNPT> ListNP;
 
@@ -42,14 +56,16 @@ typedef Reference<struct SDFT> SDF;
 typedef Reference<struct WarpT> Warp;
 
 /* Math - Parametric. */
-template <class T1> struct V2T;
+template <class T1>
+struct V2T;
 typedef V2T<float> V2;
 typedef V2T<float> V2F;
 typedef V2T<double> V2D;
 typedef V2T<int> V2I;
 typedef V2T<uint> V2U;
 
-template <class T1> struct V3T;
+template <class T1>
+struct V3T;
 typedef V3T<float> V3;
 typedef V3T<float> V3F;
 typedef V3T<double> V3D;
@@ -59,29 +75,34 @@ typedef V3T<uint> V3U;
 typedef double DistanceT;
 typedef V3T<DistanceT> PointT;
 
-template <class T1> struct V4T;
+template <class T1>
+struct V4T;
 typedef V4T<float> V4;
 typedef V4T<float> V4F;
 typedef V4T<double> V4D;
 typedef V4T<int> V4I;
 typedef V4T<uint> V4U;
 
-template <class T1, class T2> struct BoundT;
-typedef BoundT<V3, V3>  Bound3;
+template <class T1, class T2>
+struct BoundT;
+typedef BoundT<V3, V3> Bound3;
 typedef BoundT<V3F, V3> Bound3F;
 typedef BoundT<V3D, V3> Bound3D;
 
-template <class T1> struct MatrixT;
+template <class T1>
+struct MatrixT;
 typedef MatrixT<float> Matrix;
 typedef MatrixT<float> MatrixF;
 typedef MatrixT<double> MatrixD;
 
-template <class T1> struct PlaneT;
+template <class T1>
+struct PlaneT;
 typedef PlaneT<float> Plane;
 typedef PlaneT<float> PlaneF;
 typedef PlaneT<double> PlaneD;
 
-template <class T1, class T2> struct RayT;
+template <class T1, class T2>
+struct RayT;
 typedef RayT<V3, V3> Ray;
 typedef RayT<V3F, V3> RayF;
 typedef RayT<V3D, V3> RayD;
@@ -128,10 +149,10 @@ typedef Reference<struct FunctionT> Function;
 typedef Reference<struct PackageT> Package;
 
 /* Misc. */
-struct DrawState;
 typedef Reference<struct ResourceMapT> ResourceMap;
 
-namespace LTE {
+namespace LTE
+{
   /* Control. */
   typedef Reference<struct AxisT> Axis;
   typedef Reference<struct ButtonT> Button;
@@ -154,10 +175,11 @@ namespace LTE {
   typedef Reference<struct ScriptTypeT> ScriptType;
 
   /* Function. */
-  template <class ValueType, class ArgType> struct Generic;
+  template <class ValueType, class ArgType>
+  struct Generic;
 
   typedef uint HashT;
-  #define HASHT_MAX UINT_MAX
+#define HASHT_MAX UINT_MAX
 
   typedef Generic<bool, void> GenericBool;
   typedef Generic<Color, void> GenericColor;
@@ -171,8 +193,10 @@ namespace LTE {
   typedef Generic<V4, void> GenericV4;
 
   /* Enums. */
-  namespace CubeFace {
-    enum Enum {
+  namespace CubeFace
+  {
+    enum Enum
+    {
       PositiveX,
       NegativeX,
       PositiveY,
@@ -191,7 +215,7 @@ namespace LTE {
     const unsigned char NegativeZBit = 0x20;
   }
 
-  #define KEY_X                                                                \
+#define KEY_X                                                                \
     X(A) X(B) X(C) X(D) X(E) X(F) X(G) X(H) X(I) X(J) X(K) X(L) X(M) X(N) X(O) \
     X(P) X(Q) X(R) X(S) X(T) X(U) X(V) X(W) X(X) X(Y) X(Z)                     \
     X(N0) X(N1) X(N2) X(N3) X(N4) X(N5) X(N6) X(N7) X(N8) X(N9)                \
@@ -239,26 +263,26 @@ namespace LTE {
     X(LSystem)                                                                 \
     X(RSystem)
 
-  #define XLIST KEY_X
-  #define XTYPE Key
-  #include "LTE/XEnum.h"
-  #undef XTYPE
-  #undef XLIST
+#define XLIST KEY_X
+#define XTYPE Key
+#include "LTE/XEnum.h"
+#undef XTYPE
+#undef XLIST
 
-  #define MOUSE_BUTTON_X                                                       \
+#define MOUSE_BUTTON_X                                                       \
     X(Left)                                                                    \
     X(Middle)                                                                  \
     X(Right)                                                                   \
     X(X1)                                                                      \
     X(X2)
 
-  #define XLIST MOUSE_BUTTON_X
-  #define XTYPE MouseButton
-  #include "LTE/XEnum.h"
-  #undef XTYPE
-  #undef XLIST
+#define XLIST MOUSE_BUTTON_X
+#define XTYPE MouseButton
+#include "LTE/XEnum.h"
+#undef XTYPE
+#undef XLIST
 
-  #define JOYSTICK_AXIS_X                                                      \
+#define JOYSTICK_AXIS_X                                                      \
     X(X)                                                                       \
     X(Y)                                                                       \
     X(Z)                                                                       \
@@ -268,11 +292,11 @@ namespace LTE {
     X(PovX)                                                                    \
     X(PovY)
 
-  #define XLIST JOYSTICK_AXIS_X
-  #define XTYPE JoystickAxis
-  #include "LTE/XEnum.h"
-  #undef XTYPE
-  #undef XLIST
+#define XLIST JOYSTICK_AXIS_X
+#define XTYPE JoystickAxis
+#include "LTE/XEnum.h"
+#undef XTYPE
+#undef XLIST
 }
 
 #define offset_of(type, member) ((volatile void const*)&((type*)0)->member)
@@ -280,7 +304,7 @@ namespace LTE {
 #define MACRO_IDENTITY(x) x
 
 #define DeclareMetadata(T)                                                     \
-  LT_API friend Type _Type_Get(T const& t);
+  friend Type _Type_Get(T const& t);
 
 #define FIELDS                                                                 \
   static void MapFields(                                                       \
@@ -306,7 +330,8 @@ namespace LTE {
   X(double)
 
 template <class T>
-void Swap(T& one, T& two) {
+void Swap(T& one, T& two)
+{
   T temp = one;
   one = two;
   two = temp;
@@ -320,33 +345,27 @@ X(char const*)
 #undef X
 
 template <class StreamT, class T>
-void _ToStream(StreamT& s, T* const& t) {
-  s << (void*)t;
-}
+void _ToStream(StreamT& s, T* const& t) { s << (void*)t; }
 
 #if 1
 template <class StreamT, class T>
-void _ToStream(StreamT& s, T const& t) {
-  s << "Unknown Type";
-}
+void _ToStream(StreamT& s, T const& t) { s << "Unknown Type"; }
 #endif
 
 template <class StreamT>
-inline void ToStream(StreamT& s, char const* str) {
-  s << str;
-}
+inline void ToStream(StreamT& s, char const* str) { s << str; }
 
 template <class StreamT, class T>
-void ToStream(StreamT& s, T const& t) {
-  _ToStream(s, t);
-}
+void ToStream(StreamT& s, T const& t) { _ToStream(s, t); }
 
 template <class T>
-struct NullBase {
+struct NullBase
+{
   FIELDS {}
 };
 
-struct NoBase {};
+struct NoBase
+{};
 
 #include "StdMath.h"
 

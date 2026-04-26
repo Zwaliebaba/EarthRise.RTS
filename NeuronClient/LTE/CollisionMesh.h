@@ -22,6 +22,6 @@ struct CollisionMeshT : public RefCounted {
     V3* normalOut = nullptr) const = 0;
 };
 
-LT_API CollisionMesh CollisionMesh_Create(Mesh const& sourceMesh);
+CollisionMesh CollisionMesh_Create(Mesh const& sourceMesh);
 
 #endif

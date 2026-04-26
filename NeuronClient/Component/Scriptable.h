@@ -44,7 +44,7 @@ AutoComponent(Scriptable)
     ScriptFunction receive = type->GetFunction("Receive");
     ScriptFunction update = type->GetFunction("Update");
     if (!update)
-      error("Script object must have 'Update' function");
+      Fatal("Script object must have 'Update' function");
 
     Scriptable.elements.push(ComponentScriptElement(object, receive, update));
   }

@@ -25,7 +25,7 @@ Reference<T> ItemProperty_Create() {
   struct ItemProperty_##name##T : public ItemPropertyT {                       \
     DERIVED_TYPE_EX(ItemProperty_##name##T)                                    \
                                                                                \
-    LT_API DataRef Evaluate(Item const& item) const;                           \
+    DataRef Evaluate(Item const& item) const;                           \
                                                                                \
     type const& Get(Item const& item) {                                        \
       return item->Get##name();                                                \

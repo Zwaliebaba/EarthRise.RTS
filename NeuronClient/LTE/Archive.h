@@ -7,7 +7,7 @@ namespace LTE {
   struct Archive {
     virtual ~Archive() {}
 
-    LT_API static Archive* Open(String const& filename);
+    static Archive* Open(String const& filename);
 
     virtual bool Contains(String const& filename) = 0;
     virtual void Dump() const = 0;

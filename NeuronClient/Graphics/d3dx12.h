@@ -7043,7 +7043,7 @@ public: // Function declaration
     // Initialize data from the given device
     HRESULT Init(ID3D12Device* pDevice);
 
-    // Retreives the status of the object. If an error occurred in the initialization process, the function returns the error code.
+    // Retreives the status of the object. If an Fatal occurred in the initialization process, the function returns the Fatal code.
     HRESULT GetStatus() const noexcept { return m_hStatus; }
 
     // Getter functions for each feature class
@@ -7277,7 +7277,7 @@ private: // Member data
     // Pointer to the underlying device
     ID3D12Device* m_pDevice;
 
-    // Stores the error code from initialization
+    // Stores the Fatal code from initialization
     HRESULT m_hStatus;
 
     // Feature support data structs
@@ -7736,7 +7736,7 @@ inline HRESULT CD3DX12FeatureSupport::FormatSupport(DXGI_FORMAT Format, D3D12_FO
     D3D12_FEATURE_DATA_FORMAT_SUPPORT dFormatSupport;
     dFormatSupport.Format = Format;
 
-    // It is possible that the function call returns an error
+    // It is possible that the function call returns an Fatal
     HRESULT result = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &dFormatSupport, sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT));
 
     Support1 = dFormatSupport.Support1;
@@ -8025,7 +8025,7 @@ inline HRESULT CD3DX12FeatureSupport::QueryHighestShaderModel()
         if (result != E_INVALIDARG)
         {
             // Indicates that the version is recognizable by the runtime and stored in the struct
-            // Also terminate on unexpected error code
+            // Also terminate on unexpected Fatal code
             if (FAILED(result))
             {
                 m_dShaderModel.HighestShaderModel = static_cast<D3D_SHADER_MODEL>(0);

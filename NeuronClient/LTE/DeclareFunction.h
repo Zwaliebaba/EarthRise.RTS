@@ -60,7 +60,7 @@ void Infer_MetaData(Function const& type, RT (*fn)()) {}
   typedef ReturnType Name##_ReturnType;                                        \
                                                                                \
   typedef int Name##_ArgRefs;                                                  \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name() { return Name(0); }                                 \
   inline ReturnType Name##_ExplicitCall() { return Name(0); }                  \
   inline void Name##_Call(void** in, void* out) {                              \
@@ -97,7 +97,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&)) {
     Name##_ArgRefs(T0 const& N0) : N0(N0) {}                                   \
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0) {                                       \
     return Name(Name##_ArgRefs(N0));                                           \
   }                                                                            \
@@ -151,7 +151,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&)) {
     Name##_ArgRefs(T0 const& N0, T1 const& N1) : N0(N0), N1(N1) {}             \
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1) {                         \
     return Name(Name##_ArgRefs(N0, N1));                                       \
   }                                                                            \
@@ -208,7 +208,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2) : N0(N0), N1(N1), N2(N2) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2) {           \
     return Name(Name##_ArgRefs(N0, N1, N2));                                   \
   }                                                                            \
@@ -268,7 +268,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3) : N0(N0), N1(N1), N2(N2), N3(N3) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3));                               \
   }                                                                            \
@@ -331,7 +331,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4));                           \
   }                                                                            \
@@ -397,7 +397,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5));                       \
   }                                                                            \
@@ -466,7 +466,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5), N6(N6) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5, N6));                   \
   }                                                                            \
@@ -538,7 +538,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5), N6(N6), N7(N7) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5, N6, N7));               \
   }                                                                            \
@@ -613,7 +613,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5), N6(N6), N7(N7), N8(N8) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5, N6, N7, N8));           \
   }                                                                            \
@@ -691,7 +691,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8, T9 const& N9) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5), N6(N6), N7(N7), N8(N8), N9(N9) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8, T9 const& N9) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5, N6, N7, N8, N9));       \
   }                                                                            \
@@ -772,7 +772,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8, T9 const& N9, T10 const& N10) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5), N6(N6), N7(N7), N8(N8), N9(N9), N10(N10) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8, T9 const& N9, T10 const& N10) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10));  \
   }                                                                            \
@@ -856,7 +856,7 @@ void Infer_MetaData(Function const& type, RT (*fn)(T0 const&, T1 const&, T2 cons
     Name##_ArgRefs(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8, T9 const& N9, T10 const& N10, T11 const& N11) : N0(N0), N1(N1), N2(N2), N3(N3), N4(N4), N5(N5), N6(N6), N7(N7), N8(N8), N9(N9), N10(N10), N11(N11) {}\
   };                                                                           \
                                                                                \
-  LT_API ReturnType Name(Name##_ArgRefs const&);                               \
+  ReturnType Name(Name##_ArgRefs const&);                               \
   inline ReturnType Name(T0 const& N0, T1 const& N1, T2 const& N2, T3 const& N3, T4 const& N4, T5 const& N5, T6 const& N6, T7 const& N7, T8 const& N8, T9 const& N9, T10 const& N10, T11 const& N11) {\
     return Name(Name##_ArgRefs(N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11));\
   }                                                                            \

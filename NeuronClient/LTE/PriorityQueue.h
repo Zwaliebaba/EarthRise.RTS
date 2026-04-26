@@ -23,7 +23,7 @@ namespace LTE {
     }
 
     void popMin() {
-      LTE_ASSERT(size() > 0);
+      DEBUG_ASSERT(size() > 0);
       size_t minIndex = 0;
       for (size_t i = 1; i < elements.size(); ++i)
         if (elements[i].y < elements[minIndex].y)
@@ -32,7 +32,7 @@ namespace LTE {
     }
 
     T sample(float t) const {
-      LTE_ASSERT(size() > 0);
+      DEBUG_ASSERT(size() > 0);
       float total = 0;
       for (size_t i = 0; i < elements.size(); ++i)
         total += elements[i].y;

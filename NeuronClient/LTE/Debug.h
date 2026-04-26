@@ -8,8 +8,8 @@
 #define DBG(level, output) { if (Debug_GetLevel() >= level) { dbg | output; } }
 
 namespace LTE {
-  LT_API int Debug_GetLevel();
-  LT_API void Debug_SetLevel(int level);
+  int Debug_GetLevel();
+  void Debug_SetLevel(int level);
 
   struct _Newline     {} static endl;
   struct _Marker      {} static marker;

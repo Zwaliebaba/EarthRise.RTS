@@ -81,7 +81,7 @@ When context files do not fully answer a question:
 2. Match existing patterns for:
    - naming
    - ownership and memory management
-   - error handling
+   - Fatal handling
    - header guards or `#pragma once`
    - logging and assertions
    - include ordering
@@ -108,7 +108,7 @@ When context files do not fully answer a question:
   - include guards like `#ifndef File_h__`
   - typedef aliases such as `uint`, `uint32`, and `uchar`
   - raw pointers and C-style strings in many areas
-  - macro-based assertions and diagnostics such as `LTE_ASSERT`, `error(...)`, `debugbreak`, and `debugprint`
+  - macro-based assertions and diagnostics such as `DEBUG_ASSERT`, `Fatal(...)`, `__debugbreak();`, and `DebugTrace`
 - Preserve surrounding legacy style unless the user explicitly asks for modernization.
 - OpenGL/GLEW-related code is legacy renderer infrastructure. Keep fixes scoped, and prefer boundaries that make a later D3D12 replacement easier.
 - Existing `Network` code is not automatically an MMO server architecture. Treat it as current client/library code until a server target is introduced.
@@ -134,7 +134,7 @@ When context files do not fully answer a question:
 
 Follow the local subsystem:
 
-- In legacy NeuronClient/LTE code, prefer existing macros such as `LTE_ASSERT`, `error`, `debugbreak`, and `debugprint`.
+- In legacy NeuronClient/LTE code, prefer existing macros such as `DEBUG_ASSERT`, `Fatal`, `__debugbreak();`, and `DebugTrace`.
 - In newer/core code, follow `.github/coding-standards.md` and nearby examples for `ASSERT_TEXT`, `DEBUG_ASSERT`, `Neuron::DebugTrace`, and `Neuron::Fatal` where available.
 - Do not force one assertion style across the whole repo.
 

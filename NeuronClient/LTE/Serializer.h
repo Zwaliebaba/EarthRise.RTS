@@ -12,8 +12,8 @@ namespace LTE {
     virtual void Process(void* data, Type const& type) = 0;
   };
 
-  LT_API Serializer* CreateLoader(Location const& location);
-  LT_API Serializer* CreateSaver(Location const& location, int version);
+  Serializer* CreateLoader(Location const& location);
+  Serializer* CreateSaver(Location const& location, int version);
 
   template <class T>
   bool LoadFrom(

@@ -176,7 +176,7 @@ namespace
 
     bool Write(const Array<uchar>& data) const override
     {
-      LTE_ASSERT(!data.size());
+      DEBUG_ASSERT(!data.size());
       return false;
     }
 

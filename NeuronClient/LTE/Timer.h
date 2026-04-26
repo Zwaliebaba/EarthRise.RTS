@@ -7,8 +7,8 @@ struct Timer
 {
   struct TimerData* d;
 
-  LT_API Timer();
-  LT_API ~Timer();
+  Timer();
+  ~Timer();
 
   float Lap()
   {
@@ -18,9 +18,9 @@ struct Timer
   }
 
   /* NOTE : Measured in seconds. */
-  LT_API float GetElapsed() const;
+  float GetElapsed() const;
 
-  LT_API void Reset() const;
+  void Reset() const;
 };
 
 #endif

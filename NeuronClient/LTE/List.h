@@ -87,7 +87,7 @@ struct List : public NullBase<List<T> > {
   }
 
   void erase(Iterator& it) {
-    LTE_ASSERT(it.elem);
+    DEBUG_ASSERT(it.elem);
     *it.lastPtr = it.elem->next;
     it.elem = it.elem->next;
     it.skip = true;

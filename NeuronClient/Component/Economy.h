@@ -21,7 +21,7 @@ AutoClass(ComponentEconomy,
     return items.size() ? items.random() : nullptr;
   }
 
-  LT_API void Run(ObjectT*, UpdateState&);
+  void Run(ObjectT*, UpdateState&);
 };
 
 AutoComponent(Economy)

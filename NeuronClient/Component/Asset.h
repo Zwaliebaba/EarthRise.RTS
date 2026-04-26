@@ -6,25 +6,25 @@
 #include "LTE/AutoClass.h"
 #include "LTE/Pointer.h"
 
-AutoClass(ComponentAsset,
-  Player, owner)
+AutoClass(ComponentAsset, Player, owner)
 
   ComponentAsset() {}
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(Asset)
-  void OnUpdate(UpdateState& s) {
+
+  void OnUpdate(UpdateState& s)
+  {
     Asset.Run(this, s);
     BaseT::OnUpdate(s);
   }
 
-  Player const& GetOwner() const {
-    return Asset.owner;
-  }
+  const Player& GetOwner() const { return Asset.owner; }
 
-  void SetOwner(Player const& owner) {
+  void SetOwner(const Player& owner)
+  {
     if (Asset.owner)
       Asset.owner->RemoveAsset(this);
     owner->AddAsset(this);

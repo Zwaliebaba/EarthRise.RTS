@@ -7,16 +7,16 @@ struct Program {
   Window window;
   bool deleted;
 
-  LT_API Program();
-  LT_API virtual ~Program();
+  Program();
+  virtual ~Program();
 
-  LT_API void Delete();
-  LT_API void Execute();
+  void Delete();
+  void Execute();
 
   virtual void OnInitialize() = 0;
   virtual void OnUpdate() = 0;
 };
 
-LT_API bool Program_InStaticSection();
+bool Program_InStaticSection();
 
 #endif

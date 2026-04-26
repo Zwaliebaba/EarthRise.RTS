@@ -16,7 +16,7 @@
       cacheName += "_" + ToString((HashT)hash) + ".bin";
       Location cache = Location_Cache(cacheName);
       if (cache->Exists()) {
-        debugprint;
+        DebugTrace;
         LoadFrom(result, cache, 0, 0);
         return;
       }

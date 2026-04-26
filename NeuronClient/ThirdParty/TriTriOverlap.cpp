@@ -156,7 +156,7 @@ bool CoplanarTriTri(
   }                                          \
 }
 
-LT_API bool TriTriOverlap(
+bool TriTriOverlap(
     const V3& V0, const V3& V1, const V3& V2,
     const V3& U0, const V3& U1, const V3& U2)
 {

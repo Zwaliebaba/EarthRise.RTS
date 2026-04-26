@@ -93,13 +93,13 @@ AutoClassDerived(ProjectT, RefCounted,
     Stop();
   }
 
-  LT_API void Stop();
+  void Stop();
 
-  LT_API void Update(UpdateState&);
+  void Update(UpdateState&);
 
-  LT_API void UpdateGross();
+  void UpdateGross();
 
-  LT_API void UpdateMarketOrders();
+  void UpdateMarketOrders();
 };
 
 DeclareFunction(Project_Allocate, void,

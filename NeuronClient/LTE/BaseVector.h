@@ -31,14 +31,14 @@ namespace LTE {
 
     T& operator[](size_t index) {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(index < _size);
+      DEBUG_ASSERT(index < _size);
 #endif
       return _data[index];
     }
 
     const T& operator[](size_t index) const {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(index < _size);
+      DEBUG_ASSERT(index < _size);
 #endif
       return _data[index];
     }
@@ -50,14 +50,14 @@ namespace LTE {
 
     T& back() {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(_size > 0);
+      DEBUG_ASSERT(_size > 0);
 #endif
       return _data[_size - 1];
     }
 
     const T& back() const {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(_size > 0);
+      DEBUG_ASSERT(_size > 0);
 #endif
       return _data[_size - 1];
     }
@@ -121,14 +121,14 @@ namespace LTE {
 
     void pop_back() {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(_size > 0);
+      DEBUG_ASSERT(_size > 0);
 #endif
       _data[_size--].~T();
     }
 
     void removeIndex(size_t index) {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(index < _size);
+      DEBUG_ASSERT(index < _size);
 #endif
       if (index + 1 < _size)
         _data[index] = back();

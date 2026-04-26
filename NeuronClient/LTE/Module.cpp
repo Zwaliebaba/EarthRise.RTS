@@ -10,7 +10,7 @@ namespace {
 }
 
 void Module_RegisterGlobal(Module const& module) {
-  LTE_ASSERT(!GetModules().contains(module));
+  DEBUG_ASSERT(!GetModules().contains(module));
   GetModules().push(module);
 }
 

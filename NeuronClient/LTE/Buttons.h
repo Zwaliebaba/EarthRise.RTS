@@ -4,21 +4,21 @@
 #include "Button.h"
 
 namespace LTE {
-  LT_API Button Button_And(Button const& a, Button const& b);
+  Button Button_And(Button const& a, Button const& b);
 
-  LT_API Button Button_Axis(Axis const& axis, float sign);
+  Button Button_Axis(Axis const& axis, float sign);
 
-  LT_API Button Button_Capture();
+  Button Button_Capture();
 
-  LT_API Button Button_Inverted(Button const& button);
+  Button Button_Inverted(Button const& button);
 
-  LT_API Button Button_Joy(uint joyIndex, uint buttonIndex);
+  Button Button_Joy(uint joyIndex, uint buttonIndex);
 
-  LT_API Button Button_Key(Key key);
+  Button Button_Key(Key key);
 
-  LT_API Button Button_Mouse(MouseButton mouseButton);
+  Button Button_Mouse(MouseButton mouseButton);
 
-  LT_API Button Button_Or(Button const& a, Button const& b);
+  Button Button_Or(Button const& a, Button const& b);
 
   inline Button Button_AndAlt(Button const& button) {
     return Button_And(button,

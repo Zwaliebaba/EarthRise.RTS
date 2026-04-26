@@ -3,6 +3,6 @@
 
 #include "Common.h"
 
-LT_API StringList LTSL_ApplyRewrites(StringList const& list);
+StringList LTSL_ApplyRewrites(StringList const& list);
 
 #endif

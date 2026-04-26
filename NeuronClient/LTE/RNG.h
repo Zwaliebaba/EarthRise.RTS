@@ -160,12 +160,12 @@ struct RNGT : public RefCounted {
   }
 };
 
-LT_API RNG RNG_Default();
+RNG RNG_Default();
 
-LT_API RNG RNG_LCG(unsigned int seed);
+RNG RNG_LCG(unsigned int seed);
 
-LT_API RNG RNG_MTG(unsigned int seed);
-LT_API RNG RNG_MTG(
+RNG RNG_MTG(unsigned int seed);
+RNG RNG_MTG(
   unsigned int const* arr, size_t size);
 
 #endif

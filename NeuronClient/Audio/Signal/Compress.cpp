@@ -2,25 +2,24 @@
 
 #include "LTE/StdMath.h"
 
-namespace Audio {
-  namespace {
-    struct Compress : public SignalT {
+namespace Audio { namespace
+  {
+    struct Compress : SignalT
+    {
       Signal input;
       double factor;
 
-      Compress(Signal const& input, double factor) :
-        input(input),
-        factor(factor)
-        {}
+      Compress(const Signal& input, double factor)
+        : input(input),
+          factor(factor) {}
 
-      double OnGet(GlobalData const& d) {
+      double OnGet(const GlobalData& d) override
+      {
         double s = input->Get(d);
         return Sign(s) * (1.0 - Exp(-factor * Abs(s)));
       }
     };
   }
 
-  Signal Signal_Compress(Signal const& input, double factor) {
-    return new Compress(input, factor);
-  }
+  Signal Signal_Compress(const Signal& input, double factor) { return new Compress(input, factor); }
 }

@@ -8,25 +8,21 @@
 #include "Game/Object.h"
 #include "Game/Graphics/Effects.h"
 
-bool ComponentDamager::Hit(
-  ObjectT* self,
-  Object const& dest,
-  Position const& position,
-  float dt)
+bool ComponentDamager::Hit(ObjectT* self, const Object& dest, const Position& position, float dt)
 {
   ComponentCollidable* collidable = dest->GetCollidable();
   if (!collidable || !dest->CanCollide(self))
     return false;
 
-  if (source != dest->GetRoot().get()) {
+  if (source != dest->GetRoot().get())
+  {
     collidable->Collide(dest, self, position, position);
 
     float scale = 2.0f * source->GetRadius();
     Effect_SmallPlume(position, dest->GetVelocity(), type->color, scale);
 
     /* If the object can be damaged, damage it appropriately. */
-    Damage damage = type->damage *
-      (type->type == WeaponClass_Beam ? (source->GetPowerFraction() * dt) : 1.0f);
+    Damage damage = type->damage * (type->type == WeaponClass_Beam ? (source->GetPowerFraction() * dt) : 1.0f);
 
     Event_Damage(source, dest, damage);
   }

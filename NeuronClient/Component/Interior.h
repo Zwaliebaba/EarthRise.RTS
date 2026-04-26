@@ -23,13 +23,13 @@ AutoClass(ComponentInterior,
     particles(ParticleSystem_Create())
     {}
 
-  LT_API ~ComponentInterior();
+  ~ComponentInterior();
 
-  LT_API void Draw(ObjectT* self, DrawState* state);
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Draw(ObjectT* self, DrawState* state);
+  void Run(ObjectT* self, UpdateState& state);
 
-  LT_API void Add(ObjectT* self, Object const& o);
-  LT_API void Remove(ObjectT* self, Object const& o);
+  void Add(ObjectT* self, Object const& o);
+  void Remove(ObjectT* self, Object const& o);
 };
 
 AutoComponent(Interior)

@@ -27,7 +27,7 @@ struct GlyphT : public RefCounted {
 
   virtual Glyph Clone() const = 0;
 
-  LT_API void Draw(GlyphState const& state = GlyphState()) const;
+  void Draw(GlyphState const& state = GlyphState()) const;
 
   virtual Shader GetShader() const = 0;
 

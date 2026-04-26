@@ -8,25 +8,23 @@
 #include "LTE/Bound.h"
 #include "LTE/Vector.h"
 
-AutoClass(ComponentDockable,
-  Vector<Bound3>, hangars,
-  Vector<Bound3>, ports,
-  int, docked,
-  int, capacity)
+AutoClass(ComponentDockable, Vector<Bound3>, hangars, Vector<Bound3>, ports, int, docked, int, capacity)
 
-  ComponentDockable() :
-    docked(0),
-    capacity(0)
-    {}
+  ComponentDockable()
+    : docked(0),
+      capacity(0) {}
 
-  LT_API bool CanDock(ObjectT* self, Object const& docker);
-  LT_API void Dock(ObjectT* self, Object const& docker);
-  LT_API void Undock(ObjectT* self, Object const& docker);
+  bool CanDock(ObjectT* self, const Object& docker);
+  void Dock(ObjectT* self, const Object& docker);
+  void Undock(ObjectT* self, const Object& docker);
 };
 
 AutoComponent(Dockable)
-  void SetSupertype(Item const& type) {
-    if (type->GetDocks()) {
+
+  void SetSupertype(const Item& type)
+  {
+    if (type->GetDocks())
+    {
       Dockable.ports = *type->GetDocks();
       Dockable.hangars = Dockable.ports; // TODO
     }
@@ -35,17 +33,11 @@ AutoComponent(Dockable)
     BaseT::SetSupertype(type);
   }
 
-  bool CanDock(Object const& docker) {
-    return Dockable.CanDock(this, docker);
-  }
+  bool CanDock(const Object& docker) { return Dockable.CanDock(this, docker); }
 
-  void Dock(Object const& docker) {
-    Dockable.Dock(this, docker);
-  }
+  void Dock(const Object& docker) { Dockable.Dock(this, docker); }
 
-  void Undock(Object const& docker) {
-    Dockable.Undock(this, docker);
-  }
+  void Undock(const Object& docker) { Dockable.Undock(this, docker); }
 };
 
 #endif

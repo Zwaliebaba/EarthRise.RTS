@@ -170,7 +170,7 @@ namespace utf8
         // Go back until we hit either a lead octet or start
         while (utf8::internal::is_trail(*(--it)))
             if (it == start)
-                throw invalid_utf8(*it); // error - no lead byte in the sequence
+                throw invalid_utf8(*it); // Fatal - no lead byte in the sequence
         return utf8::peek_next(it, end);
     }
 
@@ -181,7 +181,7 @@ namespace utf8
         octet_iterator end = it;
         while (utf8::internal::is_trail(*(--it)))
             if (it == pass_start)
-                throw invalid_utf8(*it); // error - no lead byte in the sequence
+                throw invalid_utf8(*it); // Fatal - no lead byte in the sequence
         octet_iterator temp = it;
         return utf8::next(temp, end);
     }

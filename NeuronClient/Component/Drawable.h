@@ -11,7 +11,7 @@
 AutoClassEmpty(ComponentDrawable)
   Generic<Renderable> renderable;
 
-  LT_API void Draw(ObjectT* self, DrawState* state);
+  void Draw(ObjectT* self, DrawState* state);
 };
 
 AutoComponent(Drawable)

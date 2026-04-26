@@ -34,14 +34,14 @@ struct SpatialPartition {
     QueryFn callback,
     void* aux) const = 0;
 
-  LT_API virtual void Query(V3 const& point, Vector<void*>& result) const;
+  virtual void Query(V3 const& point, Vector<void*>& result) const;
 
-  LT_API virtual void Query(Bound3 const& box, Vector<void*>& result) const;
+  virtual void Query(Bound3 const& box, Vector<void*>& result) const;
 };
 
-LT_API SpatialPartition* SpatialPartition_Hash(V3 const& cellSize, size_t cells);
+SpatialPartition* SpatialPartition_Hash(V3 const& cellSize, size_t cells);
 
-LT_API SpatialPartition* SpatialPartition_Uniform(
+SpatialPartition* SpatialPartition_Uniform(
   Bound3 const& box,
   size_t cellsX,
   size_t cellsY,

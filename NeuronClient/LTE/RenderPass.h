@@ -9,7 +9,7 @@ struct RenderPassT : RefCounted
 {
   BASE_TYPE(RenderPassT)
 
-  LT_API void Render(DrawState* state);
+  void Render(DrawState* state);
 
   virtual const char* GetName() const = 0;
   virtual void OnRender(DrawState* state) = 0;

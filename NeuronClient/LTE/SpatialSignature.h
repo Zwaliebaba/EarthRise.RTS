@@ -19,13 +19,13 @@ namespace LTE {
     virtual bool Query(Bound3 const& box) const = 0;
   };
 
-  LT_API SpatialSignature* SpatialSignature_Grid(
+  SpatialSignature* SpatialSignature_Grid(
     Bound3 const& box,
     size_t cellsX,
     size_t cellsY,
     size_t cellsZ);
 
-  LT_API SpatialSignature* SpatialSignature_Grid(Bound3 const& box, size_t cells);
+  SpatialSignature* SpatialSignature_Grid(Bound3 const& box, size_t cells);
 }
 
 #endif

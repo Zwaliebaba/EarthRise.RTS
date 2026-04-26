@@ -1,7 +1,5 @@
 #pragma once
 
-#include "NetLib.h"
-
 namespace Neuron
 {
   class DataWriter
@@ -109,6 +107,8 @@ namespace Neuron
     [[nodiscard]] int Size() const { return static_cast<int>(m_size); }
 
   protected:
+    constexpr static size_t MAX_PACKET_SIZE = 1500; // Typical MTU size for Ethernet, can be adjusted as needed
+    constexpr static size_t DATALOAD_SIZE = MAX_PACKET_SIZE - 32; // Reserve 32 bytes for protocol overhead
     std::array<std::byte, DATALOAD_SIZE> m_data;
     size_t m_size = 0;
   };

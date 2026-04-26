@@ -9,6 +9,28 @@
 
 namespace Neuron
 {
+  inline void BreakIfDebuggerPresent() noexcept
+  {
+    if (IsDebuggerPresent())
+      __debugbreak();
+  }
+
+  [[noreturn]] inline void ThrowFatal(const std::string& _message)
+  {
+    OutputDebugStringA(_message.c_str());
+    OutputDebugStringA("\n");
+    BreakIfDebuggerPresent();
+    throw std::runtime_error(_message);
+  }
+
+  [[noreturn]] inline void ThrowFatal(const std::wstring& _message)
+  {
+    OutputDebugStringW(_message.c_str());
+    OutputDebugStringW(L"\n");
+    BreakIfDebuggerPresent();
+    throw std::runtime_error("Fatal Error");
+  }
+
   template <class... Types>
   void DebugTrace(const std::string_view _fmt, [[maybe_unused]] Types&&... _args)
   {
@@ -34,20 +56,20 @@ namespace Neuron
   template <class... Types>
   [[noreturn]] void Fatal(const std::format_string<Types...> _fmt, [[maybe_unused]] Types&&... _args)
   {
-    __debugbreak();
-    throw std::exception("Fatal Error");
+    ThrowFatal(std::format(_fmt, static_cast<Types&&>(_args)...));
   }
 
   template <class... Types>
   [[noreturn]] void Fatal(const std::wformat_string<Types...> _fmt, [[maybe_unused]] Types&&... _args)
   {
-    __debugbreak();
-    throw std::exception("Fatal Error");
+    ThrowFatal(std::format(_fmt, static_cast<Types&&>(_args)...));
   }
 }
 
 #define ASSERT(expression)                   (void)((!!(expression)) || (Neuron::Fatal(_CRT_WIDE("Assert Failure")), 0))
 #define ASSERT_TEXT(expression, ...)         (void)((!!(expression)) || (Neuron::Fatal(__VA_ARGS__), 0))
+#define ASSERT_RELEASE(expression)           ASSERT(expression)
+#define ASSERT_RELEASE_TEXT(expression, ...) ASSERT_TEXT(expression, __VA_ARGS__)
 
 #ifdef _DEBUG
 #define DEBUG_ASSERT(expression)             ASSERT(expression)

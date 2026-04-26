@@ -1,31 +1,32 @@
 #ifndef Audio_Signal_h__
 #define Audio_Signal_h__
 
-#include "Common.h"
 #include "LTE/Reference.h"
 
-namespace Audio {
-  struct GlobalData {
+namespace Audio
+{
+  using Generator = Reference<GeneratorT>;
+
+  struct GlobalData
+  {
     uint sampleNum;
     uint sampleRate;
   };
 
-  struct SignalT : public RefCounted {
+  struct SignalT : RefCounted
+  {
     struct SignalImpl* impl;
 
-    LT_API SignalT();
-    LT_API virtual ~SignalT();
+    SignalT();
+    ~SignalT() override;
 
-    virtual double OnGet(GlobalData const& d) = 0;
+    virtual double OnGet(const GlobalData& d) = 0;
 
-    LT_API double Get(GlobalData const& d);
+    double Get(const GlobalData& d);
   };
+  using Signal = Reference<SignalT>;
 
-  LT_API Array<float>* Signal_Render(
-    Signal const& signal,
-    uint seconds,
-    uint bpm = 120,
-    uint rate = 44100);
+  Array<float>* Signal_Render(const Signal& signal, uint seconds, uint bpm = 120, uint rate = 44100);
 }
 
 #endif

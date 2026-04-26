@@ -320,7 +320,7 @@ const InfoLevelT InfoLevel_Location   = 3; // Knows where the object is, knows b
 const InfoLevelT InfoLevel_Scan       = 4; // Has full scan information on the object
 const InfoLevelT InfoLevel_Max        = 4;
 
-LT_API Time Universe_Age();
+Time Universe_Age();
 
 /* How many time quanta in a second? */
 const Time kTimeScale = 1000;

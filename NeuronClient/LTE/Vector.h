@@ -158,39 +158,39 @@ struct Vector : public NullBase<Vector<T> > {
 
   T& front() {
 #ifdef DEBUG_BOUNDS_CHECK
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
 #endif
     return v[0];
   }
 
   T const& front() const {
 #ifdef DEBUG_BOUNDS_CHECK
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
 #endif
     return v[0];
   }
 
   T& get(size_t index) {
 #ifdef DEBUG_BOUNDS_CHECK
-    LTE_ASSERT(index < v.size());
+    DEBUG_ASSERT(index < v.size());
 #endif
     return v[index];
   }
 
   T const& get(size_t index) const {
 #ifdef DEBUG_BOUNDS_CHECK
-    LTE_ASSERT(index < v.size());
+    DEBUG_ASSERT(index < v.size());
 #endif
     return v[index];
   }
 
   T& getModulo(size_t index) {
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
     return v[index % v.size()];
   }
 
   T const& getModulo(size_t index) const {
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
     return v[index % v.size()];
   }
 
@@ -203,7 +203,7 @@ struct Vector : public NullBase<Vector<T> > {
   }
 
   void insert(size_t index, T const& t) {
-    LTE_ASSERT(index <= v.size());
+    DEBUG_ASSERT(index <= v.size());
     v.insert(v.begin() + index, t);
   }
 
@@ -217,7 +217,7 @@ struct Vector : public NullBase<Vector<T> > {
   }
 
   Vector& operator>>(T& t) {
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
     t = v.back();
     v.pop_back();
     return *this;
@@ -244,12 +244,12 @@ struct Vector : public NullBase<Vector<T> > {
   }
 
   T& random() {
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
     return v[rand() % v.size()];
   }
 
   T const& random() const {
-    LTE_ASSERT(v.size());
+    DEBUG_ASSERT(v.size());
     return v[rand() % v.size()];
   }
 
@@ -265,7 +265,7 @@ struct Vector : public NullBase<Vector<T> > {
   }
 
   void removeIndex(size_t index) {
-    LTE_ASSERT(index < v.size());
+    DEBUG_ASSERT(index < v.size());
     if (index + 1 < v.size())
       v[index] = v.back();
     v.pop_back();

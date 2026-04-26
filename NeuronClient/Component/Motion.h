@@ -31,7 +31,7 @@ AutoClass(ComponentMotion,
     speed(0)
     {}
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(Motion)
@@ -41,7 +41,7 @@ AutoComponent(Motion)
   }
 
   void SetSupertype(Item const& type) {
-    LTE_ASSERT(type->GetMass() > 0);
+    DEBUG_ASSERT(type->GetMass() > 0);
     Motion.mass = type->GetMass();
     Motion.inertia = type->GetInertia();
 

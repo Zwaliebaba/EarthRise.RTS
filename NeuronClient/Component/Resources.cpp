@@ -12,6 +12,6 @@ VoidFreeFunction(Object_AddResource,
   float, weight)
 {
   ComponentResources* resources = object->GetResources();
-  LTE_ASSERT(resources != nullptr);
+  DEBUG_ASSERT(resources != nullptr);
   resources->elements[item] = weight;
 } FunctionAlias(Object_AddResource, AddResource);

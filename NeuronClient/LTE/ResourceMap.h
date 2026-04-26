@@ -16,6 +16,6 @@ struct ResourceMapT : RefCounted
   virtual String Get(const String& path) const = 0;
 };
 
-LT_API ResourceMap ResourceMap_Create();
+ResourceMap ResourceMap_Create();
 
 #endif

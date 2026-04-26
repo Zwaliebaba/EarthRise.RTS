@@ -35,20 +35,20 @@ namespace LTE {
 
     int64 CastInt() const {
       if (!type || !type->castInt)
-        error("Contained type does not support integer cast");
+        Fatal("Contained type does not support integer cast");
       return type->CastInt(data);
     }
 
     double CastReal() const {
       if (!type || !type->castReal)
-        error("Contained type does not support real cast");
+        Fatal("Contained type does not support real cast");
       return type->CastReal(data);
     }
 
     template <class T>
     T& Convert() {
       if (type != Type_Get<T>())
-        error("Destination type does not match data type");
+        Fatal("Destination type does not match data type");
       return *(T*)data;
     }
 
@@ -98,18 +98,18 @@ namespace LTE {
     Data(T const& t) :
       type(Type_Get(t))
     {
-      LTE_ASSERT(type->allocate);
+      DEBUG_ASSERT(type->allocate);
       data = type->Allocate();
-      LTE_ASSERT(type->assign);
+      DEBUG_ASSERT(type->assign);
       type->Assign(&t, data);
     }
 
     Data(Type const& type, void* data) :
       type(type)
     {
-      LTE_ASSERT(type->allocate);
+      DEBUG_ASSERT(type->allocate);
       this->data = type->Allocate();
-      LTE_ASSERT(type->assign);
+      DEBUG_ASSERT(type->assign);
       type->Assign(data, this->data);
     }
 
@@ -129,9 +129,9 @@ namespace LTE {
     Data& operator=(T const& t) {
       Clear();
       type = Type_Get<T>();
-      LTE_ASSERT(type->allocate);
+      DEBUG_ASSERT(type->allocate);
       data = type->Allocate();
-      LTE_ASSERT(type->assign);
+      DEBUG_ASSERT(type->assign);
       type->Assign(&t, data);
       return *this;
     }
@@ -144,9 +144,9 @@ namespace LTE {
       type = other.type;
 
       if (type) {
-        LTE_ASSERT(type->allocate);
+        DEBUG_ASSERT(type->allocate);
         data = type->Allocate();
-        LTE_ASSERT(type->assign);
+        DEBUG_ASSERT(type->assign);
         type->Assign(other.data, data);
       }
       return *this;
@@ -157,9 +157,9 @@ namespace LTE {
       type = other.type;
 
       if (type) {
-        LTE_ASSERT(type->allocate);
+        DEBUG_ASSERT(type->allocate);
         data = type->Allocate();
-        LTE_ASSERT(type->assign);
+        DEBUG_ASSERT(type->assign);
         type->Assign(other.data, data);
       }
       return *this;
@@ -167,13 +167,13 @@ namespace LTE {
 
     int64 CastInt() const {
       if (!type || !type->castInt)
-        error("Contained type does not support integer cast");
+        Fatal("Contained type does not support integer cast");
       return type->CastInt(data);
     }
 
     double CastReal() const {
       if (!type || !type->castReal)
-        error("Contained type does not support real cast");
+        Fatal("Contained type does not support real cast");
       return type->CastReal(data);
     }
 
@@ -187,14 +187,14 @@ namespace LTE {
     void Construct(Type const& type) {
       Clear();
       this->type = type;
-      LTE_ASSERT(type->allocate);
+      DEBUG_ASSERT(type->allocate);
       data = type->Allocate();
     }
 
     template <class T>
     T& Convert() {
       if (type != Type_Get<T>())
-        error("Destination type does not match data type");
+        Fatal("Destination type does not match data type");
       return *(T*)data;
     }
 
@@ -232,7 +232,7 @@ namespace LTE {
           self->Clear();
           Type const& newType = Type_Find(typeName);
           if (!newType)
-            error("Could not resolve dynamic type name");
+            Fatal("Could not resolve dynamic type name");
           self->Construct(newType);
         }
         
@@ -258,7 +258,7 @@ namespace LTE {
 
   inline DataRef& DataRef::operator=(Data const& other) {
     if (type != other.type)
-      error("Assignment type does not match contained type");
+      Fatal("Assignment type does not match contained type");
     type->Assign(other.data, data);
     return *this;
   }

@@ -1,36 +1,32 @@
 #include "SoundEngine.h"
-
-#include "LTE/ProgramLog.h"
 #include "LTE/Vector.h"
 
-namespace {
+namespace
+{
   Vector<SoundEngine*> gSoundEngine;
 }
 
-SoundEngine::SoundEngine() {
+SoundEngine::SoundEngine()
+{
   if (!gSoundEngine.size())
     Push();
 }
 
-SoundEngine::~SoundEngine() {
-  gSoundEngine.remove(this);
-}
+SoundEngine::~SoundEngine() { gSoundEngine.remove(this); }
 
-void SoundEngine::Pop() {
-  LTE_ASSERT(gSoundEngine.size());
-  LTE_ASSERT(gSoundEngine.back() == this);
+void SoundEngine::Pop()
+{
+  DEBUG_ASSERT(gSoundEngine.size());
+  DEBUG_ASSERT(gSoundEngine.back() == this);
   gSoundEngine.pop();
 }
 
-void SoundEngine::Push() {
-  gSoundEngine.push(this);
-}
+void SoundEngine::Push() { gSoundEngine.push(this); }
 
-SoundEngine* GetSoundEngine() {
-  LTE_ASSERT(gSoundEngine.size());
+SoundEngine* GetSoundEngine()
+{
+  DEBUG_ASSERT(gSoundEngine.size());
   return gSoundEngine.back();
 }
 
-SoundEngine* SoundEngine_Default() {
-  return SoundEngine_XAudio2();
-}
+SoundEngine* SoundEngine_Default() { return SoundEngine_XAudio2(); }

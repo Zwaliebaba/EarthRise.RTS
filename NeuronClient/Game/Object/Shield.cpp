@@ -185,7 +185,7 @@ DERIVED_IMPLEMENT(Shield)
 
 DefineFunction(Object_Shield)
 {
-  LTE_ASSERT(args.type->GetType() == ItemType_ShieldType);
+  DEBUG_ASSERT(args.type->GetType() == ItemType_ShieldType);
   Reference<Shield> self = new Shield;
   self->SetSupertype(args.type);
   return self;

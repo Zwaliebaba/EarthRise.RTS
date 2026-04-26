@@ -17,14 +17,14 @@ AutoClass(ComponentIntegrity,
     maxHealth(0)
     {}
 
-  LT_API Damage ApplyDamage(ObjectT*, Damage);
-  LT_API ItemT* GetDataDamaged(ObjectT const*) const;
-  LT_API ItemT* GetDataDestroyed(ObjectT const*) const;
+  Damage ApplyDamage(ObjectT*, Damage);
+  ItemT* GetDataDamaged(ObjectT const*) const;
+  ItemT* GetDataDestroyed(ObjectT const*) const;
 };
 
 AutoComponent(Integrity)
   void SetSupertype(Item const& type) {
-    LTE_ASSERT(type->GetIntegrity() > 0);
+    DEBUG_ASSERT(type->GetIntegrity() > 0);
     Integrity.health = Integrity.maxHealth = type->GetIntegrity();
 
     BaseT::SetSupertype(type);

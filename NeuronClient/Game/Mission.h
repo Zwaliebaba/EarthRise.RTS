@@ -20,7 +20,7 @@ struct MissionConstraintT : public RefCounted {
   virtual String GetDescription() const = 0;
 };
 
-LT_API MissionConstraint MissionConstraint_Equality(
+MissionConstraint MissionConstraint_Equality(
   ItemProperty const& property,
   Data const& value);
 

@@ -45,7 +45,7 @@ namespace LTE {
 
       if (modified) {
         std::ofstream writeFile(filename.c_str(), std::ios::binary);
-        LTE_ASSERT(writeFile);
+        DEBUG_ASSERT(writeFile);
 
         /* Write the header. */
         writeFile.write((const char*)&kArchiveMagic, sizeof(kArchiveMagic));
@@ -110,7 +110,7 @@ namespace LTE {
     }
 
     String GetFileName(size_t index) const {
-      LTE_ASSERT(index < files.size());
+      DEBUG_ASSERT(index < files.size());
       return files[index].name;
     }
 
@@ -151,13 +151,13 @@ namespace LTE {
       if (!stream.read((char*)&magic, sizeof(int)))
         return false;
 
-      LTE_ASSERT(magic == kArchiveMagic);
+      DEBUG_ASSERT(magic == kArchiveMagic);
 
       int fileCount;
       if (!stream.read((char*)&fileCount, sizeof(int)))
         return false;
 
-      LTE_ASSERT(fileCount >= 0 && fileCount < 1024);
+      DEBUG_ASSERT(fileCount >= 0 && fileCount < 1024);
 
       for (int i = 0; i < fileCount; ++i) {
         File thisFile;

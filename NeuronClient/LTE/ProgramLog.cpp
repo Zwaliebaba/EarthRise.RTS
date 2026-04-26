@@ -1,5 +1,4 @@
 #include "ProgramLog.h"
-#include "BuildMode.h"
 #include "OS.h"
 #include "StackFrame.h"
 #include "Vector.h"
@@ -43,14 +42,14 @@ namespace {
 
 namespace LTE {
   void Log_Critical(String const& entry) {
-#ifdef BUILD_RELEASE
+#ifdef _NDEBUG
     GetWindow()->close();
 #endif
     DoLog("[CRITICAL] (" + StackFrame_Get() + ") " + entry);
-    DoLog("Shutting down due to critical error.");
-    OS_MessageBox("ERROR", "Shutting down due to critical error:\n" + entry);
-#ifdef BUILD_DEBUG
-    LTE_ASSERT(false);
+    DoLog("Shutting down due to critical Fatal.");
+    OS_MessageBox("ERROR", "Shutting down due to critical Fatal:\n" + entry);
+#ifdef _DEBUG
+    DEBUG_ASSERT(false);
 #endif
     exit(1);
   }

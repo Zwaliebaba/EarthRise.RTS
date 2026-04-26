@@ -26,14 +26,14 @@ struct ViewportT : public RefCounted {
     return V2(1) / size;
   }
 
-  LT_API Matrix GetMatrix() const;
-  LT_API void LoadMatrix() const;
+  Matrix GetMatrix() const;
+  void LoadMatrix() const;
 
-  LT_API V2 FromNDC(V2 const& point) const;
-  LT_API V2 ToNDC(V2 const& point) const;
+  V2 FromNDC(V2 const& point) const;
+  V2 ToNDC(V2 const& point) const;
 
-  LT_API V2 Transform(V2 const& point) const;
-  LT_API V2 InvTransform(V2 const& point) const;
+  V2 Transform(V2 const& point) const;
+  V2 InvTransform(V2 const& point) const;
 
 };
 
@@ -51,8 +51,8 @@ inline Viewport Viewport_Create(
   return self;
 }
 
-LT_API Viewport Viewport_Get();
-LT_API void Viewport_Pop();
-LT_API void Viewport_Push(Viewport const&);
+Viewport Viewport_Get();
+void Viewport_Pop();
+void Viewport_Push(Viewport const&);
 
 #endif

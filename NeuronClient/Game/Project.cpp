@@ -247,7 +247,7 @@ DefineFunction(Project_Deallocate) {
   Project const& self = args.project;
 
   Pointer<ComponentTasks> tasks = args.asset->GetTasks();
-  LTE_ASSERT(tasks->project == self);
+  DEBUG_ASSERT(tasks->project == self);
 
   for (size_t i = 0; i < self->allocated.size(); ++i) {
     if (self->allocated[i].object == args.asset) {

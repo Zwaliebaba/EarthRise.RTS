@@ -62,8 +62,8 @@ namespace {
     FieldType positiveField = type.type->GetField(type.data, positive);
     FieldType negativeField = type.type->GetField(type.data, negative);
 
-    LTE_ASSERT(positiveField.type == Type_Get<float>());
-    LTE_ASSERT(negativeField.type == Type_Get<float>());
+    DEBUG_ASSERT(positiveField.type == Type_Get<float>());
+    DEBUG_ASSERT(negativeField.type == Type_Get<float>());
 
     *(float*)positiveField.address *= multiplier;
     *(float*)negativeField.address /= multiplier;

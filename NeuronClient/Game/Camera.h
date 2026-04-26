@@ -36,7 +36,7 @@ DeclareFunction(Camera_CanSee, bool,
 DeclareFunctionNoParams(Camera_Create, Camera)
 DeclareFunctionNoParams(Camera_Get, Camera)
 
-LT_API void Camera_Pop();
-LT_API void Camera_Push(Camera const&);
+void Camera_Pop();
+void Camera_Push(Camera const&);
 
 #endif

@@ -4,8 +4,8 @@
 #include "Common.h"
 
 namespace LTE {
-  LT_API bool RegisterLoader(void (*loader)());
-  LT_API bool RegisterUnloader(void (*unloader)());
+  bool RegisterLoader(void (*loader)());
+  bool RegisterUnloader(void (*unloader)());
 }
 
 #endif

@@ -90,7 +90,7 @@ The intended future direction is a native DirectX 12 renderer and MMO-capable ga
   - typedefs like `uint`, `uint32`, and `uchar`
   - raw pointers and manual ownership
   - C-style strings in older systems
-  - macros such as `LTE_ASSERT`, `error`, `debugbreak`, and `debugprint`
+  - macros such as `DEBUG_ASSERT`, `Fatal`, `__debugbreak();`, and `DebugTrace`
 - OpenGL-related code uses GLEW-style headers and constants in places such as `LTE/GLEnum.h`.
 - Existing `Network` code should be inspected before assuming it is suitable for MMO server authority, replication, or persistence.
 
@@ -171,7 +171,7 @@ The intended future direction is a native DirectX 12 renderer and MMO-capable ga
 ## Testing and Validation
 
 - No active test project is present in the checked-in workspace.
-- Validate changes with builds, targeted runtime checks, and focused error inspection.
+- Validate changes with builds, targeted runtime checks, and focused Fatal inspection.
 - Do not claim broader test coverage than has actually been run.
 
 ## Documentation Expectations

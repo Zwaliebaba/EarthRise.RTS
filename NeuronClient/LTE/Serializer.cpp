@@ -116,7 +116,7 @@ namespace {
           }
 
           if (!located)
-            error("Failed to locate ID of dynamic derived type");
+            Fatal("Failed to locate ID of dynamic derived type");
         }
 
         *((void**)data) = pointee.type->Allocate();

@@ -84,7 +84,7 @@ struct Array : public NullBase<Array<T> > {
 
   T& operator[](size_t index) const {
 #ifdef DEBUG_BOUNDS_CHECK
-    LTE_ASSERT(index < _size);
+    DEBUG_ASSERT(index < _size);
 #endif
     return buffer[index];
   }
@@ -141,12 +141,12 @@ struct Array : public NullBase<Array<T> > {
   }
 
   T& random() {
-    LTE_ASSERT(size());
+    DEBUG_ASSERT(size());
     return (*this)[rand() % size()];
   }
 
   T const& random() const {
-    LTE_ASSERT(size());
+    DEBUG_ASSERT(size());
     return (*this)[rand() % size()];
   }
 

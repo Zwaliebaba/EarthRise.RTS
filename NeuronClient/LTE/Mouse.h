@@ -8,9 +8,9 @@
 
 namespace LTE {
   DeclareFunctionNoParams(Mouse_DoubleClicked, bool)
-  LT_API bool Mouse_Down(MouseButton button);
-  LT_API bool Mouse_Pressed(MouseButton button);
-  LT_API bool Mouse_Released(MouseButton button);
+  bool Mouse_Down(MouseButton button);
+  bool Mouse_Pressed(MouseButton button);
+  bool Mouse_Released(MouseButton button);
 
   DeclareFunctionNoParams(Mouse_GetDP, V2)
   DeclareFunctionNoParams(Mouse_GetDX, int)
@@ -22,15 +22,15 @@ namespace LTE {
   DeclareFunctionNoParams(Mouse_GetX, int)
   DeclareFunctionNoParams(Mouse_GetY, int)
 
-  LT_API float Mouse_GetDownTime(MouseButton button);
+  float Mouse_GetDownTime(MouseButton button);
   DeclareFunctionNoParams(Mouse_GetScrollDelta, float)
 
-  LT_API void Mouse_SetPos(V2 const& v);
-  LT_API void Mouse_SetPressed(MouseButton button, bool pressed);
-  LT_API void Mouse_SetScrollDelta(float ds);
+  void Mouse_SetPos(V2 const& v);
+  void Mouse_SetPressed(MouseButton button, bool pressed);
+  void Mouse_SetScrollDelta(float ds);
 
-  LT_API void Mouse_Update();
-  LT_API void Mouse_UpdatePos(V2I const& p);
+  void Mouse_Update();
+  void Mouse_UpdatePos(V2I const& p);
 
   DeclareFunctionNoParams(Mouse_LeftDown, bool)
   DeclareFunctionNoParams(Mouse_LeftPressed, bool)

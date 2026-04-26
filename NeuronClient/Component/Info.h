@@ -22,8 +22,8 @@ AutoClass(ComponentInfo,
     return GetLevel(object) >= level;
   }
 
-  LT_API void Add(ObjectT* object, InfoLevelT level);
-  LT_API InfoLevelT GetLevel(ObjectT* object) const;
+  void Add(ObjectT* object, InfoLevelT level);
+  InfoLevelT GetLevel(ObjectT* object) const;
 };
 
 AutoComponent(Info)

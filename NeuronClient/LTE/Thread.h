@@ -13,7 +13,7 @@ struct ThreadT : public RefCounted {
   virtual void Wait() = 0;
 };
 
-LT_API Thread Thread_Create(Job const& job);
+Thread Thread_Create(Job const& job);
 
 DeclareFunction(Thread_SleepMS, void, uint, ms)
 DeclareFunction(Thread_SleepUS, void, uint, us)

@@ -33,18 +33,18 @@ PhysicsEngine::~PhysicsEngine() {
 }
 
 PhysicsEngine* GetPhysicsEngine() {
-  LTE_ASSERT(!gPhysicsEngineStack.empty());
+  DEBUG_ASSERT(!gPhysicsEngineStack.empty());
   return gPhysicsEngineStack.back();
 }
 
 void PhysicsEngine::Pop() {
-  LTE_ASSERT(!gPhysicsEngineStack.empty());
-  LTE_ASSERT(gPhysicsEngineStack.back() == this);
+  DEBUG_ASSERT(!gPhysicsEngineStack.empty());
+  DEBUG_ASSERT(gPhysicsEngineStack.back() == this);
   gPhysicsEngineStack.pop();
 }
 
 void PhysicsEngine::Push() {
-  LTE_ASSERT(gPhysicsEngineStack.size() < 100);
+  DEBUG_ASSERT(gPhysicsEngineStack.size() < 100);
   gPhysicsEngineStack << this;
 }
 

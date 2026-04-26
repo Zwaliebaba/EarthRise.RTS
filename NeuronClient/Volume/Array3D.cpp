@@ -22,7 +22,7 @@ Mesh Mesh_Volume(
     float f = grid.GetData(x, y, z);
     if (!IsFinite(f)) {
       std::cout << f << " @ " << x << ',' << y << ',' << z << std::flush;
-      error("Non-finite grid cell.");
+      Fatal("Non-finite grid cell.");
     }
     mc.set_data(f, x, y, z);
   }

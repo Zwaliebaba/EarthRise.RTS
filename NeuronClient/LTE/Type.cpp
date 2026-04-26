@@ -69,7 +69,7 @@ Type Type_Create(String const& name, size_t size) {
 }
 
 TypeT::~TypeT() {
-  LTE_ASSERT(refCount == 0);
+  DEBUG_ASSERT(refCount == 0);
   ((TypeImpl*)this)->extra.~TypeExtra();
 }
 
@@ -175,7 +175,7 @@ FieldType TypeT::GetField(void* base, size_t index) {
     }
   };
 
-  LTE_ASSERT(IsComposite());
+  DEBUG_ASSERT(IsComposite());
   Getter g(index);
   mapper(this, base, g, nullptr);
   return g.result;

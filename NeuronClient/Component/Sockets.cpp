@@ -29,7 +29,7 @@ bool ComponentSockets::Plug(ObjectT* self, Item const& type, uint index) {
 
   Unplug(self, index);
   Object newChild = type->Instantiate(self);
-  LTE_ASSERT(newChild);
+  DEBUG_ASSERT(newChild);
   Plug(self, newChild, index);
   return true;
 }
@@ -51,7 +51,7 @@ bool ComponentSockets::Plug(ObjectT* self, Object const& object, uint index) {
 }
 
 void ComponentSockets::Unplug(ObjectT* self, uint index) {
-  LTE_ASSERT(index < instances.size());
+  DEBUG_ASSERT(index < instances.size());
   if (instances[index]) {
     self->RemoveChild(instances[index]);
     instances[index]->Delete();

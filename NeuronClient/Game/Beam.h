@@ -23,6 +23,6 @@ struct Beam : public BeamBaseT {
   float width;
 };
 
-LT_API Beam* Beam_Create();
+Beam* Beam_Create();
 
 #endif

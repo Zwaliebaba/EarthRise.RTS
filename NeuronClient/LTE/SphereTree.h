@@ -70,7 +70,7 @@ struct SphereTreeT : public RefCounted {
   }
 };
 
-LT_API SphereTree SphereTree_Mesh(Mesh const& mesh);
+SphereTree SphereTree_Mesh(Mesh const& mesh);
 
 #endif
 #endif

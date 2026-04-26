@@ -3,6 +3,6 @@
 
 #include "ItemProperty.h"
 
-LT_API ItemProperty ItemProperty_Owner();
+ItemProperty ItemProperty_Owner();
 
 #endif

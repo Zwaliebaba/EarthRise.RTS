@@ -5,14 +5,14 @@
 #include "Game/Object.h"
 #include "LTE/AutoClass.h"
 
-AutoClass(ComponentCullable,
-  float, cullDistanceSquared)
+AutoClass(ComponentCullable, float, cullDistanceSquared)
 
-  ComponentCullable() : cullDistanceSquared(0.0f) {}
+  ComponentCullable()
+    : cullDistanceSquared(0.0f) {}
 
-  void Recompute(ObjectT const* self) const {
-    Mutable(this)->cullDistanceSquared =
-      500 * self->GetRadius() * self->GetCullDistanceMult();
+  void Recompute(const ObjectT* self) const
+  {
+    Mutable(this)->cullDistanceSquared = 500 * self->GetRadius() * self->GetCullDistanceMult();
     Mutable(this)->cullDistanceSquared *= cullDistanceSquared;
   }
 };

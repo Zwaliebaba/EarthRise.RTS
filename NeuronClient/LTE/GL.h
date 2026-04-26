@@ -26,7 +26,6 @@
 #define _EasyGL_JP_
 
 #include <GL/glew.h>
-#include "BuildMode.h"
 
 #pragma comment(lib, "opengl32.lib")
 
@@ -38,10 +37,10 @@
 #include "Common.h"
 #include "ProgramLog.h"
 #define DEBUG_GL_ERRORS {                                                    \
-    GL_Error::Enum error = GL_GetError();                                      \
-    if (error != GL_Error::None) {                                             \
-      Log_Error(std::string("OpenGL Error: ") + GL_Error::String(error));      \
-      error("OpenGL Error");                                                   \
+    GL_Error::Enum Fatal = GL_GetError();                                      \
+    if (Fatal != GL_Error::None) {                                             \
+      Log_Error(std::string("OpenGL Error: ") + GL_Error::String(Fatal));      \
+      Fatal("OpenGL Error");                                                   \
     }}
 #else
 #define DEBUG_GL_ERRORS
@@ -143,7 +142,7 @@ inline void GL_CheckFramebuffer()
   (status != GL_FramebufferStatus::Complete)
   {
     Log_Error(std::string("OpenGL Error: ") + GL_FramebufferStatus::String(status));
-    error("OpenGL Error");
+    Fatal("OpenGL Error");
   }
 #endif
 }

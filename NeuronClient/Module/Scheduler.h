@@ -17,7 +17,7 @@ struct Scheduler : public ModuleT {
   }
 };
 
-LT_API void Scheduler_Add(Job const& job, bool threaded);
-LT_API Scheduler* Scheduler_Get();
+void Scheduler_Add(Job const& job, bool threaded);
+Scheduler* Scheduler_Get();
 
 #endif

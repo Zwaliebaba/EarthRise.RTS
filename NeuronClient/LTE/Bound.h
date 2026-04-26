@@ -73,7 +73,7 @@ AutoClass(BoundT,
   }
   
   Plane GetFace(size_t index) const {
-    LTE_ASSERT(index < 6);
+    DEBUG_ASSERT(index < 6);
     /* TODO : Unify. */
     if (index == 0)
       return Plane(lower, V3(-1.0f, 0.0f, 0.0f));

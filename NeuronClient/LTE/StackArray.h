@@ -19,14 +19,14 @@ namespace LTE {
 
     T& operator[](size_t index) {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(index < capacity);
+      DEBUG_ASSERT(index < capacity);
 #endif
       return stack[index];
     }
 
     T const& operator[](size_t index) const {
 #ifdef DEBUG_BOUNDS_CHECK
-      LTE_ASSERT(index < capacity);
+      DEBUG_ASSERT(index < capacity);
 #endif
       return stack[index];
     }

@@ -4,28 +4,25 @@
 #include "Common.h"
 #include "LTE/AutoClass.h"
 
-AutoClass(ComponentCollidable,
-  bool, passive,
-  bool, solid)
+AutoClass(ComponentCollidable, bool, passive, bool, solid)
 
-  LT_API ComponentCollidable();
+  ComponentCollidable();
 
-  LT_API void CheckCollisions(ObjectT* self, UpdateState& state);
+  void CheckCollisions(ObjectT* self, UpdateState& state);
 
-  LT_API void Collide(
-    ObjectT* self,
-    ObjectT* other,
-    Position const& pSelf,
-    Position const& pOther);
+  void Collide(ObjectT* self, ObjectT* other, const Position& pSelf, const Position& pOther);
 
-  void Run(ObjectT* self, UpdateState& state) {
+  void Run(ObjectT* self, UpdateState& state)
+  {
     if (!passive)
       CheckCollisions(self, state);
   }
 };
 
 AutoComponent(Collidable)
-  void OnUpdate(UpdateState& s) {
+
+  void OnUpdate(UpdateState& s)
+  {
     Collidable.Run(this, s);
     BaseT::OnUpdate(s);
   }

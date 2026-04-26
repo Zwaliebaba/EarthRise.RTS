@@ -96,9 +96,6 @@ struct Launcher : Program
             return;
         }
 
-        if (Keyboard_Down(Key_Tilde))
-            debugprint;
-
         if (Keyboard_Pressed(Key_F5))
             Launch();
 

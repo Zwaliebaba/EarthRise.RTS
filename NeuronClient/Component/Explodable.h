@@ -13,7 +13,7 @@ AutoClass(ComponentExplodable,
     explosionType(ExplosionType_Fire)
     {}
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(Explodable)

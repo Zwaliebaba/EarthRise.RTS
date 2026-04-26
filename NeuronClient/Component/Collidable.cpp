@@ -13,54 +13,51 @@
 #include "LTE/Renderer.h"
 #include "LTE/StackFrame.h"
 
-const double kCollisionDamageCoefficient = 1.0 / 1000.0;
-const double kResolutionCoefficient = 1.5;
+constexpr double kCollisionDamageCoefficient = 1.0 / 1000.0;
+constexpr double kResolutionCoefficient = 1.5;
 
-namespace {
-  void ResolveCollision(
-    ObjectT* self,
-    ObjectT* othr,
-    V3 const& normal)
+namespace
+{
+  void ResolveCollision(ObjectT* self, ObjectT* othr, const V3& normal)
   {
     ComponentMotion* motion = self->GetMotion();
-    double selfMass = (double)self->GetMass();
-    double othrMass = (double)othr->GetMass();
+    double selfMass = self->GetMass();
+    double othrMass = othr->GetMass();
     V3 selfVelocity = self->GetVelocity();
     V3 othrVelocity = othr->GetVelocity();
 
-    double totalEnergy =
-      selfMass * LengthSquared(selfVelocity) * Saturate( Dot(Normalize(selfVelocity), normal)) +
-      othrMass * LengthSquared(othrVelocity) * Saturate(-Dot(Normalize(othrVelocity), normal));
-    
+    double totalEnergy = selfMass * LengthSquared(selfVelocity) * Saturate(Dot(Normalize(selfVelocity), normal)) + othrMass *
+      LengthSquared(othrVelocity) * Saturate(-Dot(Normalize(othrVelocity), normal));
+
     double othrMassFraction = othrMass / (selfMass + othrMass);
     double damage = kCollisionDamageCoefficient * totalEnergy * othrMassFraction;
 
     /* TEMPCHANGE Don't apply collision damage to AI pilots. */
-    Player const& p = self->GetOwner();
+    const Player& p = self->GetOwner();
 
     /* CRITICAL Don't apply any collision damage...ever ;) */
     if (false && (!p || p->IsHuman()))
-      self->ApplyDamage((Damage)damage);
+      self->ApplyDamage(static_cast<Damage>(damage));
 
     if (motion)
-      motion->velocity -=
-        (float)(kResolutionCoefficient * othrMassFraction) *
-        Max(0.f, Dot(motion->velocity, normal)) * normal;
+    {
+      motion->velocity -= static_cast<float>(kResolutionCoefficient * othrMassFraction) * Max(0.f, Dot(motion->velocity, normal)) * normal;
+    }
   }
 }
 
-ComponentCollidable::ComponentCollidable() :
-  passive(true),
-  solid(true)
-  {}
+ComponentCollidable::ComponentCollidable()
+  : passive(true),
+    solid(true) {}
 
-void ComponentCollidable::CheckCollisions(ObjectT* self, UpdateState& state) {
+void ComponentCollidable::CheckCollisions(ObjectT* self, UpdateState& state)
+{
   AUTO_FRAME;
   if (!state.hasFocus)
     return;
 
   /* CRITICAL. Never check collisions for non-player objects. */
-  Player const& owner = self->GetOwner();
+  const Player& owner = self->GetOwner();
   if (!owner || !owner->IsHuman())
     return;
 
@@ -81,10 +78,11 @@ void ComponentCollidable::CheckCollisions(ObjectT* self, UpdateState& state) {
   static Vector<ObjectT*> nearbyObjects;
   nearbyObjects.clear();
   nearbyObjects.reserve(100);
-  Bound3D const& myBound = self->GetGlobalBound();
+  const Bound3D& myBound = self->GetGlobalBound();
   context->QueryInterior(myBound, nearbyObjects);
 
-  for (size_t i = 0; i < nearbyObjects.size(); ++i) {
+  for (size_t i = 0; i < nearbyObjects.size(); ++i)
+  {
     ObjectT* other = nearbyObjects[i];
     if (self == other)
       continue;
@@ -114,13 +112,16 @@ void ComponentCollidable::CheckCollisions(ObjectT* self, UpdateState& state) {
     if (mySpeed < 1e-4f && otherSpeed < 1e-4f)
       continue;
 
-    if (myBound.Overlaps(other->GetGlobalBound())) {
+    if (myBound.Overlaps(other->GetGlobalBound()))
+    {
       V3 contactNormal;
       bool collided = GetPhysicsEngine()->CheckCollision(self, other, &contactNormal);
 
-      if (collided) {
+      if (collided)
+      {
         /* Generic collision-resolution logic. */
-        if (solid && otherCollidable->solid) {
+        if (solid && otherCollidable->solid)
+        {
           ResolveCollision(self, other, contactNormal);
           ResolveCollision(other, self, -contactNormal);
         }
@@ -135,11 +136,7 @@ void ComponentCollidable::CheckCollisions(ObjectT* self, UpdateState& state) {
   }
 }
 
-void ComponentCollidable::Collide(
-  ObjectT* self,
-  ObjectT* other,
-  Position const& pSelf,
-  Position const& pOther)
+void ComponentCollidable::Collide(ObjectT* self, ObjectT* other, const Position& pSelf, const Position& pOther)
 {
   self->OnCollide(self, other, pSelf, pOther);
 }

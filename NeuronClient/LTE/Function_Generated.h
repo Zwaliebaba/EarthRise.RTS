@@ -1,5 +1,5 @@
 #define FreeFunction0(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl() Postfix;                              \
+  Prefix ReturnType Name##_Impl() Postfix;                              \
                                                                                \
   inline void Name##_Call(                                                     \
     void** in,                                                                 \
@@ -54,7 +54,7 @@
   Prefix ReturnType Name##_Impl() Postfix                                      \
 
 #define VoidFreeFunction0(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl() Postfix;                              \
+  Prefix ReturnType Name##_Impl() Postfix;                              \
                                                                                \
   inline void Name##_Call(                                                     \
     void** in,                                                                 \
@@ -107,7 +107,7 @@
   Prefix ReturnType Name##_Impl() Postfix                                      \
 
 #define FreeFunction1(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(T0 const& N0) Postfix;                  \
+  Prefix ReturnType Name##_Impl(T0 const& N0) Postfix;                  \
                                                                                \
   inline void Name##_Call(                                                     \
     void** in,                                                                 \
@@ -166,7 +166,7 @@
   Prefix ReturnType Name##_Impl(T0 const& N0) Postfix                          \
 
 #define VoidFreeFunction1(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(T0 const& N0) Postfix;                  \
+  Prefix ReturnType Name##_Impl(T0 const& N0) Postfix;                  \
                                                                                \
   inline void Name##_Call(                                                     \
     void** in,                                                                 \
@@ -223,7 +223,7 @@
   Prefix ReturnType Name##_Impl(T0 const& N0) Postfix                          \
 
 #define FreeFunction2(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1) Postfix;                                                     \
                                                                                \
@@ -292,7 +292,7 @@
     T1 const& N1) Postfix                                                      \
 
 #define VoidFreeFunction2(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1) Postfix;                                                     \
                                                                                \
@@ -359,7 +359,7 @@
     T1 const& N1) Postfix                                                      \
 
 #define FreeFunction3(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2) Postfix;                                                     \
@@ -435,7 +435,7 @@
     T2 const& N2) Postfix                                                      \
 
 #define VoidFreeFunction3(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2) Postfix;                                                     \
@@ -509,7 +509,7 @@
     T2 const& N2) Postfix                                                      \
 
 #define FreeFunction4(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -592,7 +592,7 @@
     T3 const& N3) Postfix                                                      \
 
 #define VoidFreeFunction4(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -673,7 +673,7 @@
     T3 const& N3) Postfix                                                      \
 
 #define FreeFunction5(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -763,7 +763,7 @@
     T4 const& N4) Postfix                                                      \
 
 #define VoidFreeFunction5(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -851,7 +851,7 @@
     T4 const& N4) Postfix                                                      \
 
 #define FreeFunction6(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -948,7 +948,7 @@
     T5 const& N5) Postfix                                                      \
 
 #define VoidFreeFunction6(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -1043,7 +1043,7 @@
     T5 const& N5) Postfix                                                      \
 
 #define FreeFunction7(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -1147,7 +1147,7 @@
     T6 const& N6) Postfix                                                      \
 
 #define VoidFreeFunction7(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -1249,7 +1249,7 @@
     T6 const& N6) Postfix                                                      \
 
 #define FreeFunction8(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \
@@ -1360,7 +1360,7 @@
     T7 const& N7) Postfix                                                      \
 
 #define VoidFreeFunction8(Prefix, Postfix, ReturnType, Name, Description, T0, N0, T1, N1, T2, N2, T3, N3, T4, N4, T5, N5, T6, N6, T7, N7) \
-  LT_API Prefix ReturnType Name##_Impl(                                        \
+  Prefix ReturnType Name##_Impl(                                        \
     T0 const& N0,                                                              \
     T1 const& N1,                                                              \
     T2 const& N2,                                                              \

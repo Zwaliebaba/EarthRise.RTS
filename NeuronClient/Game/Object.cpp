@@ -139,7 +139,7 @@ Position ObjectT::GetDockLocation(Object const& docker) const {
   Position center = docker->GetCenter();
   Transform const& transform = GetTransform();
   Vector<Bound3> const* docks = GetSupertype()->GetDocks();
-  LTE_ASSERT(docks);
+  DEBUG_ASSERT(docks);
 
   Position closestPoint = transform.TransformPoint(docks->get(0).GetCenter());
   Distance closestDistance = Length(closestPoint - center);
@@ -168,7 +168,7 @@ Bound3 ObjectT::GetLocalBound() const {
 
 Bound3D ObjectT::GetGlobalBound() const {
   ComponentBoundingBox const* bb = GetBoundingBox();
-  LTE_ASSERT(bb);
+  DEBUG_ASSERT(bb);
   ((ComponentBoundingBox*)bb)->Recompute(this);
   return bb->worldBox;
 }

@@ -59,7 +59,7 @@ struct AutoPtr : public NullBase<AutoPtr<T> > {
   T* operator->() const {
 #ifdef DEBUG_POINTERS
     if (!t)
-      error("Attempt to access null autopointer");
+      Fatal("Attempt to access null autopointer");
 #endif
     return t;
   }
@@ -67,7 +67,7 @@ struct AutoPtr : public NullBase<AutoPtr<T> > {
   T& operator*() const {
 #ifdef DEBUG_POINTERS
     if (!t)
-      error("Attempt to access null autopointer");
+      Fatal("Attempt to access null autopointer");
 #endif
     return *t;
   }

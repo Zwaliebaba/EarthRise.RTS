@@ -36,6 +36,6 @@ struct Light : public LightBaseT {
   }
 };
 
-LT_API LightRef Light_Create(ObjectT* parent);
+LightRef Light_Create(ObjectT* parent);
 
 #endif

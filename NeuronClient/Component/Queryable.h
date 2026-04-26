@@ -11,19 +11,19 @@ struct ComponentQueryableImpl;
 AutoClassEmpty(ComponentQueryable)
   Pointer<ComponentQueryableImpl> impl;
 
-  LT_API ComponentQueryable();
-  LT_API ~ComponentQueryable();
+  ComponentQueryable();
+  ~ComponentQueryable();
 
-  LT_API void Remove(ObjectT* object);
+  void Remove(ObjectT* object);
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 
-  LT_API void QueryBox(
+  void QueryBox(
     ObjectT* self,
     Bound3D const& box,
     Vector<ObjectT*>& objects);
 
-  LT_API ObjectT* QueryRay(
+  ObjectT* QueryRay(
     ObjectT* self,
     WorldRay const& ray,
     float& t,
@@ -61,8 +61,8 @@ AutoComponent(Queryable)
 };
 
 /* Pre-defined callbacks for use with Query. */
-LT_API bool RaycastCanCollide(ObjectT const*, void*);
-LT_API bool RaycastCanCollideBidirectional(ObjectT const*, void*);
-LT_API bool RaycastSolids(ObjectT const*, void*);
+bool RaycastCanCollide(ObjectT const*, void*);
+bool RaycastCanCollideBidirectional(ObjectT const*, void*);
+bool RaycastSolids(ObjectT const*, void*);
 
 #endif

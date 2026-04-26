@@ -92,8 +92,8 @@ AutoClassDerived(StringListList, StringListT,
   }
 };
 
-LT_API StringList StringList_Create(String const& data);
-LT_API StringList StringList_Load(Location const& location);
-LT_API void StringList_Print(StringList const& list);
+StringList StringList_Create(String const& data);
+StringList StringList_Load(Location const& location);
+void StringList_Print(StringList const& list);
 
 #endif

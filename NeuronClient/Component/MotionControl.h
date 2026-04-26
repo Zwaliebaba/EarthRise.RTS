@@ -12,7 +12,7 @@ AutoClass(ComponentMotionControl,
 
   ComponentMotionControl() {}
 
-  LT_API void Run(ObjectT* self, UpdateState& state);
+  void Run(ObjectT* self, UpdateState& state);
 };
 
 AutoComponent(MotionControl)
