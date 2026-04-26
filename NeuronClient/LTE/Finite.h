@@ -3,21 +3,16 @@
 
 #include "Common.h"
 
-namespace LTE {
+namespace LTE
+{
   template <class T>
-  inline bool IsFinite(T const& t) {
-    return true;
-  }
+  bool IsFinite(const T& t) { return true; }
 
   template <>
-  inline bool IsFinite<float>(float const& t) {
-    return t <= FLT_MAX && t >= -FLT_MAX;
-  }
+  inline bool IsFinite<float>(const float& t) { return t <= FLT_MAX && t >= -FLT_MAX; }
 
   template <>
-  inline bool IsFinite<double>(double const& t) {
-    return t <= DBL_MAX && t >= -DBL_MAX;
-  }
+  inline bool IsFinite<double>(const double& t) { return t <= DBL_MAX && t >= -DBL_MAX; }
 }
 
 #endif

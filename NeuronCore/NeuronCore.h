@@ -61,7 +61,6 @@
 
 #include <Windows.h>
 
-
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Globalization.h>
 #include <winrt/Windows.Storage.Streams.h>
@@ -74,6 +73,7 @@ using namespace winrt;
 #include "Debug.h"
 #include "FileSys.h"
 #include "GameMath.h"
+#include "TimerCore.h"
 
 #include "NeuronHelper.h"
 

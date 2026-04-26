@@ -1,23 +1,15 @@
 #include "Timer.h"
-
 #include "SFML/System.hpp"
 
-struct TimerData {
+struct TimerData
+{
   sf::Clock clock;
 };
 
-Timer::Timer() {
-  d = new TimerData;
-}
+::Timer::Timer() { d = new TimerData; }
 
-Timer::~Timer() {
-  delete d;
-}
+::Timer::~Timer() { delete d; }
 
-float Timer::GetElapsed() const {
-  return d->clock.getElapsedTime().asSeconds();
-}
+float ::Timer::GetElapsed() const { return d->clock.getElapsedTime().asSeconds(); }
 
-void Timer::Reset() {
-  d->clock.restart();
-}
+void ::Timer::Reset() const { d->clock.restart(); }

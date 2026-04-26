@@ -5,6 +5,7 @@
 #include "Component/Interior.h"
 #include "Component/Orientation.h"
 #include "Component/Queryable.h"
+#include "UpdateState.h"
 
 #include "Game/Light.h"
 #include "Game/Item/WeaponType.h"

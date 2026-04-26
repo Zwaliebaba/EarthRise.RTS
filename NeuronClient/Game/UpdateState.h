@@ -3,16 +3,16 @@
 
 #include "Common.h"
 
-struct UpdateState {
+struct UpdateState
+{
   float dt;
   Time quanta;
   bool hasFocus;
 
-  UpdateState(float dt, bool hasFocus = true) :
-    dt(dt),
-    quanta((Time)((float)kTimeScale * dt)),
-    hasFocus(hasFocus)
-    {}
+  UpdateState(float dt, bool hasFocus = true)
+    : dt(dt),
+      quanta(static_cast<Time>((float)kTimeScale * dt)),
+      hasFocus(hasFocus) {}
 };
 
 #endif

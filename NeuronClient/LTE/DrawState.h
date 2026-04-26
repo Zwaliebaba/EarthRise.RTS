@@ -8,7 +8,10 @@
 #include "Texture2D.h"
 #include "Vector.h"
 
-struct DrawState : public Pushable<DrawState> {
+#undef DrawState
+
+struct DrawState : Pushable<DrawState>
+{
   Stack<View*> view;
   Stack<CubeMap> envMap;
   Stack<CubeMap> envMapLF;
@@ -29,24 +32,19 @@ struct DrawState : public Pushable<DrawState> {
   Vector<void*> lights;
   Vector<void*> visible;
 
-  void Flip() {
-    Swap(primary, secondary);
-  }
+  void Flip() { Swap(primary, secondary); }
 };
 
-LT_API Data const& DrawState_Get(String const& name);
-LT_API void DrawState_Inject(Shader const& shader);
+LT_API const Data& DrawState_Get(const String& name);
+LT_API void DrawState_Inject(const Shader& shader);
 
-LT_API void DrawState_Link(Shader const& shader);
-LT_API void DrawState_Link(ShaderInstance const& shaderState);
+LT_API void DrawState_Link(const Shader& shader);
+LT_API void DrawState_Link(const ShaderInstance& shaderState);
 
 DeclareFunctionNoParams(DrawState_Clear, void)
 
-DeclareFunction(DrawState_Pop, void,
-  String, name)
+DeclareFunction(DrawState_Pop, void, String, name)
 
-DeclareFunction(DrawState_Push, void,
-  String, name,
-  Data, data)
+DeclareFunction(DrawState_Push, void, String, name, Data, data)
 
 #endif

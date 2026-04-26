@@ -3,13 +3,15 @@
 
 #include "Common.h"
 
-struct Timer {
+struct Timer
+{
   struct TimerData* d;
 
   LT_API Timer();
   LT_API ~Timer();
 
-  float Lap() {
+  float Lap()
+  {
     float elapsed = GetElapsed();
     Reset();
     return elapsed;
@@ -18,7 +20,7 @@ struct Timer {
   /* NOTE : Measured in seconds. */
   LT_API float GetElapsed() const;
 
-  LT_API void Reset();
+  LT_API void Reset() const;
 };
 
 #endif

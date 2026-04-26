@@ -61,7 +61,7 @@ When working inside NeuronCore:
 ## Legacy Code (NeuronClient, GameLogic)
 
 - Keep C-style strings (`char*`) consistent with surrounding code.
-- Use `strdup`, `new[]` / `delete[]` as the file already does.
+- Use `_strdup`, `new[]` / `delete[]` as the file already does.
 - Do not introduce new uses of unsafe C string functions (`sprintf`, `strcpy`, `strcat`). Prefer `snprintf`, `std::string`, or `std::format` in new code.
 
 ## Build Verification

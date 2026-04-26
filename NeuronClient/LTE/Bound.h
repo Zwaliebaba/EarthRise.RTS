@@ -187,14 +187,14 @@ AutoClass(BoundT,
   bool Intersects(
     PointT const& rayOrigin,
     DirT const& rcpRayDirection,
-    float& near,
-    float& far) const
+    float& _near,
+    float& _far) const
   {
     DirT t0 = (DirT)(lower - rayOrigin) * rcpRayDirection;
     DirT t1 = (DirT)(upper - rayOrigin) * rcpRayDirection;
-    near = Min(t0, t1).GetMax();
-    far = Max(t0, t1).GetMin();
-    return near <= far;
+    _near = Min(t0, t1).GetMax();
+    _far = Max(t0, t1).GetMin();
+    return _near <= _far;
   }
 
   BoundT& Intersect(BoundT const& other) {

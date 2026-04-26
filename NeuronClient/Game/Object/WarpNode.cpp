@@ -1,5 +1,5 @@
 #include "../Objects.h"
-
+#include "UpdateState.h"
 #include "Component/BoundingBox.h"
 #include "Component/Cullable.h"
 #include "Component/Detectable.h"
@@ -9,143 +9,112 @@
 #include "Component/Nameable.h"
 #include "Component/Orientation.h"
 #include "Component/Scriptable.h"
-
 #include "Game/Materials.h"
 #include "Game/Messages.h"
-
 #include "Module/SoundEngine.h"
-
 #include "LTE/DrawState.h"
 #include "LTE/Meshes.h"
 #include "LTE/Model.h"
-
 #include "LTE/Debug.h"
 
-const float kPadding = 5;
-const float kRailForce = 2.0f * 2048;
-const size_t kSplitPrecision = 16;
-const int kInitialPartitions = 4;
-const float kMinRadius = 200;
-const float kMaxRadius = 5000;
+constexpr float kPadding = 5;
+constexpr float kRailForce = 2.0f * 2048;
+constexpr size_t kSplitPrecision = 16;
+constexpr int kInitialPartitions = 4;
+constexpr float kMinRadius = 200;
+constexpr float kMaxRadius = 5000;
 
-namespace {
-  typedef Reference<struct RailSlotT> RailSlot;
-  typedef Reference<struct WarpNodeControllerT> WarpNodeController;
+namespace
+{
+  using RailSlot = Reference<struct RailSlotT>;
+  using WarpNodeController = Reference<struct WarpNodeControllerT>;
 
-  Renderable GetModel() {
+  Renderable GetModel()
+  {
 #if 0
-    static Renderable model;
-    if (!model) {
+    static Renderable model; if (!model)
+    {
       ShaderInstance ss = ShaderInstance_Create("npm.jsl", "wormhole.jsl");
       (*ss)(RenderStateSwitch_BlendModeAdditive);
       DrawState_Link(ss);
-      model = (Renderable)Model_Create()
-        ->Add(Mesh_BoxSphere(5, true)
-            ->ReverseWinding(), ss);
-    }
-    return model;
+      model = (Renderable)Model_Create()->Add(Mesh_BoxSphere(5, true)->ReverseWinding(), ss);
+    } return model;
 #else
     static Model model;
-    if (!model)
-      model = Model_Create()->Add(
-        Mesh_BoxSphere(16, true)->SetU(1),
-        Material_Ice());
+    if (!model) { model = Model_Create()->Add(Mesh_BoxSphere(16, true)->SetU(1), Material_Ice()); }
     return model;
 #endif
   }
 
-  AutoClass(Passenger,
-    Object, object,
-    float, radius,
-    RailSlot, slot,
-    Object, prevNode,
-    Object, nextNode,
-    Object, target,
-    V3, dir)
+  AutoClass(Passenger, Object, object, float, radius, RailSlot, slot, Object, prevNode, Object, nextNode, Object, target, V3, dir)
     Passenger() {}
   };
 
-  AutoClassDerived(RailSlotT, RefCounted,
-    Pointer<RailSlotT>, parent,
-    Vector<RailSlot>, children,
-    float, angle,
-    float, angleSize,
-    float, radius,
-    float, radiusSize,
-    float, innerRadius,
-    float, innerPosition,
-    bool, allocated)
+  AutoClassDerived(RailSlotT, RefCounted, Pointer<RailSlotT>, parent, Vector<RailSlot>, children, float, angle, float, angleSize, float,
+                   radius, float, radiusSize, float, innerRadius, float, innerPosition, bool, allocated)
     RailSlotT() {}
 
-    RailSlotT(
-        float angle,
-        float angleSize,
-        float radius,
-        float radiusSize) :
-      angle(angle),
-      angleSize(angleSize),
-      radius(radius),
-      radiusSize(radiusSize),
-      allocated(false)
-    {
-      ComputeInnerRadius();
-    }
+    RailSlotT(float angle, float angleSize, float radius, float radiusSize)
+      : angle(angle),
+        angleSize(angleSize),
+        radius(radius),
+        radiusSize(radiusSize),
+        allocated(false) { ComputeInnerRadius(); }
 
-    void ComputeInnerRadius() {
-      const int iterations = 8;
+    void ComputeInnerRadius()
+    {
+      constexpr int iterations = 8;
       const float angleFactor = Sin(kTau * angleSize / 2.0f);
 
       innerRadius = 0;
 
-      for (int i = 0; i < iterations; ++i) {
-        float t = (float)(i + 1) / (float)(iterations + 1);
+      for (int i = 0; i < iterations; ++i)
+      {
+        float t = static_cast<float>(i + 1) / static_cast<float>(iterations + 1);
         float h = radius + t * radiusSize;
         float inner = Min(h - radius, (radius + radiusSize) - h);
         inner = Min(inner, h * angleFactor);
-        if (inner > innerRadius) {
+        if (inner > innerRadius)
+        {
           innerRadius = inner;
           innerPosition = h;
         }
       }
     }
 
-    Position GetCenter(Object const& object) {
+    Position GetCenter(const Object& object)
+    {
       float t = kTau * angle;
-      V3 const& up = object->GetUp();
-      V3 const& right = object->GetRight();
+      const V3& up = object->GetUp();
+      const V3& right = object->GetRight();
       V3 offset = innerPosition * (Cos(t) * up + Sin(t) * right);
       return object->GetPos() + offset;
     }
   };
 
-  AutoClassDerived(WarpNodeControllerT, RefCounted,
-    Vector<Passenger>, passengers,
-    Vector<RailSlot>, slots)
+  AutoClassDerived(WarpNodeControllerT, RefCounted, Vector<Passenger>, passengers, Vector<RailSlot>, slots)
 
     WarpNodeControllerT() {}
 
-    void PrintSlot(RailSlot const& slot) {
-      dbg
-        | "(" | slot->radius
-        | " - " | (slot->radius + slot->radiusSize)
-        | ") (" | slot->angle
-        | " - " | (slot->angle + slot->angleSize)
-        | ")  " | slot->radiusSize
-        | " x " | slot->angleSize
-        | endl;
+    void PrintSlot(const RailSlot& slot)
+    {
+      dbg | "(" | slot->radius | " - " | (slot->radius + slot->radiusSize) | ") (" | slot->angle | " - " | (slot->angle + slot->angleSize) |
+        ")  " | slot->radiusSize | " x " | slot->angleSize | endl;
     }
 
-    RailSlot Allocate(float radius) {
+    RailSlot Allocate(float radius)
+    {
       /* Find the best free slot to use. */
       RailSlot slot;
       float minRadius = 0;
-      for (size_t i = 0; i < slots.size(); ++i) {
-        RailSlot const& thisSlot = slots[i];
-        if (thisSlot->allocated ||
-            thisSlot->innerRadius < radius)
+      for (size_t i = 0; i < slots.size(); ++i)
+      {
+        const RailSlot& thisSlot = slots[i];
+        if (thisSlot->allocated || thisSlot->innerRadius < radius)
           continue;
 
-        if (!slot || thisSlot->radius < minRadius) {
+        if (!slot || thisSlot->radius < minRadius)
+        {
           slot = thisSlot;
           minRadius = thisSlot->radius;
         }
@@ -162,8 +131,10 @@ namespace {
       float radiusUpper = slot->radiusSize;
 
       /* Binary search the best split position. */
-      for (size_t i = 0; i < kSplitPrecision; ++i) {
-        /* Angular step. */ {
+      for (size_t i = 0; i < kSplitPrecision; ++i)
+      {
+        /* Angular step. */
+        {
           float thisAngle = (angleLower + angleUpper) / 2.0f;
           RailSlotT newSlot(slot->angle, thisAngle, slot->radius, radiusUpper);
           if (newSlot.innerRadius >= radius)
@@ -172,7 +143,8 @@ namespace {
             angleLower = thisAngle;
         }
 
-        /* Radial step. */ {
+        /* Radial step. */
+        {
           float thisRadius = (radiusLower + radiusUpper) / 2.0f;
           RailSlotT newSlot(slot->angle, angleUpper, slot->radius, thisRadius);
           if (newSlot.innerRadius >= radius)
@@ -183,29 +155,14 @@ namespace {
       }
 
       /* Split slot into 4 pieces based on minimal radial & angular sizes. */
-      RailSlot split1 = new RailSlotT(
-        slot->angle,
-        angleUpper,
-        slot->radius,
-        radiusUpper);
+      RailSlot split1 = new RailSlotT(slot->angle, angleUpper, slot->radius, radiusUpper);
 
-      RailSlot split2 = new RailSlotT(
-        slot->angle + angleUpper,
-        slot->angleSize - angleUpper,
-        slot->radius,
-        radiusUpper);
+      RailSlot split2 = new RailSlotT(slot->angle + angleUpper, slot->angleSize - angleUpper, slot->radius, radiusUpper);
 
-      RailSlot split3 = new RailSlotT(
-        slot->angle,
-        angleUpper,
-        slot->radius + radiusUpper,
-        slot->radiusSize - radiusUpper);
+      RailSlot split3 = new RailSlotT(slot->angle, angleUpper, slot->radius + radiusUpper, slot->radiusSize - radiusUpper);
 
-      RailSlot split4 = new RailSlotT(
-        slot->angle + angleUpper,
-        slot->angleSize - angleUpper,
-        slot->radius + radiusUpper,
-        slot->radiusSize - radiusUpper);
+      RailSlot split4 = new RailSlotT(slot->angle + angleUpper, slot->angleSize - angleUpper, slot->radius + radiusUpper,
+                                      slot->radiusSize - radiusUpper);
 
       split1->parent = slot;
       split2->parent = slot;
@@ -222,55 +179,52 @@ namespace {
       split1->allocated = true;
 
 #if 0
-      PrintSlot(slot);
-      PrintSlot(split1);
-      PrintSlot(split2);
-      PrintSlot(split3);
-      PrintSlot(split4);
-      dbg | " ------- " | endl;
-      dbg | waitkey;
+      PrintSlot(slot); PrintSlot(split1); PrintSlot(split2); PrintSlot(split3); PrintSlot(split4); dbg | " ------- " | endl; dbg | waitkey;
 #endif
       return split1;
     }
 
-    RailSlot Enter(
-      Object const& object,
-      Object const& node,
-      Object const& target)
+    RailSlot Enter(const Object& object, const Object& node, const Object& target)
     {
       float radius = object->GetRadius() + kPadding;
       RailSlot slot = Allocate(radius);
-      if (slot) {
+      if (slot)
+      {
         V3 dir = Normalize(node->GetPos() - object->GetPos());
         passengers.push(Passenger(object, radius, slot, node, node, target, dir));
       }
       return slot;
     }
 
-    void Exit(Passenger const& passenger) {
+    void Exit(const Passenger& passenger)
+    {
       passenger.object->Send(MessageEjected());
-      static ScriptFunction ejectPassenger =
-        ScriptFunction_Load("Object/WarpNode:EjectPassenger");
-      ejectPassenger->VoidCall(0, DataRef(passenger.object));
+      static ScriptFunction ejectPassenger = ScriptFunction_Load("Object/WarpNode:EjectPassenger");
+      ejectPassenger->VoidCall(nullptr, DataRef(passenger.object));
       Free(passenger.slot);
     }
 
-    void Free(RailSlot const& slot) {
+    void Free(const RailSlot& slot)
+    {
       slot->allocated = false;
 
       /* Check if siblings can be merged. */
       RailSlot parent = slot->parent.get();
-      if (parent) {
+      if (parent)
+      {
         bool childAllocated = false;
-        for (size_t i = 0; i < parent->children.size(); ++i) {
-          if (parent->children[i]->allocated) {
+        for (size_t i = 0; i < parent->children.size(); ++i)
+        {
+          if (parent->children[i]->allocated)
+          {
             childAllocated = true;
             break;
           }
         }
 
         /* Merge. */
-        if (!childAllocated) {
+        if (!childAllocated)
+        {
           for (size_t i = 0; i < parent->children.size(); ++i)
             slots.remove(parent->children[i]);
           Free(parent);
@@ -278,18 +232,23 @@ namespace {
       }
     }
 
-    bool HasPassenger(Object const& object) {
+    bool HasPassenger(const Object& object)
+    {
       for (size_t i = 0; i < passengers.size(); ++i)
+      {
         if (passengers[i].object == object)
           return true;
+      }
       return false;
     }
 
-    void Initialize() {
-      for (int i = 0; i < kInitialPartitions; ++i) {
+    void Initialize()
+    {
+      for (int i = 0; i < kInitialPartitions; ++i)
+      {
         RailSlot slot = new RailSlotT;
-        slot->angle = (float)i / (float)kInitialPartitions;
-        slot->angleSize = 1.0f / (float)kInitialPartitions;
+        slot->angle = static_cast<float>(i) / static_cast<float>(kInitialPartitions);
+        slot->angleSize = 1.0f / static_cast<float>(kInitialPartitions);
         slot->radius = kMinRadius;
         slot->radiusSize = kMaxRadius - kMinRadius;
         slot->allocated = false;
@@ -298,21 +257,22 @@ namespace {
       }
     }
 
-    void Update(float dt) {
-      static ScriptFunction updatePassenger =
-        ScriptFunction_Load("Object/WarpNode:UpdatePassenger");
+    void Update(float dt)
+    {
+      static ScriptFunction updatePassenger = ScriptFunction_Load("Object/WarpNode:UpdatePassenger");
 
       /* Apply forces to passengers. */
-      for (int i = 0; i < (int)passengers.size(); ++i) {
+      for (int i = 0; i < static_cast<int>(passengers.size()); ++i)
+      {
         Passenger& passenger = passengers[i];
-        Object const& object = passenger.object;
+        const Object& object = passenger.object;
         Position pos = object->GetPos();
         Position targetPos = passenger.slot->GetCenter(passenger.nextNode);
         V3 look = object->GetLook();
         V3 toTarget = targetPos - pos;
         V3 dir = Normalize(toTarget);
 
-        updatePassenger->VoidCall(0, DataRef(object));
+        updatePassenger->VoidCall(nullptr, DataRef(object));
 
         /* Apply force toward next node. */
         float railForce = kRailForce;
@@ -328,7 +288,8 @@ namespace {
         object->ApplyTorque(torque);
 
         /* Apply lane-locking force. */
-        if (passenger.prevNode != passenger.nextNode) {
+        if (passenger.prevNode != passenger.nextNode)
+        {
           Position lastTarget = passenger.slot->GetCenter(passenger.prevNode);
           V3 laneVector = Normalize(targetPos - lastTarget);
           V3 toTargetComp = targetPos - (pos + object->GetVelocity() / kLinearDrag);
@@ -337,31 +298,36 @@ namespace {
           object->ApplyForce(object->GetMass() * toLane);
         }
 
-        if (Length(toTarget) < 16.0f || Dot(passenger.dir, dir) < 0) {
+        if (Length(toTarget) < 16.0f || Dot(passenger.dir, dir) < 0)
+        {
           ComponentNavigable* nav = passenger.nextNode->GetNavigable();
           Object nextNode;
 
-          for (size_t j = 0; j < nav->nodes.size(); ++j) {
-            Object const& link = nav->nodes[j].dest;
-            if (link != passenger.prevNode) {
+          for (size_t j = 0; j < nav->nodes.size(); ++j)
+          {
+            const Object& link = nav->nodes[j].dest;
+            if (link != passenger.prevNode)
+            {
               nextNode = link;
               if (link == passenger.target)
                 break;
             }
           }
 
-          if (nextNode) {
+          if (nextNode)
+          {
             passenger.prevNode = passenger.nextNode;
             passenger.nextNode = nextNode;
             passenger.dir = Normalize(nextNode->GetPos() - pos);
             object->Send(MessageWaypoint(passenger.nextNode));
-          } else {
+          }
+          else
+          {
             Object lastNode = passenger.nextNode;
             Exit(passenger);
             passengers.removeIndex(i);
             object->Send(MessageWaypoint(lastNode));
             i--;
-            continue;
           }
         }
       }
@@ -369,37 +335,24 @@ namespace {
   };
 }
 
-typedef ObjectWrapper
-  < Component_BoundingBox
-  < Component_Cullable
-  < Component_Detectable
-  < Component_Drawable
-  < Component_Navigable
-  < Component_Nameable
-  < Component_Orientation
-  < Component_Scriptable
-  < ObjectWrapperTail<ObjectType_WarpNode>
-  > > > > > > > > >
-  WarpNodeBaseT;
+using WarpNodeBaseT = ObjectWrapper<Component_BoundingBox<Component_Cullable<Component_Detectable<Component_Drawable<Component_Navigable<
+  Component_Nameable<Component_Orientation<Component_Scriptable<ObjectWrapperTail<ObjectType_WarpNode>>>>>>>>>>;
 
-AutoClassDerived(WarpNode, WarpNodeBaseT,
-  WarpNodeController, controller,
-  bool, owner)
+AutoClassDerived(WarpNode, WarpNodeBaseT, WarpNodeController, controller, bool, owner)
   DERIVED_TYPE_EX(WarpNode)
 
-  WarpNode() {
-    Drawable.renderable = GetModel;
-  }
+  WarpNode() { Drawable.renderable = GetModel; }
 
-  void Initialize() {
-    owner = false;
-  }
+  void Initialize() { owner = false; }
 
-  void OnMessage(Data& m) {
+  void OnMessage(Data& m) override
+  {
     BaseType::OnMessage(m);
-    if (m.type == Type_Get<MessageStartUsing>()) {
-      MessageStartUsing const& message = m.Convert<MessageStartUsing>();
-      if (!controller->HasPassenger(message.object)) {
+    if (m.type == Type_Get<MessageStartUsing>())
+    {
+      const MessageStartUsing& message = m.Convert<MessageStartUsing>();
+      if (!controller->HasPassenger(message.object))
+      {
         Object target = message.target;
         if (!target)
           target = Navigable.nodes[0].dest;
@@ -411,10 +364,13 @@ AutoClassDerived(WarpNode, WarpNodeBaseT,
       }
     }
 
-    else if (m.type == Type_Get<MessageStopUsing>()) {
-      MessageStopUsing const& message = m.Convert<MessageStopUsing>();
-      for (size_t i = 0; i < controller->passengers.size(); ++i) {
-        if (controller->passengers[i].object == message.object) {
+    else if (m.type == Type_Get<MessageStopUsing>())
+    {
+      const MessageStopUsing& message = m.Convert<MessageStopUsing>();
+      for (size_t i = 0; i < controller->passengers.size(); ++i)
+      {
+        if (controller->passengers[i].object == message.object)
+        {
           controller->Exit(controller->passengers[i]);
           controller->passengers.removeIndex(i);
           return;
@@ -423,16 +379,18 @@ AutoClassDerived(WarpNode, WarpNodeBaseT,
     }
 
     /* Link this node into a new network. */
-    if (m.type == Type_Get<MessageLink>()) {
-      MessageLink const& message = m.Convert<MessageLink>();
+    if (m.type == Type_Get<MessageLink>())
+    {
+      const MessageLink& message = m.Convert<MessageLink>();
       // Distance distance = Length(message.object->GetPos() - GetPos());
       // float cost = distance / kRailForce;
       Navigable.nodes.push(NavigableNode(message.object, 0));
-      WarpNode& other = *(WarpNode*)message.object.get();
+      WarpNode& other = *static_cast<WarpNode*>(message.object.get());
 
       if (other.controller)
         controller = other.controller;
-      else {
+      else
+      {
         controller = new WarpNodeControllerT;
         controller->Initialize();
         owner = true;
@@ -441,18 +399,21 @@ AutoClassDerived(WarpNode, WarpNodeBaseT,
     }
   }
 
-  void OnUpdate(UpdateState& state) {
+  void OnUpdate(UpdateState& state) override
+  {
     BaseType::OnUpdate(state);
     if (owner)
       controller->Update(state.dt);
   }
+};
 
-}; DERIVED_IMPLEMENT(WarpNode)
+DERIVED_IMPLEMENT(WarpNode)
 
-DefineFunction(Object_WarpNode) {
+DefineFunction(Object_WarpNode)
+{
   Reference<WarpNode> self = new WarpNode;
   self->Initialize();
   self->SetName("Warp Node");
-  ScriptFunction_Load("Object/WarpNode:Init")->VoidCall(0, DataRef((Object)self));
+  ScriptFunction_Load("Object/WarpNode:Init")->VoidCall(nullptr, DataRef(static_cast<Object>(self)));
   return self;
 }

@@ -1,8 +1,7 @@
-#include "Collidable.h"
 #include "Motion.h"
-
+#include "Collidable.h"
+#include "UpdateState.h"
 #include "Game/Object.h"
-
 #include "LTE/Debug.h"
 #include "LTE/Math.h"
 #include "LTE/StackFrame.h"

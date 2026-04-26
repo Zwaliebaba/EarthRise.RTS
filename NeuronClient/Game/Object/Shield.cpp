@@ -1,5 +1,4 @@
 #include "../Objects.h"
-
 #include "Component/Attachable.h"
 #include "Component/BoundingBox.h"
 #include "Component/Collidable.h"
@@ -10,62 +9,45 @@
 #include "Component/Integrity.h"
 #include "Component/Orientation.h"
 #include "Component/Supertyped.h"
-
+#include "UpdateState.h"
 #include "Module/SoundEngine.h"
-
 #include "LTE/DrawState.h"
 #include "LTE/Geom.h"
 #include "LTE/Loader.h"
 #include "LTE/Math.h"
-#include "LTE/Matrix.h"
 #include "LTE/Mesh.h"
-#include "LTE/Model.h"
 #include "LTE/Pool.h"
 #include "LTE/RenderStyle.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/Tuple.h"
-#include "LTE/Vector.h"
 #include "LTE/VectorMap.h"
 
-const size_t kMaxHits = 16;
-const float kMaxAge = 1;
-const float kChargeTime = 60;
-const float kRestoreFraction = .25f;
+constexpr size_t kMaxHits = 16;
+constexpr float kMaxAge = 1;
+constexpr float kChargeTime = 60;
+constexpr float kRestoreFraction = .25f;
 
-namespace {
+namespace
+{
   /* CRITICAL : Seriously..? That's going to cause problems. */
   VectorMap<size_t, Mesh> gMeshCache;
 
-  static Shader gShader;
-  static ShaderInstance gShaderInstance;
+  Shader gShader;
+  ShaderInstance gShaderInstance;
 
-  void OnLoad() {
+  void OnLoad()
+  {
     gShader = Shader_Create("npm.jsl", "shield.jsl");
     gShaderInstance = ShaderInstance_Create(gShader);
-    (*gShaderInstance)
-      (RenderStateSwitch_BlendModeAdditive)
-      (RenderStateSwitch_CullModeDisabled)
-      (RenderStateSwitch_ZWritableOff);
-  } static bool l = RegisterLoader(OnLoad);
+    (*gShaderInstance)(RenderStateSwitch_BlendModeAdditive)(RenderStateSwitch_CullModeDisabled)(RenderStateSwitch_ZWritableOff);
+  }
+
+  bool l = RegisterLoader(OnLoad);
 }
 
-typedef ObjectWrapper
-  < Component_Attachable
-  < Component_BoundingBox
-  < Component_Collidable
-  < Component_Cullable
-  < Component_Drawable
-  < Component_Explodable
-  < Component_Integrity
-  < Component_Orientation
-  < Component_Supertyped
-  < ObjectWrapperTail<ObjectType_Shield>
-  > > > > > > > > > >
-  ShieldBaseT;
+using ShieldBaseT = ObjectWrapper<Component_Attachable<Component_BoundingBox<Component_Collidable<Component_Cullable<Component_Drawable<
+  Component_Explodable<Component_Integrity<Component_Orientation<Component_Supertyped<ObjectWrapperTail<ObjectType_Shield>>>>>>>>>>>;
 
-AutoClassDerived(Shield, ShieldBaseT,
-  float, time,
-  float, recharge)
+AutoClassDerived(Shield, ShieldBaseT, float, time, float, recharge)
 
   Mesh mesh;
   std::vector<V3> hitPosition;
@@ -74,31 +56,24 @@ AutoClassDerived(Shield, ShieldBaseT,
   DERIVED_TYPE_EX(Shield)
   POOLED_TYPE
 
-  struct RenderComponent : public RenderableT {
+  struct RenderComponent : RenderableT
+  {
     DERIVED_TYPE(RenderComponent, RenderableT)
     Shield* self;
 
-    RenderComponent(Shield* self) :
-      self(self)
-      {}
+    RenderComponent(Shield* self)
+      : self(self) {}
 
-    Bound3 GetBound() const {
-      return self->mesh ? self->mesh->GetBound() : Bound3(0);
-    }
+    Bound3 GetBound() const override { return self->mesh ? self->mesh->GetBound() : Bound3(0); }
 
-    Mesh GetCollisionMesh() const {
-      return self->mesh ? self->mesh->Clone() : nullptr;
-    }
+    Mesh GetCollisionMesh() const override { return self->mesh ? self->mesh->Clone() : nullptr; }
 
-    size_t GetHash() const {
-      return (size_t)self->mesh;
-    }
+    size_t GetHash() const override { return self->mesh; }
 
-    short GetVersion() const {
-      return self->mesh ? self->mesh->GetVersion() : (short)-1;
-    }
+    short GetVersion() const override { return self->mesh ? self->mesh->GetVersion() : static_cast<short>(-1); }
 
-    void Render(DrawState* state) const {
+    void Render(DrawState* state) const override
+    {
       if (!self->mesh)
         return;
 
@@ -107,7 +82,8 @@ AutoClassDerived(Shield, ShieldBaseT,
       ages.clear();
       positions.clear();
 
-      for (size_t i = 0; i < self->hitAge.size(); ++i) {
+      for (size_t i = 0; i < self->hitAge.size(); ++i)
+      {
         float thisAge = self->hitAge[i];
         if (thisAge > kMaxAge)
           continue;
@@ -116,36 +92,34 @@ AutoClassDerived(Shield, ShieldBaseT,
       }
 
       /* Only draw the shield if there are active hits on it. */
-      if (ages.size()) {
+      if (ages.size())
+      {
         gShader->SetFloatArray("hitAge", ages.data(), ages.size());
         gShader->SetFloat3Array("hitPos", positions.data(), positions.size());
         gShader->SetInt("activeHits", ages.size());
-        RenderStyle const& style = RenderStyle_Get();
+        const RenderStyle& style = RenderStyle_Get();
         style->SetShader(gShaderInstance);
         style->Render(self->mesh);
       }
     }
 
-    V3 Sample() const {
-      return self->mesh ? self->mesh->Sample() : V3(0);
-    }
+    V3 Sample() const override { return self->mesh ? self->mesh->Sample() : V3(0); }
   };
 
-  Shield() :
-    time(Rand(0, 10000)),
-    recharge(1)
+  Shield()
+    : time(Rand(0, 10000)),
+      recharge(1)
   {
-    Drawable.renderable = (Renderable)(new RenderComponent(this));
+    Drawable.renderable = static_cast<Renderable>(new RenderComponent(this));
     Explodable.explosionType = ExplosionType_Plasma;
     hitAge.resize(kMaxHits, 1e10f);
     hitPosition.resize(kMaxHits, 0);
   }
 
-  float GetCooldown() const {
-    return recharge;
-  }
+  float GetCooldown() const override { return recharge; }
 
-  void OnUpdate(UpdateState& state) {
+  void OnUpdate(UpdateState& state) override
+  {
     BaseType::OnUpdate(state);
 
     /* Keep the shield's relative orientation fixed. */
@@ -153,9 +127,11 @@ AutoClassDerived(Shield, ShieldBaseT,
     Attachable.transform = Transform_Identity();
     Attachable.moved = true;
 
-    if (!mesh) {
+    if (!mesh)
+    {
       size_t id = parent->GetDrawable()->renderable()->GetHash();
-      if (!gMeshCache[id]) {
+      if (!gMeshCache[id])
+      {
         Mesh source = parent->GetDrawable()->renderable()->GetCollisionMesh();
         /* TODO : Thread this, since SmoothHull is expensive. */
         if (source && source->GetTriangles())
@@ -169,51 +145,46 @@ AutoClassDerived(Shield, ShieldBaseT,
       hitAge[i] += state.dt;
 
     float chargeUnit = parent->GetPowerFraction() * (state.dt / kChargeTime);
-    if (!IsAlive()) {
-      if ((recharge -= chargeUnit) <= 0) {
+    if (!IsAlive())
+    {
+      if ((recharge -= chargeUnit) <= 0)
+      {
         Explodable.exploded = false;
         Integrity.health = kRestoreFraction * Integrity.maxHealth;
         recharge = 1;
       }
-    } else {
-      Integrity.health = Min(
-        Integrity.maxHealth,
-        (Health)(Integrity.health + chargeUnit * Integrity.maxHealth));
     }
+    else { Integrity.health = Min(Integrity.maxHealth, static_cast<Health>(Integrity.health + chargeUnit * Integrity.maxHealth)); }
 
     SetScale(parent->GetScale());
   }
 
-  bool CanCollide(ObjectT const* other) const {
-    ComponentDamager const* d = other->GetDamager();
+  bool CanCollide(const ObjectT* other) const override
+  {
+    const ComponentDamager* d = other->GetDamager();
     if (!d)
       return false;
-    return IsAlive() &&
-           d->source &&
-           d->source->GetRoot() != this->GetRoot();
+    return IsAlive() && d->source && d->source->GetRoot() != this->GetRoot();
   }
 
-  void OnCollide(
-    ObjectT* self,
-    ObjectT* other,
-    Position const& pSelf,
-    Position const& pOther)
+  void OnCollide(ObjectT* self, ObjectT* other, const Position& pSelf, const Position& pOther) override
   {
-    if (hitAge.size() >= kMaxHits) {
+    if (hitAge.size() >= kMaxHits)
+    {
       hitAge.erase(hitAge.begin());
       hitPosition.erase(hitPosition.begin());
     }
 
     hitAge.push_back(0);
     hitPosition.push_back(pSelf);
-    Sound_Play3D("shield/hit.wav", self,
-      self->GetTransform().InversePoint(pSelf), 0.25f);
+    Sound_Play3D("shield/hit.wav", self, self->GetTransform().InversePoint(pSelf), 0.25f);
   }
 };
 
 DERIVED_IMPLEMENT(Shield)
 
-DefineFunction(Object_Shield) {
+DefineFunction(Object_Shield)
+{
   LTE_ASSERT(args.type->GetType() == ItemType_ShieldType);
   Reference<Shield> self = new Shield;
   self->SetSupertype(args.type);

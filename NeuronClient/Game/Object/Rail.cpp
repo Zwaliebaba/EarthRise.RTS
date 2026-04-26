@@ -1,23 +1,20 @@
+#include "UpdateState.h"
 #include "../Objects.h"
-
 #include "Component/Damager.h"
 #include "Component/Drawable.h"
 #include "Component/Interior.h"
 #include "Component/Queryable.h"
-
 #include "Game/Graphics/Effects.h"
 #include "Game/Item/WeaponType.h"
-
 #include "LTE/DrawState.h"
 #include "LTE/Loader.h"
 #include "LTE/Math.h"
-#include "LTE/Matrix.h"
 #include "LTE/Meshes.h"
 #include "LTE/Model.h"
 #include "LTE/Pool.h"
 #include "LTE/Ray.h"
-#include "LTE/Renderable.h"
 #include "LTE/RenderStyle.h"
+#include "LTE/Renderable.h"
 #include "LTE/ShaderInstance.h"
 #include "LTE/View.h"
 

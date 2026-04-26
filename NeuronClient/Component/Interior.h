@@ -7,7 +7,6 @@
 #include "LTE/Map.h"
 #include "LTE/ParticleSystem.h"
 #include "LTE/Pointer.h"
-#include "LTE/V3.h"
 #include "LTE/Vector.h"
 
 typedef Vector<Object> ObjectListT;

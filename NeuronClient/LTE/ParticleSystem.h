@@ -5,22 +5,18 @@
 #include "DeclareFunction.h"
 #include "Reference.h"
 #include "V3.h"
+#include "LTE/DrawState.h"
 
-struct ParticleSystemT : public RefCounted {
+struct ParticleSystemT : RefCounted
+{
   BASE_TYPE(ParticleSystemT)
 
   virtual void Draw(DrawState* state) const = 0;
   virtual void Run(float dt) = 0;
 };
 
-DeclareFunction(ParticleSystem_Add, void,
-  ParticleSystem, particleSystem,
-  ShaderInstance, particle,
-  V3D, position,
-  V3, velocity,
-  float, scale,
-  float, life,
-  V3, attribute)
+DeclareFunction(ParticleSystem_Add, void, ParticleSystem, particleSystem, ShaderInstance, particle, V3D, position, V3, velocity, float,
+                scale, float, life, V3, attribute)
 
 DeclareFunctionNoParams(ParticleSystem_Create, ParticleSystem)
 
@@ -28,7 +24,6 @@ DeclareFunctionNoParams(ParticleSystem_Get, ParticleSystem)
 
 DeclareFunctionNoParams(ParticleSystem_Pop, void)
 
-DeclareFunction(ParticleSystem_Push, void,
-  ParticleSystem, ps)
+DeclareFunction(ParticleSystem_Push, void, ParticleSystem, ps)
 
 #endif

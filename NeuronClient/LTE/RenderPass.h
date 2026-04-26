@@ -3,8 +3,10 @@
 
 #include "BaseType.h"
 #include "Reference.h"
+#include "DrawState.h"
 
-struct RenderPassT : public RefCounted {
+struct RenderPassT : RefCounted
+{
   BASE_TYPE(RenderPassT)
 
   LT_API void Render(DrawState* state);

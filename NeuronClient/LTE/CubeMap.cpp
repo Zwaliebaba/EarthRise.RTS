@@ -1,7 +1,5 @@
 #include "CubeMap.h"
-
 #include "Array.h"
-#include "AutoPtr.h"
 #include "GL.h"
 #include "Location.h"
 #include "Math.h"
@@ -9,46 +7,47 @@
 #include "Renderer.h"
 #include "Shader.h"
 #include "StackFrame.h"
-#include "Texture2D.h"
 #include "Timer.h"
 #include "Transform.h"
 #include "V3.h"
-
 #include "SFML/Graphics.hpp"
-
-#include <cstdint>
 #include <filesystem>
 
 TypeAlias(Reference<CubeMapT>, CubeMap);
 
-namespace {
-  GL_TextureTarget::Enum CubeFaceToTarget(CubeFace::Enum face) {
-    switch (face) {
-      case CubeFace::PositiveX :
-        return GL_TextureTarget::CubeMapPositiveX;
-      case CubeFace::NegativeX :
-        return GL_TextureTarget::CubeMapNegativeX;
-      case CubeFace::PositiveY : 
-        return GL_TextureTarget::CubeMapPositiveY;
-      case CubeFace::NegativeY :
-        return GL_TextureTarget::CubeMapNegativeY;
-      case CubeFace::PositiveZ :
-        return GL_TextureTarget::CubeMapPositiveZ;
-      case CubeFace::NegativeZ :
-        return GL_TextureTarget::CubeMapNegativeZ;
-      default :
-        return GL_TextureTarget::CubeMapPositiveX;
+namespace
+{
+  GL_TextureTarget::Enum CubeFaceToTarget(CubeFace::Enum face)
+  {
+    switch (face)
+    {
+    case CubeFace::PositiveX:
+      return GL_TextureTarget::CubeMapPositiveX;
+    case CubeFace::NegativeX:
+      return GL_TextureTarget::CubeMapNegativeX;
+    case CubeFace::PositiveY:
+      return GL_TextureTarget::CubeMapPositiveY;
+    case CubeFace::NegativeY:
+      return GL_TextureTarget::CubeMapNegativeY;
+    case CubeFace::PositiveZ:
+      return GL_TextureTarget::CubeMapPositiveZ;
+    case CubeFace::NegativeZ:
+      return GL_TextureTarget::CubeMapNegativeZ;
+    default:
+      return GL_TextureTarget::CubeMapPositiveX;
     }
   }
 
-  inline uint GetLevelResolution(uint resolution, uint level) {
+  uint GetLevelResolution(uint resolution, uint level)
+  {
     for (uint i = 0; i < level; ++i)
       resolution /= 2;
     return resolution;
   }
 
-  struct CubeMapImpl : public CubeMapT {
-    typedef CubeMapT BaseType;
+  struct CubeMapImpl : CubeMapT
+  {
+    using BaseType = CubeMapT;
     DERIVED_TYPE_EX(CubeMapImpl)
 
     GL_Texture texture;
@@ -56,21 +55,23 @@ namespace {
     uint guid;
     GL_TextureFormat::Enum format;
 
-    CubeMapImpl() :
-      texture(GL_NullTexture),
-      resolution(0),
-      format(GL_TextureFormat::RGBA8)
+    CubeMapImpl()
+      : texture(GL_NullTexture),
+        resolution(0),
+        format(GL_TextureFormat::RGBA8)
     {
       static uint nextGUID = 0;
       this->guid = nextGUID++;
     }
 
-    ~CubeMapImpl() {
+    ~CubeMapImpl() override
+    {
       if (texture != GL_NullTexture)
         GL_DeleteTexture(texture);
     }
 
-    void BeginRender() {
+    void BeginRender() override
+    {
       Renderer_PushBlendMode(BlendMode::Disabled);
       Renderer_PushCullMode(CullMode::Backface);
       Renderer_PushAllBuffers();
@@ -79,47 +80,32 @@ namespace {
       Renderer_PushZBuffer(false);
     }
 
-    void Bind() const {
-      GL_BindTexture(GL_TextureTargetBindable::CubeMap, texture);
-    }
+    void Bind() const override { GL_BindTexture(GL_TextureTargetBindable::CubeMap, texture); }
 
-    void Create(uint res, GL_TextureFormat::Enum format) {
+    void Create(uint res, GL_TextureFormat::Enum format)
+    {
       this->texture = GL_GenTexture();
       this->resolution = res;
       this->format = format;
-      
+
       Bind();
       GL_TexMagFilter(GL_TextureTarget::CubeMap, GL_TextureFilter::Linear);
       GL_TexMinFilter(GL_TextureTarget::CubeMap, GL_TextureFilterMip::LinearMipLinear);
 
-      GL_TexWrapMode(
-        GL_TextureTarget::CubeMap,
-        GL_TextureCoordinate::S,
-        GL_TextureWrapMode::ClampToEdge);
-      GL_TexWrapMode(
-        GL_TextureTarget::CubeMap,
-        GL_TextureCoordinate::T,
-        GL_TextureWrapMode::ClampToEdge);
-      GL_TexWrapMode(
-        GL_TextureTarget::CubeMap,
-        GL_TextureCoordinate::R,
-        GL_TextureWrapMode::ClampToEdge);
-      
-      GL_TexImage2D(GL_TextureTarget::CubeMapPositiveX, 0, format, res, res,
-        GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
-      GL_TexImage2D(GL_TextureTarget::CubeMapPositiveY, 0, format, res, res,
-        GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
-      GL_TexImage2D(GL_TextureTarget::CubeMapPositiveZ, 0, format, res, res,
-        GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
-      GL_TexImage2D(GL_TextureTarget::CubeMapNegativeX, 0, format, res, res,
-        GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
-      GL_TexImage2D(GL_TextureTarget::CubeMapNegativeY, 0, format, res, res,
-        GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
-      GL_TexImage2D(GL_TextureTarget::CubeMapNegativeZ, 0, format, res, res,
-        GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
+      GL_TexWrapMode(GL_TextureTarget::CubeMap, GL_TextureCoordinate::S, GL_TextureWrapMode::ClampToEdge);
+      GL_TexWrapMode(GL_TextureTarget::CubeMap, GL_TextureCoordinate::T, GL_TextureWrapMode::ClampToEdge);
+      GL_TexWrapMode(GL_TextureTarget::CubeMap, GL_TextureCoordinate::R, GL_TextureWrapMode::ClampToEdge);
+
+      GL_TexImage2D(GL_TextureTarget::CubeMapPositiveX, 0, format, res, res, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
+      GL_TexImage2D(GL_TextureTarget::CubeMapPositiveY, 0, format, res, res, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
+      GL_TexImage2D(GL_TextureTarget::CubeMapPositiveZ, 0, format, res, res, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
+      GL_TexImage2D(GL_TextureTarget::CubeMapNegativeX, 0, format, res, res, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
+      GL_TexImage2D(GL_TextureTarget::CubeMapNegativeY, 0, format, res, res, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
+      GL_TexImage2D(GL_TextureTarget::CubeMapNegativeZ, 0, format, res, res, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte, nullptr);
     }
 
-    void EndRender() {
+    void EndRender() override
+    {
       Renderer_PopZBuffer();
       Renderer_PopScissor();
       Renderer_PopViewport();
@@ -128,30 +114,23 @@ namespace {
       Renderer_PopBlendMode();
     }
 
-    void GenerateFromShader(
-      Shader const& shader,
-      bool generateMips,
-      float maxJobTime)
+    void GenerateFromShader(const Shader& shader, bool generateMips, float maxJobTime) override
     {
       SFRAME("Generate CubeMap");
       Renderer_SetShader(*shader);
       BeginRender();
-      (*shader)
-        ("halfTexel", 0.5f / (float)resolution)
-        ("texelScale", (float)resolution / (float)(resolution - 1));
+      (*shader)("halfTexel", 0.5f / static_cast<float>(resolution))(
+        "texelScale", static_cast<float>(resolution) / static_cast<float>(resolution - 1));
 
-      for (uint i = 0; i < CubeFace::SIZE; ++i) {
-        SetFace((CubeFace::Enum)i);
+      for (uint i = 0; i < CubeFace::SIZE; ++i)
+      {
+        SetFace(static_cast<CubeFace::Enum>(i));
 
-        Matrix invProjView =
-          (Renderer_GetProjMatrix() * Renderer_GetViewMatrix()).Inverse();
+        Matrix invProjView = (Renderer_GetProjMatrix() * Renderer_GetViewMatrix()).Inverse();
         V3 upperL = invProjView.TransformV3Norm(V3(-1.0f, 1.0f, 0.5f), 1);
-        V3 upperR = invProjView.TransformV3Norm(V3( 1.0f, 1.0f, 0.5f), 1);
-        V3 lowerL = invProjView.TransformV3Norm(V3(-1.0f,-1.0f, 0.5f), 1);
-        (*shader)
-          ("origin", upperL)
-          ("du", upperR - upperL)
-          ("dv", lowerL - upperL);
+        V3 upperR = invProjView.TransformV3Norm(V3(1.0f, 1.0f, 0.5f), 1);
+        V3 lowerL = invProjView.TransformV3Norm(V3(-1.0f, -1.0f, 0.5f), 1);
+        (*shader)("origin", upperL)("du", upperR - upperL)("dv", lowerL - upperL);
 
         /* Variable job-size algorithm for making sure to achieve optimal GPU
            utilization without causing a timeout. In most cases, 1 second should
@@ -159,12 +138,11 @@ namespace {
         uint jobSize = 1;
         uint x = 0;
 
-        Timer timer;
-        while (x < resolution) {
+        ::Timer timer;
+        while (x < resolution)
+        {
           timer.Reset();
-          Renderer_PushScissorOn(
-            V2((float)x, 0),
-            V2((float)jobSize, (float)resolution));
+          Renderer_PushScissorOn(V2(static_cast<float>(x), 0), V2(static_cast<float>(jobSize), static_cast<float>(resolution)));
           Renderer_DrawQuad();
           Renderer_PopScissor();
 
@@ -176,7 +154,7 @@ namespace {
                     should probably implement something to make sure the jobSize
                     scales up slowly rather than all at once. */
           float elapsed = timer.GetElapsed();
-          jobSize = Min(Max((uint)((float)jobSize * (maxJobTime / elapsed)), 1U), resolution);
+          jobSize = Min(Max(static_cast<uint>((float)jobSize * (maxJobTime / elapsed)), 1U), resolution);
         }
 
         Renderer_PopColorBuffer(0);
@@ -187,63 +165,49 @@ namespace {
         GenerateMipmap();
     }
 
-    void GenerateMipmap() {
+    void GenerateMipmap() override
+    {
       Bind();
       GL_GenerateMipmap(GL_TextureTarget::CubeMap);
     }
 
-    void GetData(
-      CubeFace::Enum face,
-      uint level,
-      void* buffer) const
+    void GetData(CubeFace::Enum face, uint level, void* buffer) const override
     {
       Bind();
-      GL_GetTexImage(
-        CubeFaceToTarget(face), level,
-        GL_TextureFormat::PixelFormat(format),
-        GL_TextureFormat::DataFormat(format), buffer);
+      GL_GetTexImage(CubeFaceToTarget(face), level, GL_TextureFormat::PixelFormat(format), GL_TextureFormat::DataFormat(format), buffer);
     }
 
-    GL_TextureFormat::Enum GetFormat() const {
-      return format;
-    }
+    GL_TextureFormat::Enum GetFormat() const override { return format; }
 
-    uint GetResolution() const {
-      return resolution;
-    }
+    uint GetResolution() const override { return resolution; }
 
-    void SaveTo(String const& path, uint level) const {
+    void SaveTo(const String& path, uint level) const override
+    {
       uint res = GetLevelResolution(resolution, level);
       Array<uchar> imageData(4 * res * res);
       Bind();
 
-      for (uint i = 0; i < CubeFace::SIZE; ++i) {
-        GL_GetTexImage(
-          CubeFaceToTarget((CubeFace::Enum)i), level,
-          GL_PixelFormat::RGBA,
-          GL_DataFormat::UnsignedByte,
-          imageData.data());
+      for (uint i = 0; i < CubeFace::SIZE; ++i)
+      {
+        GL_GetTexImage(CubeFaceToTarget(static_cast<CubeFace::Enum>(i)), level, GL_PixelFormat::RGBA, GL_DataFormat::UnsignedByte,
+                       imageData.data());
 
-        sf::Image image(sf::Vector2u(res, res), (std::uint8_t const*)imageData.data());
+        sf::Image image(sf::Vector2u(res, res), (imageData.data()));
         String filename = Stringize() | path | "_" | i | ".png";
-        image.saveToFile(std::filesystem::path((char const*)filename));
+        image.saveToFile(std::filesystem::path(static_cast<char const*>(filename)));
       }
     }
 
-    void SetData(
-      CubeFace::Enum face,
-      uint level,
-      void const* buffer) const
+    void SetData(CubeFace::Enum face, uint level, const void* buffer) const override
     {
       uint res = GetLevelResolution(resolution, level);
       Bind();
-      GL_TexImage2D(
-        CubeFaceToTarget(face), level, format, res, res,
-        GL_TextureFormat::PixelFormat(format),
-        GL_TextureFormat::DataFormat(format), buffer);
+      GL_TexImage2D(CubeFaceToTarget(face), level, format, res, res, GL_TextureFormat::PixelFormat(format),
+                    GL_TextureFormat::DataFormat(format), buffer);
     }
 
-    void SetFace(CubeFace::Enum face) {
+    void SetFace(CubeFace::Enum face)
+    {
       /* Bind the appropriate face to the framebuffer color attachment. */
       GL_TextureTarget::Enum target = CubeFaceToTarget(face);
       Renderer_PushColorBuffer(0, texture, guid, target);
@@ -251,22 +215,33 @@ namespace {
       /* Set the view and projection matrices accordingly for this face. */
       V3 look = 0;
       V3 up = 0;
-      if (face == CubeFace::PositiveX) {
+      if (face == CubeFace::PositiveX)
+      {
         look = V3(1, 0, 0);
         up = V3(0, 1, 0);
-      } else if (face == CubeFace::NegativeX) {
+      }
+      else if (face == CubeFace::NegativeX)
+      {
         look = V3(-1, 0, 0);
         up = V3(0, 1, 0);
-      } else if (face == CubeFace::PositiveY) {
+      }
+      else if (face == CubeFace::PositiveY)
+      {
         look = V3(0, 1, 0);
         up = V3(0, 0, -1);
-      } else if (face == CubeFace::NegativeY) {
+      }
+      else if (face == CubeFace::NegativeY)
+      {
         look = V3(0, -1, 0);
         up = V3(0, 0, 1);
-      } else if (face == CubeFace::PositiveZ) {
+      }
+      else if (face == CubeFace::PositiveZ)
+      {
         look = V3(0, 0, 1);
         up = V3(0, 1, 0);
-      } else if (face == CubeFace::NegativeZ) {
+      }
+      else if (face == CubeFace::NegativeZ)
+      {
         look = V3(0, 0, -1);
         up = V3(0, 1, 0);
       }
@@ -279,51 +254,43 @@ namespace {
       Renderer_SetProjMatrix(Matrix::Perspective(kPi2, 1.0f, 0.1f, 100000.0f));
     }
 
-    FIELDS {
-      CubeMapImpl* self = (CubeMapImpl*)addr;
+    FIELDS
+    {
+      auto self = static_cast<CubeMapImpl*>(addr);
 
       m(&self->format, "format", Type_Get(self->format), aux);
       m(&self->resolution, "resolution", Type_Get(self->resolution), aux);
 
-      size_t totalSize = GL_TextureFormat::Size(self->format) *
-        self->resolution * self->resolution;
+      size_t totalSize = GL_TextureFormat::Size(self->format) * self->resolution * self->resolution;
 
       Array<uchar> buf(totalSize);
 
-      if (self->texture != GL_NullTexture) {
+      if (self->texture != GL_NullTexture)
+      {
         self->Bind();
-        for (uint i = 0; i < CubeFace::SIZE; ++i) {
-          GL_TextureTarget::Enum target =
-            (GL_TextureTarget::Enum)(GL_TextureTarget::CubeMapPositiveX + i);
+        for (uint i = 0; i < CubeFace::SIZE; ++i)
+        {
+          auto target = static_cast<GL_TextureTarget::Enum>(GL_TextureTarget::CubeMapPositiveX + i);
 
-          GL_GetTexImage(
-            target, 0,
-            GL_TextureFormat::PixelFormat(self->format),
-            GL_TextureFormat::DataFormat(self->format), buf.data());
+          GL_GetTexImage(target, 0, GL_TextureFormat::PixelFormat(self->format), GL_TextureFormat::DataFormat(self->format), buf.data());
 
           m(&buf, "data", Type_Get(buf), aux);
         }
       }
 
-      else {
+      else
+      {
         self->Create(self->resolution, self->format);
         self->Bind();
 
-        for (uint i = 0; i < CubeFace::SIZE; ++i) {
+        for (uint i = 0; i < CubeFace::SIZE; ++i)
+        {
           m(&buf, "data", Type_Get(buf), aux);
 
-          GL_TextureTarget::Enum target =
-            (GL_TextureTarget::Enum)(GL_TextureTarget::CubeMapPositiveX + i);
+          auto target = static_cast<GL_TextureTarget::Enum>(GL_TextureTarget::CubeMapPositiveX + i);
 
-          GL_TexImage2D(
-            target,
-            0,
-            self->format,
-            self->resolution,
-            self->resolution,
-            GL_TextureFormat::PixelFormat(self->format),
-            GL_TextureFormat::DataFormat(self->format),
-            buf.data());
+          GL_TexImage2D(target, 0, self->format, self->resolution, self->resolution, GL_TextureFormat::PixelFormat(self->format),
+                        GL_TextureFormat::DataFormat(self->format), buf.data());
         }
 
         GL_GenerateMipmap(GL_TextureTarget::CubeMap);
@@ -336,7 +303,8 @@ namespace {
   DERIVED_IMPLEMENT(CubeMapImpl)
 }
 
-CubeMap CubeMap_Create(uint resolution, GL_TextureFormat::Enum format) {
+CubeMap CubeMap_Create(uint resolution, GL_TextureFormat::Enum format)
+{
   Reference<CubeMapImpl> self = new CubeMapImpl;
   self->Create(resolution, format);
   return self;

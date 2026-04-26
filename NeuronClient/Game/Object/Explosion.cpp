@@ -1,13 +1,10 @@
 #include "../Objects.h"
-
 #include "Component/Attachable.h"
 #include "Component/Drawable.h"
 #include "Component/Orientation.h"
-
 #include "Game/Light.h"
-
+#include "UpdateState.h"
 #include "LTE/DrawState.h"
-#include "LTE/Matrix.h"
 #include "LTE/Math.h"
 #include "LTE/Meshes.h"
 #include "LTE/Model.h"

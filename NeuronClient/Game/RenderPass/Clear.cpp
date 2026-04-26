@@ -4,28 +4,29 @@
 #include "LTE/Renderer.h"
 #include "LTE/Texture2D.h"
 
-namespace {
-  struct Clear : public RenderPassT {
+namespace
+{
+  struct Clear : RenderPassT
+  {
     V4 value;
     DERIVED_TYPE_EX(Clear)
 
     Clear() {}
 
-    Clear(V4 const& value) :
-      value(value)
-      {}
+    Clear(const V4& value)
+      : value(value) {}
 
-    char const* GetName() const {
-      return "Clear";
-    }
+    const char* GetName() const override { return "Clear"; }
 
-    void OnRender(DrawState* state) {
+    void OnRender(DrawState* state) override
+    {
       Renderer_ResetCounters();
       state->primary->Bind(0);
       Renderer_Clear(value);
       state->primary->Unbind();
 
-      for (uint i = 0; i < 2; ++i) {
+      for (uint i = 0; i < 2; ++i)
+      {
         state->smallColor[i]->Bind(0);
         Renderer_Clear();
         state->smallColor[i]->Unbind();
@@ -33,14 +34,14 @@ namespace {
     }
   };
 
-  struct ClearDepth : public RenderPassT {
+  struct ClearDepth : RenderPassT
+  {
     DERIVED_TYPE_EX(ClearDepth)
 
-    char const* GetName() const {
-      return "Clear Depth";
-    }
+    const char* GetName() const override { return "Clear Depth"; }
 
-    void OnRender(DrawState* state) {
+    void OnRender(DrawState* state) override
+    {
       state->primary->Bind(0);
       Renderer_ClearDepth();
       state->primary->Unbind();
@@ -48,10 +49,6 @@ namespace {
   };
 }
 
-DefineFunction(RenderPass_Clear) {
-  return new Clear(args.value);
-}
+DefineFunction(RenderPass_Clear) { return new Clear(args.value); }
 
-DefineFunction(RenderPass_ClearDepth) {
-  return new ClearDepth;
-}
+DefineFunction(RenderPass_ClearDepth) { return new ClearDepth; }

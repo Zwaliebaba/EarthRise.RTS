@@ -1,13 +1,12 @@
 #include "Joystick.h"
 #include "Pointer.h"
 #include "Timer.h"
-
 #include "SFML/Window.hpp"
 
 namespace LTE {
   struct JoystickImpl : public Joystick {
     uint id;
-    Timer downTimer[sf::Joystick::ButtonCount];
+    ::Timer downTimer[sf::Joystick::ButtonCount];
     bool down[sf::Joystick::ButtonCount];
     bool lastDown[sf::Joystick::ButtonCount];
     float lastAxis[JoystickAxis_SIZE];

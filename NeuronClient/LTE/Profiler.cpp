@@ -142,7 +142,7 @@ namespace {
 
     size_t totalFrames;
     size_t totalSamples;
-    Timer timer;
+    ::Timer timer;
     Map<StackFrame*, uint> samples;
     float maxTime;
 

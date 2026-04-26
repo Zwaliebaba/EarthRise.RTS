@@ -4,13 +4,15 @@
 #include "Map.h"
 #include "String.h"
 
-struct StringPool {
-  Map<String, char const*> strMap;
+struct StringPool
+{
+  Map<String, const char*> strMap;
 
-  char const* Get(String const& str) {
-    char const*& ptr = strMap[str];
+  const char* Get(const String& str)
+  {
+    const char*& ptr = strMap[str];
     if (!ptr)
-      ptr = strdup(str.c_str());
+      ptr = _strdup(str.c_str());
     return ptr;
   }
 };

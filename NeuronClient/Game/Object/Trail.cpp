@@ -1,13 +1,11 @@
 #include "../Objects.h"
-
+#include "UpdateState.h"
 #include "Component/Attachable.h"
 #include "Component/Drawable.h"
 #include "Component/Motion.h"
 #include "Component/Orientation.h"
-
 #include "LTE/Color.h"
 #include "LTE/DrawState.h"
-#include "LTE/Matrix.h"
 #include "LTE/Meshes.h"
 #include "LTE/ParticleSystem.h"
 #include "LTE/Pool.h"
@@ -17,29 +15,19 @@
 #include "LTE/ShaderInstance.h"
 #include "LTE/View.h"
 
-#include <vector>
+using TrailBaseT = ObjectWrapper<Component_Attachable<Component_Drawable<Component_Orientation<ObjectWrapperTail<ObjectType_Trail>>>>>;
 
-typedef ObjectWrapper
-  < Component_Attachable
-  < Component_Drawable
-  < Component_Orientation
-  < ObjectWrapperTail<ObjectType_Trail>
-  > > > >
-  TrailBaseT;
-
-namespace {
-  struct SegmentData {
+namespace
+{
+  struct SegmentData
+  {
     Position p;
     V3 v;
     float opacity;
   };
 }
 
-AutoClassDerived(Trail, TrailBaseT,
-  Color, color,
-  float, size,
-  uint, length,
-  float, age)
+AutoClassDerived(Trail, TrailBaseT, Color, color, float, size, uint, length, float, age)
 
   DERIVED_TYPE_EX(Trail)
   POOLED_TYPE
@@ -47,47 +35,40 @@ AutoClassDerived(Trail, TrailBaseT,
   std::vector<SegmentData> trail;
   size_t trailIndex;
 
-  SegmentData& GetTrailCurrent() {
-    return trail[trailIndex % trail.size()];
-  }
+  SegmentData& GetTrailCurrent() { return trail[trailIndex % trail.size()]; }
 
-  SegmentData& GetTrailRelative(size_t offset) {
-    return trail[(trailIndex + offset) % trail.size()];
-  }
+  SegmentData& GetTrailRelative(size_t offset) { return trail[(trailIndex + offset) % trail.size()]; }
 
-  SegmentData const& GetTrailRelative(size_t offset) const {
-    return trail[(trailIndex + offset) % trail.size()];
-  }
+  const SegmentData& GetTrailRelative(size_t offset) const { return trail[(trailIndex + offset) % trail.size()]; }
 
-  struct RenderComponent : public RenderableT {
+  struct RenderComponent : RenderableT
+  {
     DERIVED_TYPE(RenderComponent, RenderableT)
     Trail* self;
 
-    RenderComponent(Trail* self) :
-      self(self)
-      {}
+    RenderComponent(Trail* self)
+      : self(self) {}
 
-    void Render(DrawState* state) const {
+    void Render(DrawState* state) const override
+    {
       if (self->trail.size() < 2)
         return;
 
       static Shader shader;
       static ShaderInstance shaderState;
-      if (!shader) {
+      if (!shader)
+      {
         shader = Shader_Create("trail.jsl", "trail.jsl");
         shaderState = ShaderInstance_Create(shader);
-        (*shaderState)
-          (RenderStateSwitch_BlendModeAdditive)
-          (RenderStateSwitch_ZWritableOff)
-          ("maxAlpha", 1.0f);
+        (*shaderState)(RenderStateSwitch_BlendModeAdditive)(RenderStateSwitch_ZWritableOff)("maxAlpha", 1.0f);
       }
 
-      const Distance cullDistance = 5000;
+      constexpr Distance cullDistance = 5000;
       Distance dist = Length(self->trail[0].p - state->view->transform.pos);
       if (dist > cullDistance * self->size)
         return;
 
-      RenderStyle const& style = RenderStyle_Get();
+      const RenderStyle& style = RenderStyle_Get();
       style->SetTransform(Transform_Identity());
       style->SetShader(shaderState);
 
@@ -102,20 +83,23 @@ AutoClassDerived(Trail, TrailBaseT,
       V3 direction = 0;
       float totalLength = 0;
 
-      for (size_t i = 0; i < self->trail.size(); ++i) {
-        SegmentData const& segment = self->GetTrailRelative(i + 1);
+      for (size_t i = 0; i < self->trail.size(); ++i)
+      {
+        const SegmentData& segment = self->GetTrailRelative(i + 1);
 
         size_t indexOffset = vertexArray.size();
-        Position const& p = segment.p;
-        float const& opacity = segment.opacity;
+        const Position& p = segment.p;
+        const float& opacity = segment.opacity;
 
-        if (i + 1 < self->trail.size()) {
-          SegmentData const& lastSegment = self->GetTrailRelative(i + 2);
-          Position const& pLast = lastSegment.p;
+        if (i + 1 < self->trail.size())
+        {
+          const SegmentData& lastSegment = self->GetTrailRelative(i + 2);
+          const Position& pLast = lastSegment.p;
           direction = pLast - p;
         }
 
-        for (uint j = 0; j < 2; ++j) {
+        for (uint j = 0; j < 2; ++j)
+        {
           Vertex v;
           v.p = p - state->view->transform.pos;
           v.n = direction;
@@ -124,22 +108,20 @@ AutoClassDerived(Trail, TrailBaseT,
           vertexArray.push(v);
         }
 
-        if (i + 1 < self->trail.size()) {
-          indexArray.push((short)(0 + indexOffset));
-          indexArray.push((short)(1 + indexOffset));
-          indexArray.push((short)(3 + indexOffset));
-          indexArray.push((short)(0 + indexOffset));
-          indexArray.push((short)(3 + indexOffset));
-          indexArray.push((short)(2 + indexOffset));
+        if (i + 1 < self->trail.size())
+        {
+          indexArray.push(static_cast<short>(0 + indexOffset));
+          indexArray.push(static_cast<short>(1 + indexOffset));
+          indexArray.push(static_cast<short>(3 + indexOffset));
+          indexArray.push(static_cast<short>(0 + indexOffset));
+          indexArray.push(static_cast<short>(3 + indexOffset));
+          indexArray.push(static_cast<short>(2 + indexOffset));
         }
-        
+
         totalLength += Length(direction);
       }
 
-      (*shader)
-        ("color", self->color)
-        ("size", self->size)
-        ("totalLength", totalLength);
+      (*shader)("color", self->color)("size", self->size)("totalLength", totalLength);
       DrawState_Link(shader);
 
       shaderState->Begin();
@@ -148,23 +130,23 @@ AutoClassDerived(Trail, TrailBaseT,
     }
   };
 
-  Trail() :
-    length(0),
-    age(0),
-    trailIndex(0)
-  {
-    Drawable.renderable = (Renderable)(new RenderComponent(this));
-  }
+  Trail()
+    : length(0),
+      age(0),
+      trailIndex(0) { Drawable.renderable = static_cast<Renderable>(new RenderComponent(this)); }
 
-  void OnUpdate(UpdateState& state) {
+  void OnUpdate(UpdateState& state) override
+  {
     BaseType::OnUpdate(state);
     age += state.dt;
 
-    if (!trail.size()) {
+    if (!trail.size())
+    {
       trail.resize(length);
       trailIndex = 0;
       Position pos = GetPos();
-      for (size_t i = 0; i < length; ++i) {
+      for (size_t i = 0; i < length; ++i)
+      {
         SegmentData& segment = trail[i];
         segment.p = pos;
         segment.opacity = 0;
@@ -172,33 +154,29 @@ AutoClassDerived(Trail, TrailBaseT,
     }
 
     bool faded = true;
-    float delta = 1.0f / (float)(length - 1);
-    for (size_t i = 0; i < length; ++i) {
+    float delta = 1.0f / static_cast<float>(length - 1);
+    for (size_t i = 0; i < length; ++i)
+    {
       SegmentData& segment = GetTrailRelative(i);
       segment.opacity += delta;
       if (segment.opacity > 0)
         faded = false;
     }
 
-    if (parent && parent->CanMove()) {
+    if (parent && parent->CanMove())
+    {
       trailIndex++;
       SegmentData& segment = GetTrailCurrent();
       segment.p = GetPos();
       segment.opacity = 0;
-    } else if (faded) {
-      Delete();
-      return;
     }
+    else if (faded) { Delete(); }
   }
 };
 
 DERIVED_IMPLEMENT(Trail)
 
-Object Object_Trail(
-  Object const& parent,
-  int length,
-  Color const& color,
-  float size)
+Object Object_Trail(const Object& parent, int length, const Color& color, float size)
 {
   Reference<Trail> self = new Trail;
   self->length = length;

@@ -1,11 +1,9 @@
+#include "UpdateState.h"
 #include "../Objects.h"
-
 #include "Component/Drawable.h"
-#include "Component/Motion.h"
+#include <Motion.h>
 #include "Component/Orientation.h"
-
 #include "LTE/Pool.h"
-
 #include "Module/SoundEngine.h"
 
 typedef ObjectWrapper

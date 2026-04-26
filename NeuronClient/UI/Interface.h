@@ -5,19 +5,18 @@
 #include "LTE/DeclareFunction.h"
 #include "LTE/RenderPass.h"
 
-struct InterfaceT : public RefCounted {
-  virtual ~InterfaceT() {}
+struct InterfaceT : RefCounted
+{
+  ~InterfaceT() override {}
 
-  virtual void Add(Widget const& widget) = 0;
+  virtual void Add(const Widget& widget) = 0;
   virtual void Clear() = 0;
   virtual void Draw() = 0;
   virtual void Update() = 0;
 };
 
-DeclareFunction(Interface_Create, Interface,
-  String, name)
+DeclareFunction(Interface_Create, Interface, String, name)
 
-DeclareFunction(RenderPass_Interface, RenderPass,
-  Interface, interface)
+DeclareFunction(RenderPass_Interface, RenderPass, Interface, interf)
 
 #endif

@@ -131,7 +131,7 @@ int main(int argc, const char* argv[])
 {
     if (argc != 2)
     {
-        printf("ERROR: Launcher expects one argument (application name)\n");
+        printf("ERROR: Launcher expects one argument (application name or --d3d12-smoke)\n");
         return 0;
     }
 
@@ -142,6 +142,8 @@ int main(int argc, const char* argv[])
 
     FileSys::SetHomeDirectory(path);
 
+    //NeuronClient::Startup("EarthRise", );
+    
     Launcher(argv[1]).Execute();
     return 0;
 }

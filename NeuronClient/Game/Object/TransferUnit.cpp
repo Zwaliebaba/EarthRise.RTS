@@ -1,23 +1,17 @@
 #include "../Objects.h"
-
+#include "UpdateState.h"
 #include "Component/Attachable.h"
 #include "Component/BoundingBox.h"
 #include "Component/Cullable.h"
 #include "Component/Drawable.h"
-#include "Component/Mineable.h"
 #include "Component/Orientation.h"
 #include "Component/Queryable.h"
 #include "Component/Pluggable.h"
 #include "Component/Supertyped.h"
-
 #include "Game/Actions.h"
 #include "Game/Light.h"
 #include "Game/Messages.h"
-#include "Game/Particles.h"
-#include "Game/Socket.h"
-
 #include "Module/SoundEngine.h"
-
 #include "LTE/Color.h"
 #include "LTE/DrawState.h"
 #include "LTE/Meshes.h"
@@ -27,51 +21,37 @@
 #include "LTE/ShaderInstance.h"
 #include "LTE/Smooth.h"
 
-const float kWidthMult = 4;
-const Color kDefaultColor = Color(0.3f, 0.7f, 1.0f);
-const Color kStressColor = Color(1.0f, 0.3f, 0.1f);
+constexpr float kWidthMult = 4;
+const auto kDefaultColor = Color(0.3f, 0.7f, 1.0f);
+const auto kStressColor = Color(1.0f, 0.3f, 0.1f);
 
-namespace {
+namespace
+{
   Mesh gMesh;
   ShaderInstance gShader;
 }
 
-typedef ObjectWrapper
-  < Component_Attachable
-  < Component_BoundingBox
-  < Component_Cullable
-  < Component_Drawable
-  < Component_Orientation
-  < Component_Pluggable
-  < Component_Supertyped
-  < ObjectWrapperTail<ObjectType_TransferUnit>
-  > > > > > > > >
-  TransferUnitBaseT;
+using TransferUnitBaseT = ObjectWrapper<Component_Attachable<Component_BoundingBox<Component_Cullable<Component_Drawable<
+  Component_Orientation<Component_Pluggable<Component_Supertyped<ObjectWrapperTail<ObjectType_TransferUnit>>>>>>>>>;
 
-AutoClassDerived(TransferUnit, TransferUnitBaseT,
-  float, age,
-  Smooth<Position>, targetPos,
-  Smooth<float>, frequency,
-  Smooth<float>, active,
-  Smooth<Color>, color,
-  LightRef, backLight,
-  LightRef, frontLight,
-  bool, firing)
+AutoClassDerived(TransferUnit, TransferUnitBaseT, float, age, Smooth<Position>, targetPos, Smooth<float>, frequency, Smooth<float>, active,
+                 Smooth<Color>, color, LightRef, backLight, LightRef, frontLight, bool, firing)
   Sound loop1;
   Sound loop2;
 
   DERIVED_TYPE_EX(TransferUnit)
   POOLED_TYPE
 
-  struct RenderComponent : public RenderableT {
+  struct RenderComponent : RenderableT
+  {
     DERIVED_TYPE(RenderComponent, RenderableT)
     Pointer<TransferUnit> self;
 
-    RenderComponent(TransferUnit* self) :
-      self(self)
-      {}
+    RenderComponent(TransferUnit* self)
+      : self(self) {}
 
-    Bound3 GetBound() const {
+    Bound3 GetBound() const override
+    {
       if (self->active < 0.001f)
         return Bound3(0);
 
@@ -79,49 +59,42 @@ AutoClassDerived(TransferUnit, TransferUnitBaseT,
       return Bound3(-r, r);
     }
 
-    void Render(DrawState* state) const {
+    void Render(DrawState* state) const override
+    {
       if (self->active < 0.001f)
         return;
-      
-      if (!gMesh) {
+
+      if (!gMesh)
+      {
         gMesh = Mesh_Billboard(-1, 1, 0, 1);
         gShader = ShaderInstance_Create("billboard_axis.jsl", "transferbeam.jsl");
-        (*gShader)
-          (RenderStateSwitch_BlendModeAdditive)
-          (RenderStateSwitch_ZWritableOff);
+        (*gShader)(RenderStateSwitch_BlendModeAdditive)(RenderStateSwitch_ZWritableOff);
         DrawState_Link(gShader);
       }
 
       V3 dir = self->targetPos - self->GetTransform().pos;
-      (*gShader)
-        ("axis", Normalize(dir))
-        ("color", self->active.value * V4(self->color.value, 1.0f))
-        ("size",
-          V2(kWidthMult * Length(self->GetScale()),
-             Min(Length(dir), self->Supertyped.type->GetRange())))
-        ("t", self->age);
+      (*gShader)("axis", Normalize(dir))("color", self->active.value * V4(self->color.value, 1.0f))(
+        "size", V2(kWidthMult * Length(self->GetScale()), Min(Length(dir), self->Supertyped.type->GetRange())))("t", self->age);
 
-      RenderStyle const& style = RenderStyle_Get();
+      const RenderStyle& style = RenderStyle_Get();
       style->SetTransform(Transform_Translation(self->GetTransform().pos));
       style->SetShader(gShader);
       style->Render(gMesh);
     }
   };
 
-  TransferUnit() :
-    age(0),
-    targetPos(0),
-    frequency(1),
-    active(0),
-    color(kDefaultColor),
-    firing(false)
-    {}
+  TransferUnit()
+    : age(0),
+      targetPos(0),
+      frequency(1),
+      active(0),
+      color(kDefaultColor),
+      firing(false) {}
 
-  bool CanCollide(ObjectT const* object) const {
-    return object->GetRoot() != GetRoot();
-  }
+  bool CanCollide(const ObjectT* object) const override { return object->GetRoot() != GetRoot(); }
 
-  void OnMessage(Data& m) {
+  void OnMessage(Data& m) override
+  {
     BaseType::OnMessage(m);
     if (m.type == Type_Get<MessageFire>())
       firing = true;
@@ -130,7 +103,8 @@ AutoClassDerived(TransferUnit, TransferUnitBaseT,
       targetPos.target = m.Convert<MessageTargetPosition>().position;
   }
 
-  void OnUpdate(UpdateState& state) {
+  void OnUpdate(UpdateState& state) override
+  {
     BaseType::OnUpdate(state);
 
     Pluggable.powerRequest = Supertyped.type->GetPowerDrain();
@@ -143,17 +117,20 @@ AutoClassDerived(TransferUnit, TransferUnitBaseT,
     frequency.Update(0.25f * state.dt);
     targetPos.value = targetPos.target;
 
-    if (!backLight) {
+    if (!backLight)
+    {
       backLight = Light_Create(this);
       backLight->radius = 2.0f;
     }
 
-    if (!frontLight) {
+    if (!frontLight)
+    {
       frontLight = Light_Create(this);
       frontLight->radius = 1.0f;
     }
 
-    if (!loop1) {
+    if (!loop1)
+    {
       loop1 = Sound_Play3D("transferunit/loop.wav", this, 0, 0, Length(GetScale()), true);
       loop2 = Sound_Play3D("transferunit/loop.wav", this, 0, 0, Length(GetScale()), true);
       loop1->SetCursor(Rand() * loop1->GetDuration());
@@ -171,29 +148,30 @@ AutoClassDerived(TransferUnit, TransferUnitBaseT,
 
     frontLight->color = active * (1.0f + 0.2f * RandExp()) * color;
 
-    if (active > 0.5f) {
+    if (active > 0.5f)
+    {
       Position origin = GetPos();
-      V3 direction = Normalize((V3)(targetPos.value - origin));
+      V3 direction = Normalize(static_cast<V3>(targetPos.value - origin));
       WorldRay ray(origin, direction);
 
       float t;
       float range = Supertyped.type->GetRange();
-      ObjectT* hitObject = GetContainer()->QueryInterior(
-        ray, t, range, nullptr, true, RaycastCanCollideBidirectional, this);
+      ObjectT* hitObject = GetContainer()->QueryInterior(ray, t, range, nullptr, true, RaycastCanCollideBidirectional, this);
 
       t = Min(t, range);
       backLight->Attachable.SetPos(GetTransform().InversePoint(ray(t)));
 
-      if (hitObject) {
+      if (hitObject)
+      {
         backLight->color = 4.0f * active * (1.0f + 0.2f * RandExp()) * color;
         if (hitObject->GetMineable())
           Action_Mine(this, hitObject, ray(t))->Execute(state);
-      } else {
-        backLight->color = Color(0);
       }
-    } else {
-      backLight->color = Color(0);
+      else
+        backLight->color = Color(0);
     }
+    else
+      backLight->color = Color(0);
 
     firing = false;
   }
@@ -201,9 +179,10 @@ AutoClassDerived(TransferUnit, TransferUnitBaseT,
 
 DERIVED_IMPLEMENT(TransferUnit)
 
-DefineFunction(Object_TransferUnit) {
+DefineFunction(Object_TransferUnit)
+{
   Reference<TransferUnit> self = new TransferUnit();
   self->SetSupertype(args.type);
-  self->Drawable.renderable = (Renderable)(new TransferUnit::RenderComponent(self));
+  self->Drawable.renderable = static_cast<Renderable>(new TransferUnit::RenderComponent(self));
   return self;
 }

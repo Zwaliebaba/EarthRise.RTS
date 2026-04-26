@@ -110,8 +110,12 @@ bool OS_FileExists(const String& path)
 String OS_GetAppDir()
 {
 #ifdef LIBLT_WINDOWS
-  char const* path = getenv("APPDATA");
-  return path ? path : "";
+  char* path = nullptr;
+  size_t len = 0;
+  _dupenv_s(&path, &len, "APPDATA");
+  std::string result = path ? std::string(path) : std::string{};
+  free(path);
+  return result;
 #else
   // TODO
   return "/usr/bin";
@@ -121,8 +125,12 @@ String OS_GetAppDir()
 String OS_GetDocumentsDir()
 {
 #ifdef LIBLT_WINDOWS
-  char const* profile = getenv("USERPROFILE");
-  return profile ? String(profile) + "\\Documents" : String("./data");
+  char* profile = nullptr;
+  size_t len = 0;
+  _dupenv_s(&profile, &len, "USERPROFILE");
+  String result = profile ? String(profile) + "\\Documents" : String(".\\data");
+  free(profile);
+  return result;
 #else
   return "./data";
 #endif
@@ -134,9 +142,9 @@ String OS_GetUserDataPath()
   if (!created)
   {
     created = true;
-    OS_CreateDir("./cache/");
+    OS_CreateDir(".\\cache\\");
   }
-  return "./cache/";
+  return ".\\cache\\";
 }
 
 String OS_GetWorkingDir()
@@ -194,7 +202,7 @@ void OS_MessageBox(const String& title, const String& message)
 
 bool OS_Spawn(const String& path)
 {
-  char* const argv[] = {strdup(path), nullptr};
+  char* const argv[] = {_strdup(path), nullptr};
 #ifdef LIBLT_WINDOWS
   return _spawnl(_P_NOWAIT, path, path, NULL) != -1;
 #else

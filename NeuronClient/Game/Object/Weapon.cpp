@@ -1,5 +1,5 @@
 #include "../Objects.h"
-
+#include "UpdateState.h"
 #include "Component/Attachable.h"
 #include "Component/BoundingBox.h"
 #include "Component/Collidable.h"
@@ -10,61 +10,38 @@
 #include "Component/Orientation.h"
 #include "Component/Pluggable.h"
 #include "Component/Supertyped.h"
-
 #include "Game/Beam.h"
 #include "Game/Light.h"
 #include "Game/Messages.h"
 #include "Game/Socket.h"
-#include "Game/Graphics/Effects.h"
 #include "Game/Item/WeaponType.h"
-
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 
-const float kMinAngle = -0.25f;
+constexpr float kMinAngle = -0.25f;
 const float kTrackSpeed = 2.0f * kTau;
-const bool kInfiniteAmmo = true;
+constexpr bool kInfiniteAmmo = true;
 
-typedef ObjectWrapper
-  < Component_Attachable
-  < Component_BoundingBox
-  < Component_Collidable
-  < Component_Cullable
-  < Component_Drawable
-  < Component_Explodable
-  < Component_Integrity
-  < Component_Orientation
-  < Component_Pluggable
-  < Component_Supertyped
-  < ObjectWrapperTail<ObjectType_Weapon>
-  > > > > > > > > > > >
-  WeaponBaseT;
+using WeaponBaseT = ObjectWrapper<Component_Attachable<Component_BoundingBox<Component_Collidable<Component_Cullable<Component_Drawable<
+  Component_Explodable<Component_Integrity<Component_Orientation<Component_Pluggable<Component_Supertyped<ObjectWrapperTail<
+    ObjectType_Weapon>>>>>>>>>>>>;
 
-AutoClassDerived(Weapon, WeaponBaseT,
-  Position, targetPos,
-  Object, targetObject,
-  Object, beam,
-  V3, targetHeading,
-  float, cooldown,
-  float, magazineTime,
-  Quantity, magazine,
-  float, flash,
-  LightRef, light,
-  bool, isFiring)
+AutoClassDerived(Weapon, WeaponBaseT, Position, targetPos, Object, targetObject, Object, beam, V3, targetHeading, float, cooldown, float,
+                 magazineTime, Quantity, magazine, float, flash, LightRef, light, bool, isFiring)
 
   DERIVED_TYPE_EX(Weapon)
   POOLED_TYPE
 
-  Weapon() :
-    targetHeading(V3(0, 0, 1)),
-    cooldown(0),
-    magazineTime(0),
-    magazine(0),
-    flash(0),
-    isFiring(false)
-    {}
+  Weapon()
+    : targetHeading(V3(0, 0, 1)),
+      cooldown(0),
+      magazineTime(0),
+      magazine(0),
+      flash(0),
+      isFiring(false) {}
 
-  void Aim() {
+  void Aim()
+  {
     if (!IsAlive())
       return;
 
@@ -77,15 +54,12 @@ AutoClassDerived(Weapon, WeaponBaseT,
       targetHeading = heading / headingLength;
   }
 
-  bool CanCollide(ObjectT const* other) const {
-    return other->GetDamager();
-  }
+  bool CanCollide(const ObjectT* other) const override { return other->GetDamager(); }
 
-  bool CanFire() const {
-    return cooldown <= 0 && (kInfiniteAmmo || magazine > 0 || GetMaxUses() == 0);
-  }
+  bool CanFire() const { return cooldown <= 0 && (kInfiniteAmmo || magazine > 0 || GetMaxUses() == 0); }
 
-  void Fire() {
+  void Fire()
+  {
     if (!IsAlive())
       return;
 
@@ -99,7 +73,8 @@ AutoClassDerived(Weapon, WeaponBaseT,
     if (Dot(toTarget, heading) < 0.99f)
       return;
 
-    while (CanFire()) {
+    while (CanFire())
+    {
       /* Note that we'll add the cooldown BEFORE raycasting, so that we don't
        * end up raycasting every transform. */
       cooldown += Rand(1.0f / 1.1f, 1.1f) / GetWeaponType()->rate;
@@ -107,8 +82,10 @@ AutoClassDerived(Weapon, WeaponBaseT,
       /* Check to make sure our ship isn't in the way.  If it is, don't fire! */
       Ray r(origin + parent->GetVelocity(), heading);
       float t;
-      if (GetContainer()->QueryInterior(r, t, 100, nullptr, false) == parent) {
-        if (beam) {
+      if (GetContainer()->QueryInterior(r, t, 100, nullptr, false) == parent)
+      {
+        if (beam)
+        {
           beam->Delete();
           beam = nullptr;
         }
@@ -124,7 +101,8 @@ AutoClassDerived(Weapon, WeaponBaseT,
         magazine--;
 
       GetContainer()->AddInterior(ammo);
-      if (beam) {
+      if (beam)
+      {
         // TODO : ...?
         UpdateBeam();
         UpdateBeam();
@@ -132,41 +110,37 @@ AutoClassDerived(Weapon, WeaponBaseT,
     }
   }
 
-  float GetCooldown() const {
+  float GetCooldown() const override
+  {
     if (magazine == 0 && GetMaxUses() > 0)
       return magazineTime / GetWeaponType()->magazineTime;
     return Saturate(1.0f - cooldown * GetWeaponType()->rate);
   }
 
-  Quantity GetMaxUses() const {
-    return Supertyped.type->GetUses();
-  }
+  Quantity GetMaxUses() const override { return Supertyped.type->GetUses(); }
 
-  float GetRange() const {
-    return Supertyped.type->GetRange();
-  }
+  float GetRange() const override { return Supertyped.type->GetRange(); }
 
-  V3 GetRelativeHeading(Position const& target) const {
+  V3 GetRelativeHeading(const Position& target) const
+  {
     Position origin = Orientation.transform.TransformPoint(GetWeaponType()->offset);
     V3 toTarget = Normalize(target - origin);
     return parent->GetTransform().InverseVector(toTarget);
   }
-  
-  WeaponType* GetWeaponType() const {
-    return (WeaponType*)(ItemT*)Supertyped.type;
-  }
 
-  Quantity GetUses() const {
-    return magazine;
-  }
+  WeaponType* GetWeaponType() const { return static_cast<WeaponType*>((ItemT*)Supertyped.type); }
 
-  void HandleHeading(float dt) {
-    Socket const& sock = Pluggable.GetSocket(this);
+  Quantity GetUses() const override { return magazine; }
+
+  void HandleHeading(float dt)
+  {
+    const Socket& sock = Pluggable.GetSocket(this);
 
     V3& look = Attachable.transform.look;
     float angle = Angle(look, targetHeading);
 
-    if (angle > FLT_EPSILON) {
+    if (angle > FLT_EPSILON)
+    {
       float delta = Min(angle, dt * kTrackSpeed);
       look = Normalize(Mix(look, targetHeading, Saturate(delta / angle)));
 
@@ -179,7 +153,8 @@ AutoClassDerived(Weapon, WeaponBaseT,
     }
   }
 
-  void OnMessage(Data& m) {
+  void OnMessage(Data& m) override
+  {
     BaseType::OnMessage(m);
     if (m.type == Type_Get<MessageFire>())
       isFiring = true;
@@ -194,12 +169,14 @@ AutoClassDerived(Weapon, WeaponBaseT,
       targetObject = m.Convert<MessageTargetObject>().object;
   }
 
-  void OnUpdate(UpdateState& state) {
+  void OnUpdate(UpdateState& state) override
+  {
     BaseType::OnUpdate(state);
 
-    WeaponType const* wType = GetWeaponType();
+    const WeaponType* wType = GetWeaponType();
 
-    if (!light) {
+    if (!light)
+    {
       light = Light_Create(this);
       light->Attachable.transform = Transform_Translation(wType->GetOffset());
       light->radius = 2.0f;
@@ -214,9 +191,11 @@ AutoClassDerived(Weapon, WeaponBaseT,
     light->color = 4.0f * flash * Supertyped.type->GetColor();
 
     /* Magazine reloading. */
-    if (magazine <= 0 && GetMaxUses() > 0) {
+    if (magazine <= 0 && GetMaxUses() > 0)
+    {
       magazineTime += state.dt * Rand(0.9f, 1.1f);
-      if (magazineTime >= wType->magazineTime) {
+      if (magazineTime >= wType->magazineTime)
+      {
         magazineTime = 0;
         // ObjectT* root = GetRoot();
         // magazine = Min(GetMaxUses(), root->GetItemCount(m));
@@ -227,10 +206,13 @@ AutoClassDerived(Weapon, WeaponBaseT,
     }
 
     /* Beam handling. */
-    if (!isFiring && beam) {
+    if (!isFiring && beam)
+    {
       beam->Delete();
       beam = nullptr;
-    } else if (beam) {
+    }
+    else if (beam)
+    {
       UpdateBeam();
       flash = 1.0f;
     }
@@ -241,15 +223,18 @@ AutoClassDerived(Weapon, WeaponBaseT,
     Aim();
   }
 
-  void Reload() {
-    if (magazine > 0 && magazine < GetMaxUses()) {
+  void Reload()
+  {
+    if (magazine > 0 && magazine < GetMaxUses())
+    {
       // GetRoot()->AddItem(GetAmmoType(), magazine, true);
       magazine = 0;
     }
   }
 
-  void UpdateBeam() {
-    Beam* b = (Beam*)(ObjectT*)beam;
+  void UpdateBeam()
+  {
+    auto b = static_cast<Beam*>((ObjectT*)beam);
     b->direction = GetLook();
     b->origin = Orientation.transform.TransformPoint(GetWeaponType()->offset);
   }
@@ -257,7 +242,8 @@ AutoClassDerived(Weapon, WeaponBaseT,
 
 DERIVED_IMPLEMENT(Weapon)
 
-DefineFunction(Object_Weapon) {
+DefineFunction(Object_Weapon)
+{
   Reference<Weapon> self = new Weapon;
   self->SetSupertype(args.type);
   self->GetAttachable()->SetScale(args.type->GetScale());

@@ -2,9 +2,23 @@
 
 earthrise_collect_sources(NEURONCLIENT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}")
 
+file(GLOB_RECURSE _neuronclient_include_entries CONFIGURE_DEPENDS LIST_DIRECTORIES TRUE
+  "${CMAKE_CURRENT_SOURCE_DIR}/*")
+foreach(_path IN LISTS _neuronclient_include_entries)
+  string(REPLACE "\\" "/" _path "${_path}")
+  if (IS_DIRECTORY "${_path}"
+      AND NOT _path STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/Audio"
+      AND NOT _path STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/LTE"
+      AND NOT _path MATCHES "/(x64|x86|Debug|Release|RelWithDebInfo|MinSizeRel|out|\.vs|Generated Files|generated|winrt|tlog|embed|microsoft)(/|$)")
+    list(APPEND NEURONCLIENT_INCLUDE_DIRECTORIES "${_path}")
+  endif()
+endforeach()
+list(REMOVE_DUPLICATES NEURONCLIENT_INCLUDE_DIRECTORIES)
+
 add_library(NeuronClient STATIC ${NEURONCLIENT_SOURCES})
 
 target_include_directories(NeuronClient PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(NeuronClient SYSTEM PUBLIC ${NEURONCLIENT_INCLUDE_DIRECTORIES})
 
 # PUBLIC: include dirs and link requirements propagate to consumers (EarthRise).
 target_link_libraries(NeuronClient PUBLIC
@@ -34,9 +48,10 @@ if (WIN32 AND EARTHRISE_ENABLE_D3D12)
 
   target_compile_definitions(NeuronClient PUBLIC EARTHRISE_ENABLE_D3D12=1)
 
-  if (EARTHRISE_DXC_EXECUTABLE)
-    set(EARTHRISE_D3D12_SHADER_SOURCE
-      "${CMAKE_CURRENT_SOURCE_DIR}/LTE/Render/D3D12/Shaders/BootstrapClear.hlsl")
+  set(EARTHRISE_D3D12_SHADER_SOURCE
+    "${CMAKE_CURRENT_SOURCE_DIR}/LTE/Render/D3D12/Shaders/BootstrapClear.hlsl")
+
+  if (EARTHRISE_DXC_EXECUTABLE AND EXISTS "${EARTHRISE_D3D12_SHADER_SOURCE}")
     set(EARTHRISE_D3D12_GENERATED_SHADER_DIR
       "${CMAKE_CURRENT_BINARY_DIR}/Generated/Shaders")
     set(EARTHRISE_D3D12_BOOTSTRAP_VS
