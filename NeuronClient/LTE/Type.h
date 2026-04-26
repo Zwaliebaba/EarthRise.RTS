@@ -121,7 +121,7 @@
 typedef void* (*AllocateFn)(TypeT*);
 typedef void (*AssignFn)(TypeT*, void const*, void*);
 typedef void (*ConversionFn)(TypeT*, void const*, void*);
-typedef int64 (*CastIntFn)(TypeT*, void const*);
+typedef int64_t (*CastIntFn)(TypeT*, void const*);
 typedef double (*CastRealFn)(TypeT*, void const*);
 typedef void (*ConstructFn)(TypeT*, void*);
 typedef void (*DeallocateFn)(TypeT*, void*);
@@ -181,7 +181,7 @@ struct TypeT {
     assign(this, src, dst);
   }
 
-  int64 CastInt(void const* src) {
+  int64_t CastInt(void const* src) {
     return castInt(this, src);
   }
 
@@ -381,6 +381,7 @@ inline void FillMetadata(TypeT* type) {}
 
 template <class T>
 Type& Type_GetStorage() {
+  /* Phase 3 contract: first metadata access is startup/single-threaded. */
   static Type t;
   return t;
 }
@@ -396,8 +397,8 @@ void __type_default_assign(TypeT*, void const* src, void* dst) {
 }
 
 template <class T>
-int64 __type_default_castint(TypeT*, void const* t) {
-  return (int64)(*(T*)t);
+int64_t __type_default_castint(TypeT*, void const* t) {
+  return (int64_t)(*(T*)t);
 }
 
 template <class T>

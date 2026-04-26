@@ -106,7 +106,7 @@ When context files do not fully answer a question:
 - Currently owns much of the client/gameplay/runtime surface and links GLEW, Freetype, SFML, `ole32`, and `xaudio2`.
 - Contains older C++ conventions such as:
   - include guards like `#ifndef File_h__`
-  - typedef aliases such as `uint`, `uint32`, and `uchar`
+  - typedef aliases such as `uint`, `uint32_t`, and `uchar`
   - raw pointers and C-style strings in many areas
   - macro-based assertions and diagnostics such as `DEBUG_ASSERT`, `Fatal(...)`, `__debugbreak();`, and `DebugTrace`
 - Preserve surrounding legacy style unless the user explicitly asks for modernization.

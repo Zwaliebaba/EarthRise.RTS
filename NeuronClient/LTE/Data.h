@@ -33,7 +33,7 @@ namespace LTE {
     DataRef(Data const& other);
     DataRef& operator=(Data const& other);
 
-    int64 CastInt() const {
+    int64_t CastInt() const {
       if (!type || !type->castInt)
         Fatal("Contained type does not support integer cast");
       return type->CastInt(data);
@@ -165,7 +165,7 @@ namespace LTE {
       return *this;
     }
 
-    int64 CastInt() const {
+    int64_t CastInt() const {
       if (!type || !type->castInt)
         Fatal("Contained type does not support integer cast");
       return type->CastInt(data);

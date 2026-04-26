@@ -6,6 +6,7 @@
 #include "SFML/System.hpp"
 
 #include <Windows.h>
+#include <atomic>
 #include <memory>
 #include <thread>
 
@@ -22,9 +23,10 @@ namespace
 
   struct ThreadImpl : ThreadT
   {
+    /* Job ownership is handed to the worker; shared mutation remains external. */
     Job job;
     std::unique_ptr<std::thread> thread;
-    bool finished;
+    std::atomic_bool finished;
 
     ThreadImpl(const Job& job)
       : job(job),
@@ -38,7 +40,7 @@ namespace
     ~ThreadImpl() override
     {
       if (thread && thread->joinable()) {
-        if (finished)
+        if (finished.load())
           thread->join();
         else
           Terminate();
@@ -48,12 +50,12 @@ namespace
 
     Job GetJob() const override { return job; }
 
-    bool IsFinished() const override { return finished; }
+    bool IsFinished() const override { return finished.load(); }
 
     void Run()
     {
       job->OnRun(UINT_MAX);
-      finished = true;
+      finished.store(true);
     }
 
     void Terminate() override
@@ -63,12 +65,14 @@ namespace
         ::TerminateThread((HANDLE)thread->native_handle(), 0);
         thread->detach();
       }
-      finished = true;
+      finished.store(true);
     }
 
     void Wait() override {
-      if (thread && thread->joinable())
+      if (thread && thread->joinable()) {
         thread->join();
+        finished.store(true);
+      }
     }
   };
 }

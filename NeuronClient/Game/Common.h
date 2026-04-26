@@ -43,13 +43,13 @@ typedef DistanceT Distance;
 typedef RayT<PointT, V3> WorldRay;
 typedef MatrixT<DistanceT> WorldMatrix;
 
-typedef int32 Damage;
-typedef int32 Health;
-typedef int64 ItemID;
+typedef int32_t Damage;
+typedef int32_t Health;
+typedef int64_t ItemID;
 typedef float Mass;
-typedef int64 ObjectID;
-typedef int64 Quantity;
-typedef int64 Time;
+typedef int64_t ObjectID;
+typedef int64_t Quantity;
+typedef int64_t Time;
 
 #define CAPABILITY_X                                                           \
   X(Attack)                                                                    \

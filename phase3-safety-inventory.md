@@ -31,9 +31,35 @@ Current contract is also implicit. Type metadata registration appears designed f
 4. If runtime type registration is required, protect `Type_Create`, registry containers, `GUIDIndex`, and each lazy `Type_GetStorage<T>()` initialization path.
 5. Do not convert `refCount` to `std::atomic` mechanically until ownership transfer points are inventoried.
 
+## Boundary Scan - April 26, 2026
+
+### LTE Thread and Job
+- Owner: `NeuronClient/LTE/Thread.h`, `NeuronClient/LTE/Thread.cpp`, and `NeuronClient/LTE/Job.h`
+- `ThreadImpl` stores a `Job` reference and runs `JobT::OnRun` on a `std::thread`.
+- `JobT` derives from `RefCounted`, so the handoff into `ThreadImpl` is a cross-thread lifetime boundary.
+- `ThreadImpl::finished` is now an `std::atomic_bool` written by the worker and read by the owner thread.
+- `ThreadImpl::Terminate` uses `TerminateThread`, so cleanup and lock ownership are not guaranteed if forced termination occurs.
+
+Contract for this slice: the `Job` object is owned by the thread wrapper for the worker lifetime. Callers should not concurrently mutate the same `Reference`-managed object while the worker is running unless that object provides its own synchronization.
+
+### NeuronCore Async, Tasks, and Events
+- Owner: `NeuronCore/ASyncLoader.h`, `NeuronCore/TasksCore.h`, `NeuronCore/TasksCore.cpp`, and `NeuronCore/EventManager.h`
+- `ASyncLoader` uses `std::atomic_bool` for loading state; `StaticASyncLoader` also marks those atomics `volatile`, which should be audited separately.
+- `TasksCore` owns thread lifecycle state behind mutexes and already has comments around restart and termination hazards.
+- `EventManager` protects subscriber mutation and dispatch with `sm_sync`, but handlers retain raw instance pointers. Lifetime remains a caller contract.
+
+Contract for this slice: NeuronCore thread primitives are separate from LTE intrusive references. Do not infer that `Reference<T>` becomes thread-safe when passed through these helpers.
+
+### Reflection Registry
+- Owner: `NeuronClient/LTE/Type.h` and `NeuronClient/LTE/Type.cpp`
+- Lazy `Type_GetStorage<T>()` initialization and `Type_Create` registry insertion remain unguarded.
+- Registry mutation comments now state the startup/single-threaded assumption at the storage and registry access points.
+
+Contract for this slice: startup reflection registration may remain lazy, but runtime registration from multiple threads is out of contract until synchronization is designed.
+
 ## Next Implementation Slice
-1. Add comments or lightweight diagnostics that state the thread-confined `Reference<T>` contract.
-2. Inventory cross-thread task, async loader, event, and network call sites that store or pass `Reference<T>`.
+1. Decide whether `ThreadImpl::Terminate` should remain supported or be replaced by cooperative cancellation before any reference-counting changes.
+2. Audit `StaticASyncLoader` volatile atomics and remove `volatile` if no caller depends on it.
 3. Decide whether the type registry should be explicitly initialized during startup or guarded for runtime lazy registration.
 4. Add focused tests only after the chosen contracts are documented.
 

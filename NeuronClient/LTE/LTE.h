@@ -9,7 +9,7 @@
  *
  */
 
-#if !defined(LTE_CONSOLE) && defined(LIBLT_WINDOWS)
+#if !defined(LTE_CONSOLE)
   
   #pragma comment(linker, "/SUBSYSTEM:windows")
   #ifndef NOMINMAX

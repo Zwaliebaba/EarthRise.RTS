@@ -77,19 +77,11 @@ namespace LTE {
   Axis Axis_Sum(Axis const& a, Axis const& b);
 
   inline Axis Axis_DpadVertical() {
-#ifdef LIBLT_WINDOWS
     return Axis_Joy(0, JoystickAxis_PovX)->Invert();
-#else
-    return Axis_Joy(0, JoystickAxis_PovY);
-#endif
   }
 
   inline Axis Axis_DpadHorizontal() {
-#ifdef LIBLT_WINDOWS
     return Axis_Joy(0, JoystickAxis_PovY)->Invert();
-#else
-    return Axis_Joy(0, JoystickAxis_PovX);
-#endif
   }
 
   inline Axis Axis_LeftStickX() {
@@ -101,11 +93,7 @@ namespace LTE {
   }
 
   inline Axis Axis_LeftTrigger() {
-#ifdef LIBLT_WINDOWS
     return Axis_Range(Axis_Joy(0, JoystickAxis_Z)->SetDeadZone(.2f), 0.f, 1.f);
-#else
-    return Axis_Joy(0, JoystickAxis_Z)->SetZeroValue(-1)->SetDeadZone(.2f);
-#endif
   }
 
   inline Axis Axis_RightStickX() {
@@ -113,19 +101,11 @@ namespace LTE {
   }
 
   inline Axis Axis_RightStickY() {
-#ifdef LIBLT_WINDOWS
     return Axis_Joy(0, JoystickAxis_R);
-#else
-    return Axis_Joy(0, JoystickAxis_V);
-#endif
   }
 
   inline Axis Axis_RightTrigger() {
-#ifdef LIBLT_WINDOWS
     return Axis_Range(Axis_Joy(0, JoystickAxis_Z)->SetDeadZone(.2f), 0.f, -1.f);
-#else
-    return Axis_Joy(0, JoystickAxis_R)->SetZeroValue(-1)->SetDeadZone(.2f);
-#endif
   }
 }
 

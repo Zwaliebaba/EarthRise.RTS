@@ -73,21 +73,19 @@ When working inside NeuronCore:
 
 ## Documentation Structure
 
-The project follows this standard documentation layout:
+The project follows this documentation layout:
 
 ```
-Earthrise/
+EarthRise.RTS/
 ├── README.md                        # Project overview and quick start
-├── MMO.md                           # Full MMO implementation plan (11 phases)
+├── ARCHITECTURE.md                  # Current target map and boundaries
+├── build-baseline.md                # Current build and warning baseline
+├── impl.md                          # Staged implementation plan
+├── phase3-safety-inventory.md       # Thread and memory safety inventory
 ├── .github/
 │   ├── agents.md                    # AI agent instructions and project summary
 │   ├── coding-standards.md          # This file
-│   ├── copilot-instructions.md      # Copilot/AI assistant guidance
-│   └── agents/                      # Specialised AI agent definitions
-│       ├── Architect.agent.md
-│       ├── Planner.agent.md
-│       ├── SoftwareEngineer.agent.md
-│       └── RefactorCleaner.agent.md
+│   └── copilot-instructions.md      # Copilot/AI assistant guidance
 ```
 
 ### Documentation Conventions
@@ -103,9 +101,9 @@ Earthrise/
 
 | Change | Documentation to update |
 |---|---|
-| New subsystem or module | `docs/architecture.md`, `README.md` |
-| New development prerequisite or build step | `docs/development-guide.md` |
-| New PR or review process | `docs/contributing.md` |
+| New subsystem or module | `ARCHITECTURE.md`, `README.md` |
+| New development prerequisite or build step | `README.md`, `build-baseline.md` |
+| New PR or review process | `README.md` or a dedicated contributing document once added |
 | New coding convention | `.github/coding-standards.md` |
-| New or changed AI agent behaviour | `.github/agents.md` or `.github/agents/*.agent.md` |
-| New improvement phase | `CI.md` |
+| New or changed AI agent behavior | `.github/agents.md` or `.github/copilot-instructions.md` |
+| New implementation phase | `impl.md` |

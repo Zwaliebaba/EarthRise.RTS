@@ -8,31 +8,13 @@
 #include "Pointer.h"
 #include "ProgramLog.h"
 #include "Renderer.h"
-#include "Stack.h"
 #include "String.h"
 #include "Timer.h"
 #include "Thread.h"
 #include "V3.h"
-
 #include "Module/Settings.h"
-
-#include <unordered_map>
-
-// #define USE_TELEMETRY
-
-#ifdef LIBLT_LINUX
-  #ifdef USE_TELEMETRY
-    #define linux
-    #include "telemetry/telemetry.h"
-    #define TELEMETRY
-  #else
-    #include <iostream>
-  #endif
-#endif
-
-#include <algorithm>
-#include <cstring>
 #include <iostream>
+#include <vector>
 
 const bool kDefaultFlush = false;
 
@@ -42,7 +24,7 @@ const uint kSampleInterval = 1;
 struct StackFrame {
   Array<char const*> segments;
 
-  StackFrame(Stack<char const*> const& frame) :
+  StackFrame(std::vector<char const*> const& frame) :
     segments(frame.size())
   {
     for (size_t i = 0; i < frame.size(); ++i)
@@ -134,7 +116,7 @@ namespace {
 
   struct ProfilingModule : public ModuleT {
     StackFrame* currentFrame;
-    Stack<char const*> segments;
+    std::vector<char const*> segments;
     std::unordered_map<size_t, StackFrame*> frameMap;
 
     bool active;
@@ -215,7 +197,8 @@ namespace {
     }
 
     void Push(char const* segment) {
-      segments.push(segment);
+      DEBUG_ASSERT(segments.size() < 100);
+      segments.push_back(segment);
       if (active)
         currentFrame = GetFrame();
     }
@@ -223,7 +206,8 @@ namespace {
     void Pop() {
       if (active && flushes)
         Renderer_Flush();
-      segments.pop();
+      DEBUG_ASSERT(segments.size());
+      segments.pop_back();
       if (active)
         currentFrame = GetFrame();
     }

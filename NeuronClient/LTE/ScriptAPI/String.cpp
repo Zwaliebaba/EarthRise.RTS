@@ -18,10 +18,10 @@ DefineConversion(slong_to_string, signed long, String) { dest = ToString<signed 
 DefineConversion(ulong_to_string, unsigned long, String) { dest = ToString<unsigned long>(src); }
 DefineConversion(sllong_to_string, signed long long, String) { dest = ToString<signed long long>(src); }
 DefineConversion(ullong_to_string, unsigned long long, String) { dest = ToString<unsigned long long>(src); }
-DefineConversion(int32_to_string, int32, String) { dest = ToString<int32>(src); }
-DefineConversion(int64_to_string, int64, String) { dest = ToString<int64>(src); }
-DefineConversion(uint32_to_string, int32, String) { dest = ToString<uint32>(src); }
-DefineConversion(uint64_to_string, int64, String) { dest = ToString<uint64>(src); }
+DefineConversion(int32_to_string, int32_t, String) { dest = ToString<int32_t>(src); }
+DefineConversion(int64_to_string, int64_t, String) { dest = ToString<int64_t>(src); }
+DefineConversion(uint32_to_string, int32_t, String) { dest = ToString<uint32_t>(src); }
+DefineConversion(uint64_to_string, int64_t, String) { dest = ToString<uint64_t>(src); }
 
 VoidFreeFunction(String_Append,
   "Append 'b' to 'a'",

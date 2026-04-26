@@ -4,7 +4,7 @@
 #include "Common.h"
 
 struct UniStringIterator {
-  uint32 codepoint;
+  uint32_t codepoint;
   char const* iter;
   char const* end;
 
@@ -14,7 +14,7 @@ struct UniStringIterator {
     return iter != end;
   }
 
-  uint32 Get() const {
+  uint32_t Get() const {
     return codepoint;
   }
 };

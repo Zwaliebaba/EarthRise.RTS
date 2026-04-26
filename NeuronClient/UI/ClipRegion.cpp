@@ -1,9 +1,11 @@
 #include "ClipRegion.h"
 #include "WidgetRenderer.h"
 
+#include "LTE/AutoClass.h"
 #include "LTE/Renderer.h"
-#include "LTE/Vector.h"
 #include "LTE/Viewport.h"
+
+#include <vector>
 
 namespace {
   AutoClass(ClipRegion,
@@ -12,8 +14,8 @@ namespace {
     ClipRegion() {}
   };
 
-  Vector<ClipRegion>& GetStack() {
-    static Vector<ClipRegion> stack;
+  std::vector<ClipRegion>& GetStack() {
+    static std::vector<ClipRegion> stack;
     return stack;
   }
 }
@@ -29,7 +31,7 @@ DefineFunction(ClipRegion_GetMax) {
 DefineFunction(ClipRegion_Pop) {
   WidgetRenderer_Flush();
   Renderer_PopScissor();
-  GetStack().pop();
+  GetStack().pop_back();
 }
 
 DefineFunction(ClipRegion_Push) {
@@ -38,7 +40,7 @@ DefineFunction(ClipRegion_Push) {
   V2 newPos = args.pos;
   V2 newSize = args.size;
 
-  Vector<ClipRegion>& stack = GetStack();
+  std::vector<ClipRegion>& stack = GetStack();
   if (stack.size()) {
     V2 p1 = Max(stack.back().lower, newPos);
     V2 p2 = Min(stack.back().upper, newPos + newSize);
@@ -48,12 +50,12 @@ DefineFunction(ClipRegion_Push) {
 
   V2 pos(newPos.x, vp->size.y - (newPos.y + newSize.y));
   Renderer_PushScissorOn(pos * vp->resolution, newSize * vp->resolution);
-  GetStack().push(ClipRegion(newPos, newPos + newSize));
+  GetStack().push_back(ClipRegion(newPos, newPos + newSize));
 }
 
 DefineFunction(ClipRegion_PushNoClip) {
   WidgetRenderer_Flush();
   Renderer_PushScissorOff();
   Viewport const& vp = Viewport_Get();
-  GetStack().push(ClipRegion(vp->position, vp->position + vp->size));
+  GetStack().push_back(ClipRegion(vp->position, vp->position + vp->size));
 }

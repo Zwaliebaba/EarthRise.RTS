@@ -45,7 +45,7 @@ namespace Neuron
       m_size += sizeof(_value);
     }
 
-    // Write an int32
+    // Write an int32_t
     [[deprecated("Use Write<int32_t>() instead")]] void WriteInt32(const int32_t _value)
     {
       ASSERT_TEXT(m_size + sizeof(_value) <= DATALOAD_SIZE, "WriteInt32 out of bounds");
@@ -60,7 +60,7 @@ namespace Neuron
       m_size += sizeof(_value);
     }
 
-    // Write an int64
+    // Write an int64_t
     [[deprecated("Use Write<int64_t>() instead")]] void WriteInt64(const int64_t _value)
     {
       ASSERT_TEXT(m_size + sizeof(_value) <= DATALOAD_SIZE, "WriteInt64 out of bounds");

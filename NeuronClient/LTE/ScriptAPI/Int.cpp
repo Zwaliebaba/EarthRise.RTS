@@ -5,10 +5,10 @@ TypeAlias(signed int, int);
 TypeAlias(signed int, Int);
 TypeAlias(unsigned int, uint);
 TypeAlias(unsigned int, Uint);
-TypeAlias(int32, Int32);
-TypeAlias(uint32, Uint32);
-TypeAlias(int64, Int64);
-TypeAlias(uint64, Uint64);
+TypeAlias(int32_t, Int32);
+TypeAlias(uint32_t, Uint32);
+TypeAlias(int64_t, Int64);
+TypeAlias(uint64_t, Uint64);
 
 DefineConversion(int_to_double, int, double) {
   dest = (double)src;
@@ -34,11 +34,11 @@ DefineConversion(int_to_llong, int, long long) {
   dest = (long long)src;
 }
 
-DefineConversion(int32_to_int, int32, int) {
+DefineConversion(int32_to_int, int32_t, int) {
   dest = (int)src;
 }
 
-DefineConversion(int64_to_int, int64, int) {
+DefineConversion(int64_to_int, int64_t, int) {
   dest = (int)src;
 }
 

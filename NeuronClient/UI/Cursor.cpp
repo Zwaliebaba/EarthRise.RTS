@@ -1,6 +1,7 @@
 #include "Cursor.h"
 #include "LTE/AutoClass.h"
-#include "LTE/Vector.h"
+
+#include <vector>
 
 namespace {
   AutoClass(Cursor,
@@ -9,8 +10,8 @@ namespace {
     Cursor() {}
   };
 
-  Vector<Cursor>& GetStack() {
-    static Vector<Cursor> stack;
+  std::vector<Cursor>& GetStack() {
+    static std::vector<Cursor> stack;
     return stack;
   }
 }
@@ -29,9 +30,9 @@ DefineFunction(Cursor_GetLast) {
 }
 
 DefineFunction(Cursor_Pop) {
-  GetStack().pop();
+  GetStack().pop_back();
 }
 
 DefineFunction(Cursor_Push) {
-  GetStack().push(Cursor(args.pos, args.posLast));
+  GetStack().push_back(Cursor(args.pos, args.posLast));
 }

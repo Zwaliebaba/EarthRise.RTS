@@ -87,7 +87,7 @@ The intended future direction is a native DirectX 12 renderer and MMO-capable ga
   - `Volume`
 - Common legacy patterns include:
   - include guards like `#ifndef Name_h__`
-  - typedefs like `uint`, `uint32`, and `uchar`
+  - typedefs like `uint`, `uint32_t`, and `uchar`
   - raw pointers and manual ownership
   - C-style strings in older systems
   - macros such as `DEBUG_ASSERT`, `Fatal`, `__debugbreak();`, and `DebugTrace`

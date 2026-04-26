@@ -42,19 +42,11 @@ namespace LTE {
   }
 
   inline Button Button_LeftStick() {
-#ifdef LIBLT_WINDOWS
     return Button_Joy(0, 8);
-#else
-    return Button_Joy(0, 9);
-#endif
   }
 
   inline Button Button_RightStick() {
-#ifdef LIBLT_WINDOWS
     return Button_Joy(0, 9);
-#else
-    return Button_Joy(0, 10);
-#endif
   }
 }
 

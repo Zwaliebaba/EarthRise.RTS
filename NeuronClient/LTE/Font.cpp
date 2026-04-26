@@ -23,7 +23,7 @@ TypeAlias(Reference<FontT>, Font);
 namespace
 {
   using FontCache = Map<String, Font>;
-  using KerningMap = std::unordered_map<uint32, float>;
+  using KerningMap = std::unordered_map<uint32_t, float>;
 
   FontCache& GetFontCache()
   {
@@ -33,7 +33,7 @@ namespace
 
   struct TextGlyph
   {
-    uint32 codepoint;
+    uint32_t codepoint;
     V2 uvMin;
     V2 uvMax;
     V2 origin;
@@ -49,7 +49,7 @@ namespace
 
   struct FontImpl : FontT
   {
-    mutable Map<uint32, TextGlyph> glyphs;
+    mutable Map<uint32_t, TextGlyph> glyphs;
     mutable V2U cursor;
     Texture2D texture;
     Texture2D glyphBitmap;
@@ -68,11 +68,11 @@ namespace
       }
     }
 
-    void AddGlyph(uint32 codepoint) const
+    void AddGlyph(uint32_t codepoint) const
     {
       static Shader compute = Shader_Create("identity.jsl", "compute/sdffont.jsl");
 
-      uint32 glyphIndex = FT_Get_Char_Index(face, codepoint);
+      uint32_t glyphIndex = FT_Get_Char_Index(face, codepoint);
       if (glyphIndex == 0)
       {
         TextGlyph& glyph = glyphs[codepoint];
@@ -185,8 +185,8 @@ namespace
 #if 0
       /* Render all chars to the bitmap. */
       {
-        uint32 glyphIndex;
-        uint32 c = FT_Get_First_Char(face, &glyphIndex);
+        uint32_t glyphIndex;
+        uint32_t c = FT_Get_First_Char(face, &glyphIndex);
 
         while (glyphIndex != 0)
         {
@@ -213,7 +213,7 @@ namespace
       const TextGlyph* prev = nullptr;
       for (UniStringIterator it = UniString_Begin(text); it.HasMore(); it.Advance())
       {
-        uint32 codepoint = it.Get();
+        uint32_t codepoint = it.Get();
         const TextGlyph* glyph = glyphs.get(codepoint);
         if (!glyph)
         {
@@ -300,7 +300,7 @@ namespace
       const TextGlyph* prev = nullptr;
       for (UniStringIterator it = UniString_Begin(text); it.HasMore(); it.Advance())
       {
-        uint32 codepoint = it.Get();
+        uint32_t codepoint = it.Get();
         const TextGlyph* glyph = glyphs.get(codepoint);
         if (!glyph)
         {

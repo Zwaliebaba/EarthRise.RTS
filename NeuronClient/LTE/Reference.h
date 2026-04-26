@@ -6,6 +6,7 @@
 
 #define DEBUG_POINTERS
 
+/* Phase 3 contract: intrusive reference counts are thread-confined. */
 struct RefCounted : public NullBase<RefCounted> {
   uint refCount;
 

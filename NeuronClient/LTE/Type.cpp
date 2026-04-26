@@ -17,6 +17,7 @@ String const kPointerName = "Pointer";
 String const kReferenceName = "Reference";
 
 namespace {
+  /* Phase 3 contract: registry mutation is startup/single-threaded. */
   Vector<Type>& GetTypeList() {
     static Vector<Type> v;
     return v;

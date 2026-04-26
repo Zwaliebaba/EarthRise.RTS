@@ -38,6 +38,44 @@ Still intentionally deferred:
 - Remaining `.t` access inside wrapper internals, `Type`, list-link plumbing, and raw tuple vertex fields where `.get()` would not be equivalent or the type has no accessor yet.
 - Removing `RingBuffer.h`, rewriting reflected `Stack<T>`/`Array<T>` fields, migrating public `AutoPtr` APIs such as `Location::Read` and `Diff_Create`, or changing `Array<T>` buffer transfer semantics.
 
+## Phase 5 Current Inventory - April 26, 2026
+
+Phase 5 has moved from inventory into implementation-local pilot migrations. Reflected fields, script-visible APIs, serialization shapes, and intrusive ownership semantics remain unchanged.
+
+| Type family | Current boundary | Migration status | Primary blockers | Recommended next slice |
+|---|---|---|---|---|
+| `String` | Reflection, script APIs, utilities, broad gameplay/runtime use | Deferred for broad replacement | Metadata, implicit `char const*`, utility surface, very high usage | Add `std::string_view` overloads only in pure helper code. |
+| `Vector<T>` | Reflection, script member functions, local containers | First private UI stack pilot complete | Reflected fields, helper semantics, direct `.v` history | Continue with non-reflected local temporaries after confirming no `Type_Get` or script path. |
+| `Array<T>` | Reflected buffers, raw owned storage, file/audio/graphics buffers | Correctness fixed; migration deferred | `release()`/`replace()`, raw `buffer`, serialized shape | Audit byte-buffer users before selecting a `std::vector` or `std::span` pilot. |
+| `Map<K, V>` | Reflected ordered maps and local maps | Deferred for broad replacement | Deterministic order, `_ToStream`, metadata | Add/standardize `FindPtr` helper before local map conversions. |
+| `HashMap<K, V>` / `HashSet<T>` | Mostly STL-backed wrappers | Partially migrated in non-reflected sites | Reflected `HashMap` fields such as UI widget maps | Continue converting implementation-local uses only. |
+| `Stack<T>` | Small STL-backed wrapper with implicit top conversion | First simple local pilot complete in profiler code | Implicit conversion and arithmetic push behavior in broader use | Continue converting only simple local stacks using `push`, `pop`, `back`, and `size`. |
+| `Tuple2/3/4` | AutoClass-reflected named values and local tuple-like values | Equality bugs fixed | Reflected field names and generated metadata | Convert non-reflected local tuple-like temporaries to named structs or standard tuples. |
+| `AutoPtr<T>` | Legacy ownership wrapper and reflected ownership fields | Local ownership cleanup partially done | Transfer-on-copy, reflected fields, public APIs | Continue implementation-local `std::unique_ptr` conversions; avoid reflected fields. |
+| `Reference<T>` | Intrusive shared ownership across engine objects/resources/scripts | Contract documented as thread-confined | Intrusive allocation, public `.t`, implicit raw conversion, thread policy | Do not replace; reduce external `.t` and resolve Phase 3 ownership contracts first. |
+| `Pointer<T>` | Non-owning reflected pointer wrapper | Compatibility APIs partially in place | Lifetime is external, reflection metadata, comparison with `Reference` | Keep wrapper stable; convert only obvious local observer variables later. |
+| `RingBuffer<T>` | Compatibility/reflection type; no active production use identified in prior pass | Active use migrated; header retained | Possible metadata/type-name dependency | Leave for a later dead-code/removal verification pass. |
+
+Recommended Phase 5 pilot: continue with implementation-local `HashMap`/`HashSet`, `AutoPtr`, simple `Stack<T>`, or local `Vector<T>` sites before touching `String`, `Array`, `Reference`, public APIs, or reflected fields. A pilot must name the subsystem, files, test coverage, and rollback path before code changes land.
+
+### Pilot 1: Profiler Local Stack
+
+- Subsystem: `NeuronClient/LTE` profiler internals.
+- File: `NeuronClient/LTE/Profiler.cpp`.
+- Change: replaced the private `Stack<char const*> segments` member with `std::vector<char const*>` and updated the local `StackFrame` snapshot constructor plus push/pop calls.
+- Boundary check: this stack is private implementation state, not a reflected field, public API, script-visible type, or serialized shape.
+- Rollback path: restore the `Stack.h` include, `Stack<char const*>` member, `StackFrame(Stack<char const*> const&)`, and `push`/`pop` calls.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
+### Pilot 2: UI Local Vector Stacks
+
+- Subsystem: `NeuronClient/UI` cursor and clip-region internals.
+- Files: `NeuronClient/UI/Cursor.cpp` and `NeuronClient/UI/ClipRegion.cpp`.
+- Change: replaced private static `Vector<Cursor>` and `Vector<ClipRegion>` stack storage with `std::vector` and updated local push/pop calls to `push_back`/`pop_back`.
+- Boundary check: the `Cursor` and `ClipRegion` value types remain `AutoClass` reflected types; only `.cpp`-local stack containers changed, with no public API, script-visible signature, serialization shape, or reflected field change.
+- Rollback path: restore the `LTE/Vector.h` includes, `Vector<Cursor>`/`Vector<ClipRegion>` stack return types and statics, and `push`/`pop` calls.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
 ## Search Summary
 
 Audit scope:

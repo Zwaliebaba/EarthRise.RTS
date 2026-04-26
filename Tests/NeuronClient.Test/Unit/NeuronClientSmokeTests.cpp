@@ -3,12 +3,32 @@
 #include "NeuronClient.h"
 
 #include "LTE/Array.h"
+#include "LTE/Job.h"
+#include "LTE/Thread.h"
 #include "LTE/Tuple.h"
+
+#include <atomic>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace NeuronClientTest::Unit
 {
+  struct ThreadSmokeJob : LTE::JobT
+  {
+    std::atomic_bool& ran;
+
+    ThreadSmokeJob(std::atomic_bool& ran)
+      : ran(ran)
+    {}
+
+    char const* GetName() const override { return "ThreadSmokeJob"; }
+
+    void OnRun(uint) override
+    {
+      ran.store(true);
+    }
+  };
+
   TEST_CLASS(NeuronClientSmokeTests)
   {
   public:
@@ -59,6 +79,17 @@ namespace NeuronClientTest::Unit
       right[2] = 3;
 
       Assert::IsTrue(left == right);
+    }
+
+    TEST_METHOD(ThreadWaitMarksJobFinished)
+    {
+      std::atomic_bool ran(false);
+      Thread thread = Thread_Create(new ThreadSmokeJob(ran));
+
+      thread->Wait();
+
+      Assert::IsTrue(ran.load());
+      Assert::IsTrue(thread->IsFinished());
     }
   };
 }

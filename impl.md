@@ -17,7 +17,9 @@ This plan prioritizes build stability, correctness, and testability first, then 
 - Phase 2 has started. Tuple equality and Array equality are currently in corrected form and now have regression tests that protect against the planned self-compare and byte-count comparison bugs.
 - Phase 2 is complete locally for x64-debug. Release-safe assertion semantics are implemented through `ASSERT_RELEASE` and `ASSERT_RELEASE_TEXT`, routed through `Neuron::Fatal`, and covered by Microsoft Native Unit Tests.
 - Gate C is satisfied locally for x64-debug. x64-release remains a follow-up validation item before broad Phase 3 work.
-- Phase 3 has started with `phase3-safety-inventory.md`, documenting current `Reference<T>` and type metadata registry thread-safety assumptions before atomic or locking changes are attempted.
+- Phase 3 has started with `phase3-safety-inventory.md`, documenting current `Reference<T>` and type metadata registry thread-safety assumptions before atomic or locking changes are attempted. `ThreadImpl::finished` is now atomic and covered by a NeuronClient unit smoke test.
+- Phase 4 has started with contributor-facing documentation: `README.md`, `ARCHITECTURE.md`, and refreshed documentation-layout guidance in `.github/coding-standards.md`.
+- Phase 5 has started in `types.md`; reflected fields, script-visible APIs, serialization shapes, and intrusive ownership semantics remain unchanged while implementation-local pilot migrations proceed.
 
 ## 2. Delivery Principles
 - Keep each phase build-safe and shippable.
@@ -296,18 +298,23 @@ Priority: High
 #### Current Status
 - Started. `phase3-safety-inventory.md` records the current intrusive reference counting and lazy type registry risks.
 - Current recommendation is to treat `Reference<T>` and type metadata registration as thread-confined/startup-only until cross-thread ownership and runtime registration requirements are proven.
-- No atomic or locking behavior has been changed yet.
+- First contract comments now mark `RefCounted`, metadata storage, registry mutation, and LTE `ThreadImpl` job ownership as startup/thread-confined assumptions.
+- A Phase 3 boundary scan now covers LTE Thread/Job, NeuronCore async/task/event helpers, and reflection registry mutation points.
+- `ThreadImpl::finished` is now atomic and covered by a NeuronClient unit smoke test that waits for a simple LTE job to complete.
+- No `RefCounted` atomic or type-registry locking behavior has been changed yet.
 
 #### Work Items
 1. Reference counting safety
 - Migrate RefCounted refCount to atomic or formally document single-threaded contract.
 - Add stress tests for concurrent increment and decrement scenarios where applicable.
 - Recommendation: begin with a call-site inventory. Do not change memory ordering until ownership transfer points are known.
+- Current slice: keep `Reference<T>` thread-confined and evaluate forced thread termination before changing `refCount` semantics.
 
 2. Type registry synchronization
 - Add mutex protection in dynamic type registration paths.
 - Document thread-safety contract for registration lifecycle.
 - Recommendation: prefer startup-only registration if that matches runtime behavior; locking every lookup should be avoided unless registration can happen after startup.
+- Current slice: decide between explicit startup registration and guarded runtime lazy registration before adding registry locks.
 
 3. Event and async ordering audit
 - Verify EventManager and ASyncLoader lock and atomic ordering invariants.
@@ -332,6 +339,13 @@ Priority: High
 #### Objectives
 - Improve build reproducibility, contributor onboarding, and project governance.
 
+#### Current Status
+- Started. `README.md` now documents the current target map, prerequisites, CMake preset workflow, vcpkg builtin baseline, test commands, and current validation status.
+- `ARCHITECTURE.md` now documents the current three-target architecture, dependency boundaries, Phase 3 safety contracts, and deferred DirectX 12/MMO direction.
+- `.github/coding-standards.md` documentation-layout guidance now matches the current repository files instead of absent planning documents.
+- Asset staging remains the existing `EarthRise` post-build copy of `GameData`; no staging behavior has changed yet.
+- Sanitizer presets, TODO governance, CI reporting, and any vcpkg configuration beyond the pinned manifest baseline remain pending.
+
 #### Work Items
 1. CMake and presets
 - Add sanitizer presets where practical.
@@ -347,6 +361,7 @@ Priority: High
 - Add ARCHITECTURE overview document.
 - Refactor coding standards into mandatory rules, modernization guidance, and legacy exceptions.
 - Recommendation: document current reality first. Mark D3D12 as deferred roadmap direction, and make custom-to-standard type modernization the active modernization theme.
+- Current status: README and ARCHITECTURE are present, and documentation-layout guidance has been corrected to the current repository shape.
 
 4. TODO governance
 - Standardize TODO format with issue IDs.
@@ -356,6 +371,7 @@ Priority: High
 - Document baseline and expected setup.
 - Add vcpkg configuration for dependency pinning policy.
 - Recommendation: pin and document the vcpkg baseline before adding optional packages.
+- Current status: `vcpkg.json` already pins builtin baseline `89dd0f4d241136b843fb55813b2f0fa6448c204d`; README now documents the baseline and declared dependencies.
 
 #### Exit Criteria
 - New contributor can build from README instructions.
@@ -369,11 +385,20 @@ Priority: High
 - Reduce dependency on custom LTE types in non-reflected, implementation-local code.
 - Build a repeatable migration pattern from custom types to standard C++ types without breaking reflection, serialization, scripting, or generated metadata.
 
+#### Current Status
+- Started. `types.md` now includes a Phase 5 current inventory table for `String`, `Vector`, `Array`, `Map`, `HashMap`, `HashSet`, `Stack`, `Pointer`, `Reference`, `AutoPtr`, `Tuple`, and related LTE wrappers.
+- The active Phase 5 stance is implementation-local pilot migration only; reflected fields, script-visible APIs, serialization shapes, and intrusive ownership semantics remain unchanged.
+- First pilot complete: `NeuronClient/LTE/Profiler.cpp` now uses `std::vector<char const*>` for a private profiler segment stack instead of `Stack<char const*>`.
+- Second pilot complete: `NeuronClient/UI/Cursor.cpp` and `NeuronClient/UI/ClipRegion.cpp` now use `std::vector` for private `.cpp`-local UI stacks instead of LTE `Vector`.
+- Remaining recommended pilots are implementation-local `HashMap`/`HashSet`, `AutoPtr`, or additional simple `Stack<T>` sites with named subsystem, file list, test coverage, and rollback path.
+- High-risk families remain deferred for broad replacement: `String`, `Vector`, `Array`, `Reference`, `Pointer`, and any reflected fields.
+
 #### Work Items
 1. Type migration inventory
 - Categorize `String`, `Vector`, `Array`, `Map`, `HashMap`, `HashSet`, `Stack`, `Pointer`, `Reference`, `AutoPtr`, `Tuple`, and related LTE wrappers by usage.
 - Separate reflected fields, script-visible APIs, serialization paths, and implementation-local usage.
 - Recommendation: maintain a migration table with status, owning subsystem, test coverage, and blockers.
+- Current status: initial Phase 5 inventory table added to `types.md` with current boundaries, migration status, blockers, and recommended next slices.
 
 2. Compatibility API cleanup
 - Prefer standard-like APIs such as `.get()`, `.reset()`, `begin()`, `end()`, `data()`, `empty()`, and explicit range access before changing storage types.
@@ -384,6 +409,7 @@ Priority: High
 - Convert local, non-reflected `Vector`, `HashMap`, `HashSet`, `Map`, and `Array` usage to `std::vector`, `std::unordered_map`, `std::unordered_set`, `std::map`, `std::span`, or `std::unique_ptr<T[]>` where semantics match.
 - Keep reflected fields on LTE wrappers until metadata support or adapters exist.
 - Recommendation: start with low-risk implementation files that do not cross script, serialization, or generated metadata boundaries.
+- Current status: first non-reflected pilot converted a private profiler `Stack<char const*>` to `std::vector<char const*>`; second pilot converted private UI cursor and clip-region `Vector` stacks to `std::vector`.
 
 4. Ownership modernization
 - Migrate implementation-local `AutoPtr` ownership to `std::unique_ptr` where move-only semantics are acceptable.
