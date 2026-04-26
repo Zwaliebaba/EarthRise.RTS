@@ -9,10 +9,13 @@
 #include "UI/Glyphs.h"
 #include "UI/Icon.h"
 
+#include <algorithm>
+#include <vector>
+
 double kValueMult = 10.0;
 
 namespace {
-  Vector<Universe*> gActive;
+  std::vector<Universe*> gActive;
 }
 
 Universe* Universe_Get() {
@@ -23,17 +26,19 @@ AutoClassDerivedEmpty(UniverseImpl, Universe)
   DERIVED_TYPE_EX(UniverseImpl)
 
   UniverseImpl() {
-    gActive.push(this);
+    gActive.push_back(this);
   }
 
   ~UniverseImpl() {
-    gActive.remove(this);
+    auto it = std::find(gActive.begin(), gActive.end(), this);
+    if (it != gActive.end())
+      gActive.erase(it);
   }
 };
 
 DERIVED_IMPLEMENT(UniverseImpl)
 
-Time Universe_Age() {
+gametime_t Universe_Age() {
   Universe* universe = Universe_Get();
   return universe ? universe->age : 0;
 }

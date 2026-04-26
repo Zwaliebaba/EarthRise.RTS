@@ -4,7 +4,7 @@
 HandlerFunctionBase::HandlerFunctionBase(EventSubscriber* subscriber)
   : m_subscriber(subscriber) {}
 
-void HandlerFunctionBase::Exec(Event& _evnt) { Call(_evnt); }
+void HandlerFunctionBase::Exec(GameEvent& _evnt) { Call(_evnt); }
 
 EventSubscriber* HandlerFunctionBase::GetSubscriber() const { return m_subscriber; }
 

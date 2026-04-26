@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-const Time kMarketIntervalDuration = 1000;
+const gametime_t kMarketIntervalDuration = 1000;
 
 namespace {
   inline bool SortAsks(Order const& a, Order const& b) {

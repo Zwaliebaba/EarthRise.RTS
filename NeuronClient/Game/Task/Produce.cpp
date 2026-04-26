@@ -9,7 +9,7 @@
 #include "LTE/StackFrame.h"
 
 namespace {
-  /* TODO : Use Time, not float. */
+  /* TODO : Use gametime_t, not float. */
   AutoClass(TaskProduceInstance,
     float, remaining,
     bool, inProgress)

@@ -76,6 +76,66 @@ Recommended Phase 5 pilot: continue with implementation-local `HashMap`/`HashSet
 - Rollback path: restore the `LTE/Vector.h` includes, `Vector<Cursor>`/`Vector<ClipRegion>` stack return types and statics, and `push`/`pop` calls.
 - Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
 
+### Pilot 3: LTE Render State Vector Stacks
+
+- Subsystem: `NeuronClient/LTE` render state helpers.
+- Files: `NeuronClient/LTE/RenderStyle.cpp`, `NeuronClient/LTE/Viewport.cpp`, and `NeuronClient/LTE/ParticleSystem.cpp`.
+- Change: replaced private anonymous-namespace `Vector<RenderStyle>`, `Vector<Viewport>`, and `Vector<ParticleSystem>` stack storage with `std::vector`, updating local push/pop calls to `push_back`/`pop_back`.
+- Boundary check: public render-state functions and script-visible particle system declarations remain unchanged; reflected particle data, particle maps, and draw buffers stay on LTE wrappers.
+- Rollback path: restore the private stack return types/statics to LTE `Vector` and change `push_back`/`pop_back` calls back to `push`/`pop`.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
+### Pilot 4: Active Engine And Window Stacks
+
+- Subsystems: `NeuronClient/Module`, `NeuronClient/Game`, and `NeuronClient/LTE` active object stacks.
+- Files: `NeuronClient/Module/SoundEngine.cpp`, `NeuronClient/Module/PhysicsEngine.cpp`, `NeuronClient/Game/Camera.cpp`, and `NeuronClient/LTE/Window.cpp`.
+- Change: replaced private `Vector` stack storage for active sound engines, physics engines, cameras, and windows with `std::vector`, updating local push/pop calls to `push_back`/`pop_back`.
+- Boundary check: public accessor and push/pop function signatures remain unchanged; reflected camera implementation fields, window viewport state, and engine implementation internals stay untouched.
+- Rollback path: restore the private stack types to LTE `Vector`, restore `push`/`pop` calls, and replace the `std::find`/`erase` destructor removal in `SoundEngine.cpp` with `Vector::remove`.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
+### Pilot 5: Rendering Scratch Buffers
+
+- Subsystems: UI widget rendering, font rendering, particle rendering, and mesh upload staging.
+- Files: `NeuronClient/UI/WidgetRenderer.cpp`, `NeuronClient/LTE/Font.cpp`, `NeuronClient/LTE/ParticleSystem.cpp`, and `NeuronClient/LTE/Renderer.cpp`.
+- Change: replaced private scratch `Vector` buffers that already flow through raw `data()`/`size()` renderer calls with `std::vector`, updating local `push`/`<<` calls to `push_back`.
+- Boundary check: reflected vertex value types, glyph maps, particle maps, renderer state stacks, public renderer overloads, and draw-call signatures remain unchanged.
+- Rollback path: restore the scratch buffer declarations to LTE `Vector`, restore `push`/`<<` calls, and revert `WidgetRenderer`'s private `Render` helper parameter to `Vector<T> const&`.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
+### Pilot 6: Internal Service Lists
+
+- Subsystems: universe activation, module registration, and program logging.
+- Files: `NeuronClient/Game/Universe.cpp`, `NeuronClient/LTE/Module.cpp`, and `NeuronClient/LTE/ProgramLog.cpp`.
+- Change: replaced private internal `Vector` lists for active universes, global modules, and log entries with `std::vector`, updating local append/remove/contains logic to standard algorithms and `push_back`.
+- Boundary check: public functions such as `Universe_Get`, `Module_RegisterGlobal`, `Module_UpdateGlobal`, `Log_GetEntries`, and `Log_GetEntry` keep their signatures and behavior; reflected universe fields and module/log object types remain unchanged.
+- Rollback path: restore LTE `Vector` includes and private list declarations, restore `push` and `remove` calls, and restore `Vector::contains` for duplicate-module checks.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
+### Pilot 7: Renderer Standard Vector Adapter
+
+- Subsystems: renderer draw helper API and trail rendering scratch buffers.
+- Files: `NeuronClient/LTE/Renderer.h`, `NeuronClient/LTE/Renderer.cpp`, and `NeuronClient/Game/Object/Trail.cpp`.
+- Change: added additive `Renderer_DrawVertices` overloads for `std::vector<Vertex>` with `std::vector<uint>` and `std::vector<ushort>` indices, then migrated trail draw scratch buffers to `std::vector`.
+- Boundary check: existing LTE `Vector` renderer overloads remain in place, public trail object/reflection fields remain unchanged, and the new overloads forward to the same static draw path.
+- Rollback path: remove the `std::vector` overload declarations/definitions and restore trail scratch buffers and push calls to LTE `Vector`.
+- Validation: built `NeuronClient.Test` and ran the registered `NeuronClient.Test` CTest entry successfully after the change.
+
+## Phase 5 Completion Boundary - April 26, 2026
+
+The safe implementation-local migration pass is complete locally for x64-debug. Completed pilots migrated private stacks, service lists, and scratch buffers where standard containers did not change public APIs, reflection metadata, script-visible signatures, serialization shape, or intrusive ownership semantics.
+
+Deferred remaining wrappers are intentionally out of scope for this pass:
+
+- Query buffers in `Component/Collidable.cpp` and `Component/ProximityTracker.cpp` still flow into APIs that require `Vector<ObjectT*>&`.
+- Task and project item-delta buffers still flow into `GetInputs(Vector<ItemDelta>&)` and `GetOutputs(Vector<ItemDelta>&)` contracts.
+- Function/type registries in `LTE/Function.cpp` and `LTE/Type.cpp` expose LTE `Vector`/`Map` results or are part of startup metadata registration.
+- `UI/Widget/Dynamic.cpp` keeps `HashMap<HashT, Widget>` as an `AutoClassDerived` reflected field.
+- `DrawState.h`, `Renderer.cpp` state stacks, `Environment.h`, and `Pushable.h` remain wrapper-based state infrastructure until renderer/state APIs are redesigned.
+- `AutoPtr`, `Reference`, `Pointer`, `String`, `Array`, and broad reflected `Vector` fields remain deferred until ownership, metadata, and public API adapters are designed.
+
+Gate E is satisfied for the current plan: multiple standard-type migration pilots are complete, rollback paths are documented, and the focused NeuronClient build/test validation passes.
+
 ## Search Summary
 
 Audit scope:

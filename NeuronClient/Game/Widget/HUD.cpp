@@ -151,18 +151,9 @@ namespace {
 
       if (!self->piloting) return;
 
-      static Axis yawAxisJoy = Axis_Product(
-        Axis_RightStickX()->SetDeadZone(kControlDeadZone)->SetPower(kControlPower),
-        Axis_Button(Button_LeftStick(), true));
-      static Axis pitchAxisJoy = Axis_RightStickY()
-        ->SetDeadZone(kControlDeadZone)->SetPower(kControlPower);
-      static Axis rollAxisJoy = Axis_Product(
-        Axis_RightStickX()->SetDeadZone(kControlDeadZone)->SetPower(kControlPower),
-        Axis_Button(Button_LeftStick())->Invert());
-
       static GenericButton gBoostButton =
         Settings_Button("Control/Piloting/Use Boost Capacitor",
-          Button_Or(Button_RightStick(), Button_Key(Key_Tab)));
+          Button_Key(Key_Tab));
 
       static GenericButton gCruiseButton = 
         Settings_Button("Control/Piloting/Toggle Cruise",
@@ -175,9 +166,7 @@ namespace {
 
       static GenericButton gFireButton =
         Settings_Button("Control/Piloting/Fire Weapons", 
-          Button_Or(
-            Button_Mouse(MouseButton_Right),
-            Button_Axis(Axis_RightTrigger(), 1.0f)));
+          Button_Mouse(MouseButton_Right));
 
       static GenericButton gForwardButton =
         Settings_Button("Control/Piloting/Thrust Forward", Button_Key(Key_W));
@@ -223,11 +212,6 @@ namespace {
           controller->isFiring = true;
       }
 
-#if 0
-      controller->rotation.x += pitchAxisJoy->Get();
-      controller->rotation.y += yawAxisJoy->Get();
-      controller->rotation.z += rollAxisJoy->Get();
-#endif
       controller->rotation *= kSensitivity;
 
       /* Camera. */ {
@@ -276,10 +260,6 @@ namespace {
           Sound_Play2D("ui/targetlost.wav", 0.1f);
           self->piloting->GetTargets()->elements.clear();
         }
-
-        controller->thrust += right * Axis_LeftStickX()->Get();
-        controller->thrust -= up * Axis_LeftStickY()->Get();
-        controller->thrust += look * Axis_LeftTrigger()->Get();
 
         /* Targeting. */ {
           Pointer<ComponentTargets> targets = self->piloting->GetTargets();

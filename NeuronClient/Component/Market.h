@@ -16,7 +16,7 @@
 const uint kMarketHistoryDepth = 27;
 
 AutoClass(Trade,
-  Time, time,
+  gametime_t, time,
   Quantity, volume,
   Quantity, price)
 
@@ -64,7 +64,7 @@ typedef Map<HashT, MarketData> MarketDataMap;
 
 AutoClass(ComponentMarket,
   MarketDataMap, elements,
-  Time, timer)
+  gametime_t, timer)
 
   ComponentMarket() : timer(0) {}
 

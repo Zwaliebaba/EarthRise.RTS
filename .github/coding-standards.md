@@ -81,7 +81,6 @@ EarthRise.RTS/
 ├── ARCHITECTURE.md                  # Current target map and boundaries
 ├── build-baseline.md                # Current build and warning baseline
 ├── impl.md                          # Staged implementation plan
-├── phase3-safety-inventory.md       # Thread and memory safety inventory
 ├── .github/
 │   ├── agents.md                    # AI agent instructions and project summary
 │   ├── coding-standards.md          # This file

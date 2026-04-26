@@ -1,12 +1,5 @@
 #include "CppUnitTest.h"
-
 #include "NeuronCore.h"
-
-#include <array>
-#include <list>
-#include <mutex>
-#include <string>
-
 #include "DataReader.h"
 #include "DataWriter.h"
 #include "EventManager.h"
@@ -18,7 +11,7 @@ namespace NeuronCoreTest::Unit
 {
   namespace
   {
-    struct TestEvent : Event
+    struct TestEvent : GameEvent
     {};
 
     class CountingSubscriber : public EventSubscriber
@@ -39,6 +32,10 @@ namespace NeuronCoreTest::Unit
   TEST_CLASS(NeuronCoreSmokeTests)
   {
   public:
+    BEGIN_TEST_CLASS_ATTRIBUTE()
+      TEST_CLASS_ATTRIBUTE(L"Category", L"Unit.Smoke")
+    END_TEST_CLASS_ATTRIBUTE()
+
     TEST_METHOD(UmbrellaHeaderCompiles)
     {
       Assert::IsTrue(true);

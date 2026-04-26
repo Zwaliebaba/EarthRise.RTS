@@ -7,7 +7,7 @@
  *  DU - Distance Unit    -> 1 km
  *  MU - Mass Unit        -> 1 kg
  *  RU - Resource Unit    -> 1 J
- *  TU - Time unit        -> 1 S
+ *  TU - gametime_t unit        -> 1 S
  *  OU - Output unit      -> RU / TU          -> 1 W
  *  XU - Transfer Unit    -> (RU * DU) / TU
  */

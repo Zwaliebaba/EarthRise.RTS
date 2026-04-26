@@ -13,6 +13,7 @@
 #include "Thread.h"
 #include "V3.h"
 #include "Module/Settings.h"
+#include <atomic>
 #include <iostream>
 #include <vector>
 
@@ -121,6 +122,7 @@ namespace {
 
     bool active;
     bool flushes;
+    std::atomic_bool stopping;
 
     size_t totalFrames;
     size_t totalSamples;
@@ -142,8 +144,12 @@ namespace {
         return "Sampler";
       }
 
+      void OnCancel() override {
+        profiler->stopping.store(true);
+      }
+
       void OnRun(uint) {
-        while (true) {
+        while (!profiler->stopping.load()) {
           if (profiler->active) {
             {
               ScopedLock lock(profiler->samplesLock);
@@ -163,6 +169,7 @@ namespace {
       currentFrame(nullptr),
       active(false),
       flushes(kDefaultFlush),
+      stopping(false),
       maxTime(-1),
       samplesLock(Lock_Create())
     {

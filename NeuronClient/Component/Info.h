@@ -7,7 +7,7 @@
 
 AutoClass(InfoEntry,
   InfoLevelT, level,
-  Time, expiration)
+  gametime_t, expiration)
   InfoEntry() {}
 };
 

@@ -1,11 +1,11 @@
 #pragma once
 
-class Event
+class GameEvent
 {
   public:
-  bool operator==(const Event&) const = default;
+  bool operator==(const GameEvent&) const = default;
 
-  Event()
+  GameEvent()
     : m_consumed(false)
   {}
 
@@ -14,5 +14,5 @@ class Event
 
   protected:
   bool m_consumed;
-  virtual ~Event() = default;
+  virtual ~GameEvent() = default;
 };

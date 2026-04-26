@@ -15,6 +15,8 @@
 #include "LTE/ShaderInstance.h"
 #include "LTE/View.h"
 
+#include <vector>
+
 using TrailBaseT = ObjectWrapper<Component_Attachable<Component_Drawable<Component_Orientation<ObjectWrapperTail<ObjectType_Trail>>>>>;
 
 namespace
@@ -75,8 +77,8 @@ AutoClassDerived(Trail, TrailBaseT, Color, color, float, size, uint, length, flo
       if (!style->WillRender())
         return;
 
-      static Vector<Vertex> vertexArray;
-      static Vector<ushort> indexArray;
+      static std::vector<Vertex> vertexArray;
+      static std::vector<ushort> indexArray;
       vertexArray.clear();
       indexArray.clear();
 
@@ -105,17 +107,17 @@ AutoClassDerived(Trail, TrailBaseT, Color, color, float, size, uint, length, flo
           v.n = direction;
           v.u = (j ? 1.0f : -1.0f);
           v.v = opacity;
-          vertexArray.push(v);
+          vertexArray.push_back(v);
         }
 
         if (i + 1 < self->trail.size())
         {
-          indexArray.push(static_cast<short>(0 + indexOffset));
-          indexArray.push(static_cast<short>(1 + indexOffset));
-          indexArray.push(static_cast<short>(3 + indexOffset));
-          indexArray.push(static_cast<short>(0 + indexOffset));
-          indexArray.push(static_cast<short>(3 + indexOffset));
-          indexArray.push(static_cast<short>(2 + indexOffset));
+          indexArray.push_back(static_cast<ushort>(0 + indexOffset));
+          indexArray.push_back(static_cast<ushort>(1 + indexOffset));
+          indexArray.push_back(static_cast<ushort>(3 + indexOffset));
+          indexArray.push_back(static_cast<ushort>(0 + indexOffset));
+          indexArray.push_back(static_cast<ushort>(3 + indexOffset));
+          indexArray.push_back(static_cast<ushort>(2 + indexOffset));
         }
 
         totalLength += Length(direction);

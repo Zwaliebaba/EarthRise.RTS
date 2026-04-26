@@ -34,18 +34,26 @@ else()
     set(_DXC_HOST_ARCH "x64")
 endif()
 
-find_program(DXC_EXECUTABLE dxc
+find_program(EARTHRISE_DXC_EXECUTABLE dxc
     HINTS "$ENV{WindowsSdkDir}/bin/$ENV{WindowsSDKVersion}/${_DXC_HOST_ARCH}"
-    DOC "DirectX Shader Compiler (dxc.exe)"
-    REQUIRED)
+    DOC "DirectX Shader Compiler (dxc.exe)")
 
-message(STATUS "DXC found: ${DXC_EXECUTABLE}")
+if(EARTHRISE_DXC_EXECUTABLE)
+    message(STATUS "DXC found: ${EARTHRISE_DXC_EXECUTABLE}")
+else()
+    message(STATUS "DXC not found; shader compilation targets will be skipped")
+endif()
 
 function(target_compile_shaders TARGET_NAME)
     cmake_parse_arguments(ARG "" "SHADER_MODEL" "SHADERS" ${ARGN})
 
     if(NOT ARG_SHADER_MODEL)
         message(FATAL_ERROR "target_compile_shaders: SHADER_MODEL is required")
+    endif()
+
+    if(NOT EARTHRISE_DXC_EXECUTABLE)
+        message(WARNING "target_compile_shaders: DXC was not found; skipping shader target '${TARGET_NAME}_Shaders'")
+        return()
     endif()
 
     set(OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/CompiledShaders")
@@ -81,7 +89,7 @@ function(target_compile_shaders TARGET_NAME)
 
         add_custom_command(
             OUTPUT "${OUTPUT_HEADER}"
-            COMMAND "${DXC_EXECUTABLE}"
+            COMMAND "${EARTHRISE_DXC_EXECUTABLE}"
                 -T ${SHADER_TARGET}
                 -E main
                 -Vn ${VAR_NAME}

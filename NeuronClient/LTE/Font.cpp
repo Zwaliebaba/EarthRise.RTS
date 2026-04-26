@@ -13,6 +13,8 @@
 #include "FileSys.h"
 #include <FreeType/freetype.h>
 
+#include <vector>
+
 const V2U kTextureSize = 1024;
 const V2U kSDFSize = 1024;
 constexpr int kFontSize = 64;
@@ -202,8 +204,8 @@ namespace
       AUTO_FRAME;
       size /= kFontSize;
 
-      static Vector<TextVertex> vertices;
-      static Vector<uint> indices;
+      static std::vector<TextVertex> vertices;
+      static std::vector<uint> indices;
       vertices.clear();
       indices.clear();
 
@@ -230,12 +232,12 @@ namespace
         /* Indices. */
         {
           uint offset = vertices.size();
-          indices.push(offset + 0);
-          indices.push(offset + 1);
-          indices.push(offset + 2);
-          indices.push(offset + 0);
-          indices.push(offset + 2);
-          indices.push(offset + 3);
+          indices.push_back(offset + 0);
+          indices.push_back(offset + 1);
+          indices.push_back(offset + 2);
+          indices.push_back(offset + 0);
+          indices.push_back(offset + 2);
+          indices.push_back(offset + 3);
         }
 
         if (prev)
@@ -248,10 +250,10 @@ namespace
           V2 p1 = p0 + size * V2(glyph->size.x, 0);
           V2 p2 = p0 + size * glyph->size;
           V2 p3 = p0 + size * V2(0, glyph->size.y);
-          vertices.push(TextVertex(V3(p0, 0), c, V3(glyph->uvMin.x, glyph->uvMin.y, size)));
-          vertices.push(TextVertex(V3(p1, 0), c, V3(glyph->uvMax.x, glyph->uvMin.y, size)));
-          vertices.push(TextVertex(V3(p2, 0), c, V3(glyph->uvMax.x, glyph->uvMax.y, size)));
-          vertices.push(TextVertex(V3(p3, 0), c, V3(glyph->uvMin.x, glyph->uvMax.y, size)));
+          vertices.push_back(TextVertex(V3(p0, 0), c, V3(glyph->uvMin.x, glyph->uvMin.y, size)));
+          vertices.push_back(TextVertex(V3(p1, 0), c, V3(glyph->uvMax.x, glyph->uvMin.y, size)));
+          vertices.push_back(TextVertex(V3(p2, 0), c, V3(glyph->uvMax.x, glyph->uvMax.y, size)));
+          vertices.push_back(TextVertex(V3(p3, 0), c, V3(glyph->uvMin.x, glyph->uvMax.y, size)));
         }
 
         p.x += size * glyph->advance;

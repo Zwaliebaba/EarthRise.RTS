@@ -23,7 +23,7 @@ typedef ObjectWrapper
 
 struct Universe : public UniverseBaseT {
   uint depth;
-  Time age;
+  gametime_t age;
   Distribution<Item> colonyTypes;
   Vector<Object> loadedRegions;
   Item currencyBasis;

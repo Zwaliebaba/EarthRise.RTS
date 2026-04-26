@@ -50,7 +50,6 @@
 #include "HashSet.h"
 #include "InternalList.h"
 #include "Job.h"
-#include "Joystick.h"
 #include "Keyboard.h"
 #include "List.h"
 #include "ListElement.h"

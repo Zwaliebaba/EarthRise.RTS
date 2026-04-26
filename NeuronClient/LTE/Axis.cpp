@@ -1,7 +1,6 @@
 #include "Axis.h"
 #include "AutoPtr.h"
 #include "Button.h"
-#include "Joystick.h"
 #include "Math.h"
 #include "Mouse.h"
 #include "Pool.h"
@@ -32,26 +31,6 @@ namespace {
   };
 
   DERIVED_IMPLEMENT(AxisButton)
-
-  AutoClassDerived(AxisJoystick, AxisT,
-    uint, joyIndex,
-    JoystickAxis, axis)
-    DERIVED_TYPE_EX(AxisJoystick)
-    POOLED_TYPE
-
-    AxisJoystick() {}
-
-    float GetRaw() const {
-      Joystick* j = Joystick::Get(joyIndex);
-      return j ? j->GetAxis(axis) : zeroValue;
-    }
-
-    String ToString() const {
-      return Stringize() | "Joy " | joyIndex | " " | JoystickAxis_String[axis];
-    }
-  };
-
-  DERIVED_IMPLEMENT(AxisJoystick)
 
   AutoClassDerived(AxisMouse, AxisT,
     bool, vertical)
@@ -192,20 +171,7 @@ namespace LTE {
     if (Abs(Mouse_GetDY()) > 1)
       return Axis_MouseY();
 
-    for (uint i = 0; i < Joystick::GetCount(); ++i) {
-      Joystick* joy = Joystick::Get(i);
-
-      for (JoystickAxis axis = 0; axis < JoystickAxis_SIZE; ++axis) {
-        if (Abs(joy->GetAxisDelta(axis)) > .1f)
-          return Axis_Joy(i, axis);
-      }
-    }
-
     return nullptr;
-  }
-
-  Axis Axis_Joy(uint joystickIndex, JoystickAxis axis) {
-    return new AxisJoystick(joystickIndex, axis);
   }
 
   Axis Axis_MouseX() {

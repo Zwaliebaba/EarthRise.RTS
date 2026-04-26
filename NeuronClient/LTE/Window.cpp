@@ -13,10 +13,11 @@
 #include "SFML/Graphics.hpp"
 
 #include <cstdint>
+#include <vector>
 
 namespace {
-  Vector<Window>& GetStack() {
-    static Vector<Window> stack;
+  std::vector<Window>& GetStack() {
+    static std::vector<Window> stack;
     return stack;
   }
 
@@ -205,10 +206,10 @@ Window Window_Get() {
 
 void Window_Pop() {
   Viewport_Pop();
-  GetStack().pop();
+  GetStack().pop_back();
 }
 
 void Window_Push(Window const& window) {
-  GetStack().push(window);
+  GetStack().push_back(window);
   Viewport_Push(((WindowImpl*)window.get())->viewport);
 }

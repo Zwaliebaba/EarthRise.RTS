@@ -5,7 +5,6 @@
 
 #include "SFML/System.hpp"
 
-#include <Windows.h>
 #include <atomic>
 #include <memory>
 #include <thread>
@@ -39,12 +38,7 @@ namespace
 
     ~ThreadImpl() override
     {
-      if (thread && thread->joinable()) {
-        if (finished.load())
-          thread->join();
-        else
-          Terminate();
-      }
+      Terminate();
       job->OnEnd();
     }
 
@@ -60,10 +54,9 @@ namespace
 
     void Terminate() override
     {
-      ScopedLock lock(GetThreadLock());
       if (thread && thread->joinable()) {
-        ::TerminateThread((HANDLE)thread->native_handle(), 0);
-        thread->detach();
+        job->OnCancel();
+        thread->join();
       }
       finished.store(true);
     }

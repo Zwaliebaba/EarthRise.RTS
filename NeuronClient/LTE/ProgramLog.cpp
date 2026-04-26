@@ -1,11 +1,11 @@
 #include "ProgramLog.h"
 #include "OS.h"
 #include "StackFrame.h"
-#include "Vector.h"
 #include "Window.h"
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 const uint kMaxEntries = 4096;
 const bool kLogToFile = true;
@@ -14,8 +14,8 @@ String const kLogFile = OS_GetUserDataPath() + "logErrors.txt";
 const LogLevel::Enum level = LogLevel::Everything;
 
 namespace {
-  Vector<String>& GetEntryVector() {
-    static Vector<String> entries;
+  std::vector<String>& GetEntryVector() {
+    static std::vector<String> entries;
     return entries;
   }
 
@@ -30,7 +30,7 @@ namespace {
       stream << entry;
       String buffer;
       while (getline(stream, buffer)) {
-        GetEntryVector().push(buffer);
+        GetEntryVector().push_back(buffer);
         std::cout << entry << '\n';
         std::cout << std::flush;
         if (kLogToFile)

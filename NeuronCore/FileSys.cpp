@@ -65,8 +65,11 @@ std::wstring TextFile::ReadFile(const std::wstring& _fileName)
   if (fileInfo.EndOfFile.HighPart > 0)
     return {};
 
+  if (fileInfo.EndOfFile.LowPart % sizeof(wchar_t) != 0)
+    return {};
+
   // Create enough space for the file data.
-  data.resize(fileInfo.EndOfFile.LowPart);
+  data.resize(fileInfo.EndOfFile.LowPart / sizeof(wchar_t));
 
   // Read the data in.
   DWORD bytesRead = 0;

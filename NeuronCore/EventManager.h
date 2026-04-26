@@ -2,7 +2,7 @@
 
 #include <ranges>
 #include <typeindex>
-#include "Event.h"
+#include "GameEvent.h"
 
 class EventSubscriber;
 
@@ -16,11 +16,11 @@ class HandlerFunctionBase
   virtual void* GetInstance() = 0;
   [[nodiscard]] EventSubscriber* GetSubscriber() const;
 
-  void Exec(Event& _evnt);
+  void Exec(GameEvent& _evnt);
 
   private:
   // Implemented by MemberFunctionHandler
-  virtual void Call(Event& _evnt) = 0;
+  virtual void Call(GameEvent& _evnt) = 0;
 
   EventSubscriber* m_subscriber;
 };
@@ -38,7 +38,7 @@ template <class T, class EventType> class MemberFunctionHandler : public Handler
 
   void* GetInstance() override { return m_instance; }
 
-  void Call(Event& _evnt) override
+  void Call(GameEvent& _evnt) override
   {
     // Cast event to the correct type and call member function
     (m_instance->*m_memberFunction)(static_cast<EventType&>(_evnt));

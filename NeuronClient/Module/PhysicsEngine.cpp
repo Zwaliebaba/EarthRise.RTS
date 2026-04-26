@@ -10,16 +10,16 @@
 #include "LTE/Renderable.h"
 #include "LTE/StackFrame.h"
 #include "LTE/Transform.h"
-#include "LTE/Vector.h"
 
 #include <unordered_map>
+#include <vector>
 
 /* TODO : Should multithread the creation of collision meshes. */
 
 const float kEvictionTime = 120;
 
 namespace {
-  Vector<PhysicsEngine*> gPhysicsEngineStack;
+  std::vector<PhysicsEngine*> gPhysicsEngineStack;
 }
 
 PhysicsEngine::PhysicsEngine() {
@@ -40,12 +40,12 @@ PhysicsEngine* GetPhysicsEngine() {
 void PhysicsEngine::Pop() {
   DEBUG_ASSERT(!gPhysicsEngineStack.empty());
   DEBUG_ASSERT(gPhysicsEngineStack.back() == this);
-  gPhysicsEngineStack.pop();
+  gPhysicsEngineStack.pop_back();
 }
 
 void PhysicsEngine::Push() {
   DEBUG_ASSERT(gPhysicsEngineStack.size() < 100);
-  gPhysicsEngineStack << this;
+  gPhysicsEngineStack.push_back(this);
 }
 
 struct PhysicsEngineImpl : public PhysicsEngine {

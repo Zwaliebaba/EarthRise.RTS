@@ -2,12 +2,13 @@
 
 #include "Matrix.h"
 #include "Renderer.h"
-#include "Vector.h"
 #include "Window.h"
 
+#include <vector>
+
 namespace {
-  Vector<Viewport>& GetStack() {
-    static Vector<Viewport> stack;
+  std::vector<Viewport>& GetStack() {
+    static std::vector<Viewport> stack;
     return stack;
   }
 }
@@ -47,14 +48,14 @@ Viewport Viewport_Get() {
 }
 
 void Viewport_Pop() {
-  GetStack().pop();
+  GetStack().pop_back();
   Renderer_PopViewport();
   if (GetStack().size())
     GetStack().back()->LoadMatrix();
 }
 
 void Viewport_Push(Viewport const& vp) {
-  GetStack().push(vp);
+  GetStack().push_back(vp);
 
   /* TODO : Nasty. */
   if (vp->windowSpace) {

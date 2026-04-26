@@ -9,6 +9,7 @@ struct ThreadT : public RefCounted {
 
   virtual Job GetJob() const = 0;
   virtual bool IsFinished() const = 0;
+  /* Requests cooperative cancellation and waits for the worker to exit. */
   virtual void Terminate() = 0;
   virtual void Wait() = 0;
 };

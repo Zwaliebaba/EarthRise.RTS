@@ -1,10 +1,10 @@
 #include "RenderStyle.h"
 
-#include "Vector.h"
+#include <vector>
 
 namespace {
-  Vector<RenderStyle>& GetStack() {
-    static Vector<RenderStyle> stack;
+  std::vector<RenderStyle>& GetStack() {
+    static std::vector<RenderStyle> stack;
     return stack;
   }
 }
@@ -15,10 +15,10 @@ RenderStyle RenderStyle_Get() {
 
 void RenderStyle_Pop() {
   GetStack().back()->OnEnd();
-  GetStack().pop();
+  GetStack().pop_back();
 }
 
 void RenderStyle_Push(RenderStyle const& style) {
-  GetStack().push(style);
+  GetStack().push_back(style);
   style->OnBegin();
 }

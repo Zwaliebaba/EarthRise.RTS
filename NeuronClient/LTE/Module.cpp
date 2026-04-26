@@ -1,17 +1,19 @@
 #include "Module.h"
 #include "StackFrame.h"
-#include "Vector.h"
+
+#include <algorithm>
+#include <vector>
 
 namespace {
-  Vector<Module>& GetModules() {
-    static Vector<Module> gModules;
+  std::vector<Module>& GetModules() {
+    static std::vector<Module> gModules;
     return gModules;
   }
 }
 
 void Module_RegisterGlobal(Module const& module) {
-  DEBUG_ASSERT(!GetModules().contains(module));
-  GetModules().push(module);
+  DEBUG_ASSERT(std::find(GetModules().begin(), GetModules().end(), module) == GetModules().end());
+  GetModules().push_back(module);
 }
 
 void Module_UpdateGlobal() {

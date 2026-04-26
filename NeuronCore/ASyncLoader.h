@@ -1,5 +1,8 @@
 #pragma once
 
+#include <atomic>
+#include <thread>
+
 class ASyncLoader
 {
   public:
@@ -56,6 +59,6 @@ class StaticASyncLoader
       m_isValid = true;
     }
 
-    inline static volatile std::atomic_bool m_isValid{false};
-    inline static volatile std::atomic_bool m_isLoading{false};
+    inline static std::atomic_bool m_isValid{false};
+    inline static std::atomic_bool m_isLoading{false};
 };

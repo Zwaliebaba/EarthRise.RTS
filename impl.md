@@ -6,7 +6,7 @@ Convert the recommendations in improve.md into an executable, staged plan that c
 - NeuronClient
 - EarthRise
 
-This plan prioritizes build stability, correctness, and testability first, then migration from custom LTE types toward standard C++ types. D3D12 and renderer migration work is deferred unless it directly blocks the current build or preserves an already-existing boundary.
+This plan prioritizes build stability, correctness, and testability first, then migration from custom LTE types toward standard C++ types. Renderer work is limited to maintenance unless it directly blocks the current build or preserves an already-existing boundary.
 
 ### Current Implementation Status - April 26, 2026
 - Phase 0 is complete for the x64-debug baseline. `build-baseline.md` records the current generator, SDK, dependency baseline, and legacy warning distribution. x64-release remains a follow-up validation item.
@@ -16,10 +16,10 @@ This plan prioritizes build stability, correctness, and testability first, then 
 - `DataReader` and `DataWriter` no longer depend on the missing `NetLib.h` include and now have round-trip unit coverage.
 - Phase 2 has started. Tuple equality and Array equality are currently in corrected form and now have regression tests that protect against the planned self-compare and byte-count comparison bugs.
 - Phase 2 is complete locally for x64-debug. Release-safe assertion semantics are implemented through `ASSERT_RELEASE` and `ASSERT_RELEASE_TEXT`, routed through `Neuron::Fatal`, and covered by Microsoft Native Unit Tests.
-- Gate C is satisfied locally for x64-debug. x64-release remains a follow-up validation item before broad Phase 3 work.
-- Phase 3 has started with `phase3-safety-inventory.md`, documenting current `Reference<T>` and type metadata registry thread-safety assumptions before atomic or locking changes are attempted. `ThreadImpl::finished` is now atomic and covered by a NeuronClient unit smoke test.
+- Gate C is satisfied locally for x64-debug. x64-release remains a deferred validation item.
+- Phase 3 has started. This plan now documents current `Reference<T>` and type metadata registry thread-safety assumptions before atomic or locking changes are attempted. `ThreadImpl::finished` is now atomic, `ThreadImpl::Terminate` now uses cooperative cancellation instead of forced termination, and both thread paths are covered by NeuronClient unit smoke tests.
 - Phase 4 has started with contributor-facing documentation: `README.md`, `ARCHITECTURE.md`, and refreshed documentation-layout guidance in `.github/coding-standards.md`.
-- Phase 5 has started in `types.md`; reflected fields, script-visible APIs, serialization shapes, and intrusive ownership semantics remain unchanged while implementation-local pilot migrations proceed.
+- Phase 5 is complete locally for the safe implementation-local migration pass. `types.md` records seven completed pilots plus deferred boundaries for reflected fields, script-visible APIs, serialization shapes, wrapper-heavy APIs, and intrusive ownership semantics.
 
 ## 2. Delivery Principles
 - Keep each phase build-safe and shippable.
@@ -30,7 +30,7 @@ This plan prioritizes build stability, correctness, and testability first, then 
 - Treat legacy NeuronClient code as migration territory, not greenfield code.
 - Add tests before risky behavior changes whenever the affected code can be isolated.
 - Prefer documented constraints over speculative rewrites when ownership or thread model is unclear.
-- Prioritize custom-to-standard type migration over renderer migration.
+- Prioritize custom-to-standard type migration over renderer replacement.
 - Keep renderer work limited to maintenance, build hygiene, and boundary preservation until the type-modernization gates are complete.
 
 ## 3. Analysis Summary and Recommendations
@@ -69,15 +69,15 @@ This plan prioritizes build stability, correctness, and testability first, then 
 - Do it in controlled bulk batches only after the Microsoft Native Unit Test projects exist and the build baseline is stable.
 - Keep header guard conversion separate from behavior changes and type migrations.
 
-7. Promote standard type modernization ahead of renderer migration
+7. Promote standard type modernization ahead of renderer replacement
 - The next major modernization track should focus on replacing custom LTE types with standard C++ types where safe.
 - Begin with non-reflected implementation-local containers and ownership sites, then move toward public APIs and reflected fields only after metadata support exists.
 - Treat `String`, `Vector`, `Array`, `Map`, `Reference`, `Pointer`, and `AutoPtr` as separate migrations with separate risk profiles.
 
-8. Defer D3D12 migration
-- D3D12 work should remain non-urgent and should not consume sprint capacity meant for type modernization.
+8. Keep renderer work maintenance-only
+- Renderer replacement is not an active goal and should not consume sprint capacity meant for type modernization.
 - Keep only build hygiene and source-boundary preservation work that prevents current graphics code from becoming harder to maintain.
-- Do not remove OpenGL/SFML dependencies until there is a renewed renderer migration goal.
+- Do not remove OpenGL/SFML dependencies until replacement functionality is deliberately scoped and validated.
 
 ### Decision Gates
 - Gate A: CMake configure and x64-debug build baseline are reproducible.
@@ -85,7 +85,7 @@ This plan prioritizes build stability, correctness, and testability first, then 
 - Gate C: Critical correctness fixes are covered by regression tests.
 - Gate D: Thread-safety contracts are documented before atomic or locking changes land.
 - Gate E: A standard-type modernization pilot is complete with tests, rollback notes, and no reflected-field regressions.
-- Gate F: Renderer migration is explicitly reactivated before any D3D12 replacement work removes legacy behavior.
+- Gate F: Renderer replacement is explicitly approved before any work removes legacy rendering behavior.
 
 ## 4. Plan Horizon and Cadence
 - Sprint length: 2 weeks
@@ -96,7 +96,7 @@ This plan prioritizes build stability, correctness, and testability first, then 
 - Recommended phase policy:
   - One active critical phase at a time.
   - Standard type modernization becomes the primary modernization track after Gate C.
-  - Renderer migration should not run in parallel unless it is explicitly reactivated and does not compete with type-modernization work.
+  - Renderer replacement should not run in parallel unless it is explicitly approved and does not compete with type-modernization work.
   - Modernization batches must name the subsystem, files, and rollback path before implementation.
 
 ## 5. Pre-Phase 0 Recommendations
@@ -106,7 +106,7 @@ Before starting Phase 0 implementation, treat this as a readiness review. Phase 
 ### Recommended Entry Rules
 - Freeze the Phase 0 scope to build, CMake, include hygiene, PCH policy, shader target behavior, and baseline documentation.
 - Do not start correctness fixes, warning escalation, sanitizer presets, test framework work, ownership modernization, or renderer replacement inside Phase 0 unless one of those items directly blocks configure or compile.
-- Keep experimental renderer work behind explicit feature flags. The default build should remain usable even if the D3D12 path is incomplete.
+- Keep experimental renderer work behind explicit feature flags. The default build should remain usable even if optional renderer experiments are incomplete.
 - Treat recursive include directories as a temporary compatibility bridge. Every broad include path or exclusion should have a documented reason.
 - Preserve the current three-target layout. Do not introduce new server, tools, or game-logic targets as part of Phase 0.
 - Do not replace reflected `AutoPtr` or generated reflection ownership with `std::unique_ptr` during this phase; reflected types may require generated copy/assignment behavior before ownership changes are safe.
@@ -135,7 +135,7 @@ Before starting Phase 0 implementation, treat this as a readiness review. Phase 
 - No SFML removal.
 - No renderer backend replacement.
 - No large ownership modernization.
-- No D3D12 feature work unless it is required to keep the current build graph stable.
+- No renderer feature work unless it is required to keep the current build graph stable.
 
 ### Recommended Phase 0 Success Signal
 - A developer can run the documented configure/build path twice and get the same result.
@@ -296,29 +296,67 @@ Priority: High
 - Reduce concurrency risk and unsafe ownership behavior in critical paths.
 
 #### Current Status
-- Started. `phase3-safety-inventory.md` records the current intrusive reference counting and lazy type registry risks.
+- Started. The current intrusive reference counting and lazy type registry risks are recorded here before atomic or locking behavior changes.
 - Current recommendation is to treat `Reference<T>` and type metadata registration as thread-confined/startup-only until cross-thread ownership and runtime registration requirements are proven.
 - First contract comments now mark `RefCounted`, metadata storage, registry mutation, and LTE `ThreadImpl` job ownership as startup/thread-confined assumptions.
 - A Phase 3 boundary scan now covers LTE Thread/Job, NeuronCore async/task/event helpers, and reflection registry mutation points.
 - `ThreadImpl::finished` is now atomic and covered by a NeuronClient unit smoke test that waits for a simple LTE job to complete.
+- `ThreadImpl::Terminate` now requests cooperative cancellation through `JobT::OnCancel` and joins the worker thread instead of calling Windows `TerminateThread`.
+- The profiler sampler job now honors cooperative cancellation.
+- `StaticASyncLoader` no longer uses redundant `volatile` qualifiers on atomic loading state.
 - No `RefCounted` atomic or type-registry locking behavior has been changed yet.
+
+#### Safety Inventory
+
+Intrusive reference counting:
+- Owner: `NeuronClient/LTE/Reference.h`.
+- Core type: `RefCounted` with non-atomic `uint refCount`.
+- Main wrapper: `Reference<T>`.
+- Mutation paths: `Reference<T>::Acquire`, `Reference<T>::Release`, `RefCountIncrement`, and `RefCountDecrement`.
+- Deletion behavior: `Reference<T>::Release` deletes the pointee when `RefCountDecrement` reaches zero.
+- Current contract: thread-confined intrusive reference counting. Sharing the same `RefCounted` object across threads can race increments/decrements and can cause double delete, use-after-free, or leaked references.
+
+Type metadata registry:
+- Owners: `NeuronClient/LTE/Type.h` and `NeuronClient/LTE/Type.cpp`.
+- Global storage: `Type_GetStorage<T>()` creates a static `Type` per reflected C++ type.
+- Registry containers: `GetTypeList()` and `GetTypeMap()` return static legacy containers.
+- Registration path: `Type_Create` inserts into both containers and increments a static `GUIDIndex`.
+- Lazy initialization pattern: reflection macros check `if (!type)` before assigning the result of `Type_Create`.
+- Current contract: startup or single-threaded reflection discovery. Concurrent first access to the same type or concurrent registration of different types can race on the static metadata pointer, registry containers, and GUID assignment.
+
+Boundary scan:
+- LTE Thread/Job: `ThreadImpl` stores a `Job` reference and runs `JobT::OnRun` on a `std::thread`. The `Job` object is owned by the thread wrapper for the worker lifetime. Callers should not concurrently mutate the same `Reference`-managed object while the worker is running unless that object provides its own synchronization.
+- LTE Thread termination: `ThreadImpl::Terminate` is cooperative. It calls `JobT::OnCancel` and joins the worker thread, so long-lived jobs must override `OnCancel` and exit their run loop promptly.
+- NeuronCore async/tasks/events: `ASyncLoader` uses atomics for loading state, `TasksCore` owns lifecycle state behind mutexes, and `EventManager` protects subscriber mutation/dispatch with `sm_sync`. `EventManager` handlers retain raw instance pointers, so lifetime remains a caller contract.
+- Reflection registry: lazy `Type_GetStorage<T>()` initialization and `Type_Create` registry insertion remain unguarded. Startup reflection registration may remain lazy, but runtime registration from multiple threads is out of contract until synchronization is designed.
+- Worker metadata audit: current scheduler SDF/profiler jobs do not directly call `Type_Get` or `Type_Create` from `OnRun`. Script-created threads remain a boundary because script execution can reach reflected systems; scripts running on worker threads must not be the first path to discover/register reflected types.
+
+Contract decisions:
+- Treat `Reference<T>` as thread-confined until proven otherwise.
+- Cross-thread transfer of `Reference<T>` requires an owning handoff boundary, not shared concurrent mutation.
+- Treat type metadata registration as startup-only unless runtime registration is proven necessary.
+- If runtime type registration is required, protect `Type_Create`, registry containers, `GUIDIndex`, and each lazy `Type_GetStorage<T>()` initialization path.
+- Do not convert `refCount` to `std::atomic` mechanically until ownership transfer points are inventoried.
+- Keep `ThreadT::Terminate` supported as a cooperative stop request, not as forced process-level thread termination.
+- Treat script-created threads as requiring pre-registered metadata until a guarded runtime registration design exists.
 
 #### Work Items
 1. Reference counting safety
 - Migrate RefCounted refCount to atomic or formally document single-threaded contract.
 - Add stress tests for concurrent increment and decrement scenarios where applicable.
 - Recommendation: begin with a call-site inventory. Do not change memory ordering until ownership transfer points are known.
-- Current slice: keep `Reference<T>` thread-confined and evaluate forced thread termination before changing `refCount` semantics.
+- Current slice: keep `Reference<T>` thread-confined. `ThreadImpl::Terminate` remains supported as cooperative cancellation, so `refCount` should not be changed mechanically as part of thread shutdown work.
 
 2. Type registry synchronization
 - Add mutex protection in dynamic type registration paths.
 - Document thread-safety contract for registration lifecycle.
 - Recommendation: prefer startup-only registration if that matches runtime behavior; locking every lookup should be avoided unless registration can happen after startup.
-- Current slice: decide between explicit startup registration and guarded runtime lazy registration before adding registry locks.
+- Current slice: keep type metadata registration startup-only/single-threaded. Do not add lookup-wide locks unless runtime lazy registration from worker threads becomes a proven requirement.
 
 3. Event and async ordering audit
 - Verify EventManager and ASyncLoader lock and atomic ordering invariants.
 - Remove unclear volatile usage where redundant.
+- Current slice: complete. `StaticASyncLoader` uses plain `std::atomic_bool` members, matching the instance loader and removing redundant `volatile`.
 - Recommendation: add comments only for ordering guarantees that are not obvious from the code.
 
 4. Pointer and null-safety cleanup
@@ -341,7 +379,7 @@ Priority: High
 
 #### Current Status
 - Started. `README.md` now documents the current target map, prerequisites, CMake preset workflow, vcpkg builtin baseline, test commands, and current validation status.
-- `ARCHITECTURE.md` now documents the current three-target architecture, dependency boundaries, Phase 3 safety contracts, and deferred DirectX 12/MMO direction.
+- `ARCHITECTURE.md` now documents the current three-target architecture, dependency boundaries, Phase 3 safety contracts, and deferred MMO direction.
 - `.github/coding-standards.md` documentation-layout guidance now matches the current repository files instead of absent planning documents.
 - Asset staging remains the existing `EarthRise` post-build copy of `GameData`; no staging behavior has changed yet.
 - Sanitizer presets, TODO governance, CI reporting, and any vcpkg configuration beyond the pinned manifest baseline remain pending.
@@ -360,7 +398,7 @@ Priority: High
 - Add README with quick start and target map.
 - Add ARCHITECTURE overview document.
 - Refactor coding standards into mandatory rules, modernization guidance, and legacy exceptions.
-- Recommendation: document current reality first. Mark D3D12 as deferred roadmap direction, and make custom-to-standard type modernization the active modernization theme.
+- Recommendation: document current reality first and make custom-to-standard type modernization the active modernization theme.
 - Current status: README and ARCHITECTURE are present, and documentation-layout guidance has been corrected to the current repository shape.
 
 4. TODO governance
@@ -386,11 +424,16 @@ Priority: High
 - Build a repeatable migration pattern from custom types to standard C++ types without breaking reflection, serialization, scripting, or generated metadata.
 
 #### Current Status
-- Started. `types.md` now includes a Phase 5 current inventory table for `String`, `Vector`, `Array`, `Map`, `HashMap`, `HashSet`, `Stack`, `Pointer`, `Reference`, `AutoPtr`, `Tuple`, and related LTE wrappers.
-- The active Phase 5 stance is implementation-local pilot migration only; reflected fields, script-visible APIs, serialization shapes, and intrusive ownership semantics remain unchanged.
+- Complete locally for the safe implementation-local migration pass. `types.md` includes a Phase 5 inventory table for `String`, `Vector`, `Array`, `Map`, `HashMap`, `HashSet`, `Stack`, `Pointer`, `Reference`, `AutoPtr`, `Tuple`, and related LTE wrappers.
+- Reflected fields, script-visible APIs, serialization shapes, wrapper-heavy public APIs, type registries, and intrusive ownership semantics remain unchanged and are explicitly deferred.
 - First pilot complete: `NeuronClient/LTE/Profiler.cpp` now uses `std::vector<char const*>` for a private profiler segment stack instead of `Stack<char const*>`.
 - Second pilot complete: `NeuronClient/UI/Cursor.cpp` and `NeuronClient/UI/ClipRegion.cpp` now use `std::vector` for private `.cpp`-local UI stacks instead of LTE `Vector`.
-- Remaining recommended pilots are implementation-local `HashMap`/`HashSet`, `AutoPtr`, or additional simple `Stack<T>` sites with named subsystem, file list, test coverage, and rollback path.
+- Third pilot complete: LTE render-state helper stacks in `RenderStyle.cpp`, `Viewport.cpp`, and `ParticleSystem.cpp` now use private `std::vector` storage while public functions and reflected particle data remain unchanged.
+- Fourth pilot complete: active sound engine, physics engine, camera, and window stacks now use private `std::vector` storage while public accessor/push/pop signatures remain unchanged.
+- Fifth pilot complete: private rendering scratch buffers in widget, font, particle, and mesh upload code now use `std::vector` where they already flow through raw `data()`/`size()` renderer calls.
+- Sixth pilot complete: active universe lists, registered module lists, and program log entries now use private `std::vector` storage while public accessors remain unchanged.
+- Seventh pilot complete: renderer draw helpers now have additive `std::vector<Vertex>` overloads, enabling trail rendering scratch buffers to move to `std::vector` without removing legacy overloads.
+- Remaining wrapper usages found by the final scan are deferred because they cross `Vector&` APIs, reflection/script/serialization boundaries, type registry infrastructure, renderer state infrastructure, or ownership wrapper contracts.
 - High-risk families remain deferred for broad replacement: `String`, `Vector`, `Array`, `Reference`, `Pointer`, and any reflected fields.
 
 #### Work Items
@@ -409,7 +452,7 @@ Priority: High
 - Convert local, non-reflected `Vector`, `HashMap`, `HashSet`, `Map`, and `Array` usage to `std::vector`, `std::unordered_map`, `std::unordered_set`, `std::map`, `std::span`, or `std::unique_ptr<T[]>` where semantics match.
 - Keep reflected fields on LTE wrappers until metadata support or adapters exist.
 - Recommendation: start with low-risk implementation files that do not cross script, serialization, or generated metadata boundaries.
-- Current status: first non-reflected pilot converted a private profiler `Stack<char const*>` to `std::vector<char const*>`; second pilot converted private UI cursor and clip-region `Vector` stacks to `std::vector`.
+- Current status: first non-reflected pilot converted a private profiler `Stack<char const*>` to `std::vector<char const*>`; second pilot converted private UI cursor and clip-region `Vector` stacks to `std::vector`; third pilot converted private LTE render-state `Vector` stacks to `std::vector`; fourth pilot converted active engine/window/camera stacks to `std::vector`; fifth pilot converted private rendering scratch buffers to `std::vector` where raw data renderer calls already existed; sixth pilot converted internal universe/module/log service lists to `std::vector`; seventh pilot added renderer `std::vector` overloads and converted trail scratch buffers.
 
 4. Ownership modernization
 - Migrate implementation-local `AutoPtr` ownership to `std::unique_ptr` where move-only semantics are acceptable.
@@ -428,25 +471,25 @@ Priority: High
 - Recommendation: batch by folder, verify each batch with the Microsoft Native Unit Test projects, and stop if warning or build trends regress.
 
 #### Exit Criteria
-- At least one standard-type migration pilot is complete in a non-reflected subsystem.
-- Migration batches compile cleanly and preserve behavior.
-- Reflection and serialization boundaries are documented for every custom type touched.
-- Build time and warning trend do not regress.
-- Gate E is satisfied.
+- At least one standard-type migration pilot is complete in a non-reflected subsystem. Complete: seven pilots are documented in `types.md`.
+- Migration batches compile cleanly and preserve behavior. Complete locally for x64-debug focused NeuronClient validation.
+- Reflection and serialization boundaries are documented for every custom type touched. Complete in `types.md` pilot notes and completion boundary.
+- Build time and warning trend do not regress. No new blocker identified; existing legacy warnings remain tracked outside this phase.
+- Gate E is satisfied locally for x64-debug.
 
-### Phase 6: Deferred Renderer Boundary Maintenance
-Duration: Deferred until explicitly reactivated
+### Phase 6: Renderer Boundary Maintenance
+Duration: Deferred until needed
 Priority: Low
 
 #### Objectives
 - Keep the current rendering path maintainable while type modernization is the active priority.
-- Preserve useful renderer boundaries without committing sprint capacity to D3D12 migration.
-- Avoid making OpenGL/SFML coupling worse, but do not treat replacement as urgent.
+- Preserve useful renderer boundaries without committing sprint capacity to renderer replacement.
+- Avoid making OpenGL/SFML coupling worse, but do not treat replacement as an active goal.
 
 #### Work Items
 1. Boundary preservation
 - Keep graphics-specific includes localized.
-- Avoid spreading OpenGL, SFML, Windows, or D3D headers into unrelated core and gameplay code.
+- Avoid spreading OpenGL, SFML, or Windows graphics headers into unrelated core and gameplay code.
 - Recommendation: make small containment fixes only when they reduce build risk or dependency spread.
 
 2. Current renderer health
@@ -460,7 +503,7 @@ Priority: Low
 - Recommendation: this inventory supports future renderer planning without changing current priorities.
 
 4. Reactivation checklist
-- Require an explicit roadmap decision before starting D3D12 replacement work.
+- Require an explicit roadmap decision before starting renderer replacement work.
 - Require build baseline, tests, critical correctness fixes, and standard-type migration pilot to be complete first.
 - Recommendation: do not remove SFML from dependencies until replacement functionality is implemented and validated.
 
@@ -472,7 +515,7 @@ Priority: Low
 
 ### Before Phase 0 Starts
 - Create the Phase 0 issue list and assign owners for build baseline, shader target behavior, include/PCH hygiene, and baseline reporting.
-- Confirm that Phase 0 is responsible for the default build path first; D3D12-enabled failures may remain documented optional blockers unless they break the default build.
+- Confirm that Phase 0 is responsible for the default build path first; optional renderer experiments should not block the default build unless explicitly promoted.
 - Prepare the build-baseline note template so Phase 0 captures consistent data.
 - Confirm that missing experimental shader assets are treated as optional, not release blockers.
 
@@ -540,7 +583,7 @@ Priority: Low
 - Mitigation: use targeted suppression list with sunset dates and owners.
 
 4. Renderer work distracts from the active type-modernization priority
-- Mitigation: keep renderer changes maintenance-only and require Gate F before replacement or D3D12 migration work starts.
+- Mitigation: keep renderer changes maintenance-only and require Gate F before replacement work starts.
 
 5. Test adoption slows due to framework setup overhead
 - Mitigation: start with NeuronCore pure utility tests and expand outward.
@@ -558,12 +601,10 @@ This implementation plan is considered active when:
 - CI reflects at least configure, build, and tests for x64-debug.
 - Progress is reviewed every sprint against phase exit criteria.
 - Decision gates A through E are tracked explicitly in milestones.
-- Gate F remains closed unless the project explicitly reactivates renderer migration.
+- Gate F remains closed unless the project explicitly approves renderer replacement.
 
 ## 12. Immediate Next Actions
-1. Run x64-release validation for the completed Phase 0 through Phase 2 work.
-2. Begin Phase 3 with a RefCounted ownership-transfer inventory before changing atomic or locking behavior.
-3. Document whether reference counting is thread-confined or thread-safe before implementation.
-4. Identify Type registry registration timing and decide whether synchronization belongs only on startup mutation paths or on runtime lookup as well.
-5. Add focused stress tests only after the ownership and registration contracts are documented.
-6. Keep renderer and D3D12 work deferred while Phase 3 safety work begins.
+1. Decide whether script-created threads should be restricted to pre-registered metadata or disabled for reflected runtime registration until locks exist.
+2. Add focused stress tests only around finalized contracts: cooperative thread cancellation, startup-only type registration, and thread-confined references.
+3. Keep `Reference<T>` thread-confined until ownership transfer paths are inventoried; do not mechanically convert `refCount` to atomic.
+4. Keep renderer work maintenance-only while Phase 3 safety work continues.

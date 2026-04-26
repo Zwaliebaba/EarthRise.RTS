@@ -116,7 +116,7 @@ String ScaleToClass(float scale) {
     return "Colossus";
 }
 
-String String_Time(Time time) {
+String String_Time(gametime_t time) {
   if (time > 3600000)
     return Stringize() | (time / 3600000) | " hr";
   else if (time > 60000)

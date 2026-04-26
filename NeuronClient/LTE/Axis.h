@@ -2,7 +2,6 @@
 #define LTE_Axis_h__
 
 #include "BaseType.h"
-#include "Joystick.h"
 #include "Reference.h"
 #include "String.h"
 
@@ -60,8 +59,6 @@ namespace LTE {
 
   Axis Axis_Capture();
 
-  Axis Axis_Joy(uint joystickIndex, JoystickAxis axix);
-
   Axis Axis_MouseX();
   Axis Axis_MouseY();
 
@@ -75,38 +72,6 @@ namespace LTE {
   Axis Axis_Range(Axis const& source, float minValue, float maxValue);
 
   Axis Axis_Sum(Axis const& a, Axis const& b);
-
-  inline Axis Axis_DpadVertical() {
-    return Axis_Joy(0, JoystickAxis_PovX)->Invert();
-  }
-
-  inline Axis Axis_DpadHorizontal() {
-    return Axis_Joy(0, JoystickAxis_PovY)->Invert();
-  }
-
-  inline Axis Axis_LeftStickX() {
-    return Axis_Joy(0, JoystickAxis_X);
-  }
-
-  inline Axis Axis_LeftStickY() {
-    return Axis_Joy(0, JoystickAxis_Y);
-  }
-
-  inline Axis Axis_LeftTrigger() {
-    return Axis_Range(Axis_Joy(0, JoystickAxis_Z)->SetDeadZone(.2f), 0.f, 1.f);
-  }
-
-  inline Axis Axis_RightStickX() {
-    return Axis_Joy(0, JoystickAxis_U);
-  }
-
-  inline Axis Axis_RightStickY() {
-    return Axis_Joy(0, JoystickAxis_R);
-  }
-
-  inline Axis Axis_RightTrigger() {
-    return Axis_Range(Axis_Joy(0, JoystickAxis_Z)->SetDeadZone(.2f), 0.f, -1.f);
-  }
 }
 
 #endif

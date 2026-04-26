@@ -156,7 +156,6 @@ namespace LTE
   /* Control. */
   typedef Reference<struct AxisT> Axis;
   typedef Reference<struct ButtonT> Button;
-  struct Joystick;
 
   /* Engine. */
   struct Data;
@@ -282,21 +281,6 @@ namespace LTE
 #undef XTYPE
 #undef XLIST
 
-#define JOYSTICK_AXIS_X                                                      \
-    X(X)                                                                       \
-    X(Y)                                                                       \
-    X(Z)                                                                       \
-    X(R)                                                                       \
-    X(U)                                                                       \
-    X(V)                                                                       \
-    X(PovX)                                                                    \
-    X(PovY)
-
-#define XLIST JOYSTICK_AXIS_X
-#define XTYPE JoystickAxis
-#include "LTE/XEnum.h"
-#undef XTYPE
-#undef XLIST
 }
 
 #define offset_of(type, member) ((volatile void const*)&((type*)0)->member)

@@ -108,7 +108,7 @@ namespace {
     Link(s, "INVVIEW", GetInvView);
     Link(s, "INVPROJ", GetInvProj);
 
-    /* Time. */
+    /* gametime_t. */
     Link(s, "time", GetGameTime);
   }
 }

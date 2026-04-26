@@ -16,6 +16,8 @@
 
 #include "LTE/Debug.h"
 
+#include <vector>
+
 const float kPanelShadowSize = 32;
 
 namespace {
@@ -46,10 +48,10 @@ namespace {
   struct WidgetRenderer {
     GlyphMapT glyphs;
 
-    Vector<PanelVertex> panelBuffer;
-    Vector<RadialPanelVertex> radialPanelBuffer;
-    Vector<uchar> vertexBuffer;
-    Vector<uint> indexBuffer;
+    std::vector<PanelVertex> panelBuffer;
+    std::vector<RadialPanelVertex> radialPanelBuffer;
+    std::vector<uchar> vertexBuffer;
+    std::vector<uint> indexBuffer;
 
     Shader panelShader;
     Shader radialPanelShader;
@@ -80,17 +82,17 @@ namespace {
   void PopulateIndices(size_t count) {
     for (uint i = renderer.indexBuffer.size() / 6; i < count; ++i) {
       uint offset = i * 4;
-      renderer.indexBuffer.push(offset + 0);
-      renderer.indexBuffer.push(offset + 1);
-      renderer.indexBuffer.push(offset + 2);
-      renderer.indexBuffer.push(offset + 0);
-      renderer.indexBuffer.push(offset + 2);
-      renderer.indexBuffer.push(offset + 3);
+      renderer.indexBuffer.push_back(offset + 0);
+      renderer.indexBuffer.push_back(offset + 1);
+      renderer.indexBuffer.push_back(offset + 2);
+      renderer.indexBuffer.push_back(offset + 0);
+      renderer.indexBuffer.push_back(offset + 2);
+      renderer.indexBuffer.push_back(offset + 3);
     }
   }
 
   template <class T>
-  void Render(Shader const& shader, Vector<T> const& vertexBuffer) {
+  void Render(Shader const& shader, std::vector<T> const& vertexBuffer) {
     DrawState_Link(shader);
     Renderer_SetShader(*shader);
     Renderer_DrawVertices(
@@ -155,25 +157,25 @@ DefineFunction(WidgetRenderer_DrawPanel) {
   V2 size = ss2 - ss1 + 2.0f * V2(kPanelShadowSize);
   V4 color = V4(args.color, args.alpha);
 
-  renderer.panelBuffer.push(PanelVertex(
+  renderer.panelBuffer.push_back(PanelVertex(
     V3(V2(ss1.x - kPanelShadowSize, ss1.y - kPanelShadowSize), 0),
     V4(0, 0, size.x, size.y),
     color,
     V2(args.innerAlpha, args.bevel)));
 
-  renderer.panelBuffer.push(PanelVertex(
+  renderer.panelBuffer.push_back(PanelVertex(
     V3(V2(ss2.x + kPanelShadowSize, ss1.y - kPanelShadowSize), 0),
     V4(1, 0, size.x, size.y),
     color,
     V2(args.innerAlpha, args.bevel)));
 
-  renderer.panelBuffer.push(PanelVertex(
+  renderer.panelBuffer.push_back(PanelVertex(
     V3(V2(ss2.x + kPanelShadowSize, ss2.y + kPanelShadowSize), 0),
     V4(1, 1, size.x, size.y),
     color,
     V2(args.innerAlpha, args.bevel)));
 
-  renderer.panelBuffer.push(PanelVertex(
+  renderer.panelBuffer.push_back(PanelVertex(
     V3(V2(ss1.x - kPanelShadowSize, ss2.y + kPanelShadowSize), 0),
     V4(0, 1, size.x, size.y),
     color,
@@ -194,25 +196,25 @@ DefineFunction(WidgetRenderer_DrawPanelRadial) {
   V2 ss2 = args.pos + V2(args.r2 + kPanelShadowSize);
   V4 color = V4(args.color, args.alpha);
 
-  renderer.radialPanelBuffer.push(RadialPanelVertex(
+  renderer.radialPanelBuffer.push_back(RadialPanelVertex(
     V3(V2(ss1.x - kPanelShadowSize, ss1.y - kPanelShadowSize), 0),
     V4(0, 0, args.r1, args.r2),
     color,
     V4(args.innerAlpha, args.bevel, args.phase, args.angle)));
 
-  renderer.radialPanelBuffer.push(RadialPanelVertex(
+  renderer.radialPanelBuffer.push_back(RadialPanelVertex(
     V3(V2(ss2.x + kPanelShadowSize, ss1.y - kPanelShadowSize), 0),
     V4(1, 0, args.r1, args.r2),
     color,
     V4(args.innerAlpha, args.bevel, args.phase, args.angle)));
 
-  renderer.radialPanelBuffer.push(RadialPanelVertex(
+  renderer.radialPanelBuffer.push_back(RadialPanelVertex(
     V3(V2(ss2.x + kPanelShadowSize, ss2.y + kPanelShadowSize), 0),
     V4(1, 1, args.r1, args.r2),
     color,
     V4(args.innerAlpha, args.bevel, args.phase, args.angle)));
 
-  renderer.radialPanelBuffer.push(RadialPanelVertex(
+  renderer.radialPanelBuffer.push_back(RadialPanelVertex(
     V3(V2(ss1.x - kPanelShadowSize, ss2.y + kPanelShadowSize), 0),
     V4(0, 1, args.r1, args.r2),
     color,

@@ -1,5 +1,4 @@
 #include "Time.h"
-#include <ctime>
 
 DefineFunction(Time_Current)
 {

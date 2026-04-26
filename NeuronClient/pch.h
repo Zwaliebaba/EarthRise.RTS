@@ -1,7 +1,12 @@
 #pragma once
 
-// Keep the client PCH limited to stable project headers. Do not add Windows,
-// graphics SDK, OpenGL, or SFML headers here; include them only in the narrow
-// implementation files that own those platform or renderer boundaries.
+// Keep the client PCH limited to stable project headers.
 
 #include "NeuronClient.h"
+
+#include "Game/Object.h"
+#include "Game/Player.h"
+#include "Game/Task.h"
+#include "Game/Tasks.h"
+#include "Game/Objects.h"
+#include "Game/Items.h"

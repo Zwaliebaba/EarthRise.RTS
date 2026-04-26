@@ -14,6 +14,8 @@
 #include "VectorMap.h"
 #include "Window.h"
 
+#include <vector>
+
 const bool kAllow16BitIndices = true;
 const bool kCameraSpaceRendering = true;
 const size_t kMaxColorAttachments = 4;
@@ -276,10 +278,10 @@ namespace LTE {
       /* If the indices can fit in unsigned short format, store them that way
          to save space. */
       if (kAllow16BitIndices && mesh->vertices.size() < USHRT_MAX) {
-        static Vector<ushort> indices;
+        static std::vector<ushort> indices;
         indices.clear();
         for (uint i = 0; i < mesh->indices.size(); ++i)
-          indices << (ushort)mesh->indices[i];
+          indices.push_back((ushort)mesh->indices[i]);
 
         mesh->indexFormat = GL_IndexFormat::Short;
         GL_BufferData(
@@ -552,6 +554,28 @@ namespace LTE {
   void Renderer_DrawVertices(
     Vector<Vertex> const& vertices,
     Vector<ushort> const& indices)
+  {
+    StaticDrawVertices(
+      vertices.data(),
+      indices.data(),
+      GL_IndexFormat::Short,
+      indices.size());
+  }
+
+  void Renderer_DrawVertices(
+    std::vector<Vertex> const& vertices,
+    std::vector<uint> const& indices)
+  {
+    StaticDrawVertices(
+      vertices.data(),
+      indices.data(),
+      GL_IndexFormat::Int,
+      indices.size());
+  }
+
+  void Renderer_DrawVertices(
+    std::vector<Vertex> const& vertices,
+    std::vector<ushort> const& indices)
   {
     StaticDrawVertices(
       vertices.data(),

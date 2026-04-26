@@ -2,7 +2,6 @@
 
 #include "AutoPtr.h"
 #include "Axis.h"
-#include "Joystick.h"
 #include "Keyboard.h"
 #include "Math.h"
 #include "Mouse.h"
@@ -126,27 +125,6 @@ namespace LTE {
     for (MouseButton button = 0; button < MouseButton_SIZE; ++button)
       if (Mouse_Pressed(button))
         return Button_Mouse(button);
-
-    /* Try joystick buttons. */
-    for (uint i = 0; i < Joystick::GetCount(); ++i) {
-      Joystick* joy = Joystick::Get(i);
-      if (!joy)
-        continue;
-
-      for (uint j = 0; j < Joystick::GetButtonCount(); ++j)
-        if (joy->Down(j))
-          return Button_Joy(i, j);
-
-      /* As a last resort, try the joystick axes. We will allow these to be
-         used as buttons, especially since a gamepad trigger is considered to
-         be an axis. */
-      for (JoystickAxis axis = 0; axis < JoystickAxis_SIZE; ++axis) {
-        float delta = joy->GetAxisDelta(axis);
-        float sgn = Sign(joy->GetAxis(axis));
-        if (Abs(delta) > .1f && sgn == Sign(delta))
-          return Button_Axis(Axis_Joy(i, axis), sgn);
-      }
-    }
     return nullptr;
   }
 }

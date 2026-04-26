@@ -37,7 +37,7 @@ if (NOT EXISTS "${EARTHRISE_MS_NATIVE_TEST_LIBRARY}")
 endif()
 
 function(earthrise_add_microsoft_native_test TARGET_NAME)
-  set(_multi_value_args SOURCES LIBRARIES DEPENDS INCLUDES)
+  set(_multi_value_args SOURCES LIBRARIES DEPENDS INCLUDES CTEST_CATEGORIES)
   cmake_parse_arguments(EARTHRISE_TEST "" "" "${_multi_value_args}" ${ARGN})
 
   add_library(${TARGET_NAME} SHARED ${EARTHRISE_TEST_SOURCES})
@@ -76,17 +76,42 @@ function(earthrise_add_microsoft_native_test TARGET_NAME)
     VS_GLOBAL_ProjectSubType "NativeUnitTestProject")
 
   if (EXISTS "${EARTHRISE_VSTEST_CONSOLE}")
-    add_test(NAME ${TARGET_NAME}
-      COMMAND "${EARTHRISE_VSTEST_CONSOLE}" "$<TARGET_FILE:${TARGET_NAME}>")
+    if (EARTHRISE_TEST_CTEST_CATEGORIES)
+      string(REGEX REPLACE "\\.Test$" "" _test_name_prefix "${TARGET_NAME}")
+      foreach(_category IN LISTS EARTHRISE_TEST_CTEST_CATEGORIES)
+        add_test(NAME ${_test_name_prefix}.${_category}
+          COMMAND "${EARTHRISE_VSTEST_CONSOLE}" "$<TARGET_FILE:${TARGET_NAME}>" "/TestCaseFilter:Category=${_category}")
+      endforeach()
+    else()
+      add_test(NAME ${TARGET_NAME}
+        COMMAND "${EARTHRISE_VSTEST_CONSOLE}" "$<TARGET_FILE:${TARGET_NAME}>")
+    endif()
   endif()
 endfunction()
 
 earthrise_add_microsoft_native_test(NeuronCore.Test
   SOURCES
+    NeuronCore.Test/Unit/AsyncLoaderTests.cpp
+    NeuronCore.Test/Unit/DataSerializationTests.cpp
+    NeuronCore.Test/Unit/DebugTests.cpp
+    NeuronCore.Test/Unit/EventManagerTests.cpp
+    NeuronCore.Test/Unit/MathAndTimerTests.cpp
     NeuronCore.Test/Unit/NeuronCoreSmokeTests.cpp
+    NeuronCore.Test/Unit/TasksThreadTests.cpp
+    NeuronCore.Test/Integration/FileSysIntegrationTests.cpp
     NeuronCore.Test/Integration/NeuronCoreIntegrationTests.cpp
   LIBRARIES
-    NeuronCore)
+    NeuronCore
+  CTEST_CATEGORIES
+    Unit.AsyncLoader
+    Unit.Serialization
+    Unit.Diagnostics
+    Unit.Events
+    Unit.MathAndTimer
+    Unit.Threading
+    Unit.Smoke
+    Integration.FileSystem
+    Integration.CoreRuntime)
 
 earthrise_add_microsoft_native_test(NeuronClient.Test
   SOURCES

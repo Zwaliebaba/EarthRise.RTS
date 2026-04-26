@@ -8,6 +8,8 @@
 #include "V4.h"
 #include "Vector.h"
 
+#include <vector>
+
 const size_t kAttribArrays = 8;
 
 namespace LTE {
@@ -63,6 +65,14 @@ namespace LTE {
   void Renderer_DrawVertices(
     Vector<Vertex> const& vertices,
     Vector<ushort> const& indices);
+
+  void Renderer_DrawVertices(
+    std::vector<Vertex> const& vertices,
+    std::vector<uint> const& indices);
+
+  void Renderer_DrawVertices(
+    std::vector<Vertex> const& vertices,
+    std::vector<ushort> const& indices);
 
   void Renderer_DrawVertices(
     void const* vertexData,

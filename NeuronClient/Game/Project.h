@@ -26,7 +26,7 @@ AutoClass(ProjectManagement,
 };
 
 AutoClass(ProjectMetrics,
-  Time, duration,
+  gametime_t, duration,
   Quantity, cycles,
   Quantity, expense,
   Quantity, revenue,

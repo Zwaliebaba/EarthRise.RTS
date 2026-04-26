@@ -37,6 +37,8 @@ namespace LTE {
     }
 
     virtual void OnBegin() {}
+    /* Cooperative stop request for jobs that may run until cancelled. */
+    virtual void OnCancel() {}
     virtual void OnEnd() {}
     virtual void OnRun(uint units) = 0;
 

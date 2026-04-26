@@ -6,12 +6,12 @@
 struct UpdateState
 {
   float dt;
-  Time quanta;
+  gametime_t quanta;
   bool hasFocus;
 
   UpdateState(float dt, bool hasFocus = true)
     : dt(dt),
-      quanta(static_cast<Time>((float)kTimeScale * dt)),
+      quanta(static_cast<gametime_t>((float)kTimeScale * dt)),
       hasFocus(hasFocus) {}
 };
 

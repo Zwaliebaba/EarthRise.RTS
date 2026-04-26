@@ -12,8 +12,6 @@ namespace LTE {
 
   Button Button_Inverted(Button const& button);
 
-  Button Button_Joy(uint joyIndex, uint buttonIndex);
-
   Button Button_Key(Key key);
 
   Button Button_Mouse(MouseButton mouseButton);
@@ -39,14 +37,6 @@ namespace LTE {
       Button_Or(
         Button_Key(Key_LShift),
         Button_Key(Key_RShift)));
-  }
-
-  inline Button Button_LeftStick() {
-    return Button_Joy(0, 8);
-  }
-
-  inline Button Button_RightStick() {
-    return Button_Joy(0, 9);
   }
 }
 

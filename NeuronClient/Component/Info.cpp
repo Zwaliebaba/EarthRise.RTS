@@ -8,7 +8,7 @@ void ComponentInfo::Add(ObjectT* object, InfoLevelT level) {
   if (!det)
     return;
 
-  Time expiration = Universe_Age() + det->detectionTime; 
+  gametime_t expiration = Universe_Age() + det->detectionTime; 
   ObjectID id = object->GetID();
 
   InfoEntry* entry = elements.get(id);

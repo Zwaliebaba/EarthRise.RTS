@@ -1,9 +1,11 @@
 #include "SoundEngine.h"
-#include "LTE/Vector.h"
+
+#include <algorithm>
+#include <vector>
 
 namespace
 {
-  Vector<SoundEngine*> gSoundEngine;
+  std::vector<SoundEngine*> gSoundEngine;
 }
 
 SoundEngine::SoundEngine()
@@ -12,16 +14,21 @@ SoundEngine::SoundEngine()
     Push();
 }
 
-SoundEngine::~SoundEngine() { gSoundEngine.remove(this); }
+SoundEngine::~SoundEngine()
+{
+  auto it = std::find(gSoundEngine.begin(), gSoundEngine.end(), this);
+  if (it != gSoundEngine.end())
+    gSoundEngine.erase(it);
+}
 
 void SoundEngine::Pop()
 {
   DEBUG_ASSERT(gSoundEngine.size());
   DEBUG_ASSERT(gSoundEngine.back() == this);
-  gSoundEngine.pop();
+  gSoundEngine.pop_back();
 }
 
-void SoundEngine::Push() { gSoundEngine.push(this); }
+void SoundEngine::Push() { gSoundEngine.push_back(this); }
 
 SoundEngine* GetSoundEngine()
 {

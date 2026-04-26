@@ -49,7 +49,7 @@ typedef int64_t ItemID;
 typedef float Mass;
 typedef int64_t ObjectID;
 typedef int64_t Quantity;
-typedef int64_t Time;
+typedef int64_t gametime_t;
 
 #define CAPABILITY_X                                                           \
   X(Attack)                                                                    \
@@ -320,9 +320,9 @@ const InfoLevelT InfoLevel_Location   = 3; // Knows where the object is, knows b
 const InfoLevelT InfoLevel_Scan       = 4; // Has full scan information on the object
 const InfoLevelT InfoLevel_Max        = 4;
 
-Time Universe_Age();
+gametime_t Universe_Age();
 
 /* How many time quanta in a second? */
-const Time kTimeScale = 1000;
+const gametime_t kTimeScale = 1000;
 
 #endif

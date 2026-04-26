@@ -10,7 +10,7 @@ String DistanceToString(float distance);
 
 String DurationToString(float duration);
 
-inline String DurationToString(Time duration) {
+inline String DurationToString(gametime_t duration) {
   return DurationToString((float)duration / (float)kTimeScale);
 }
 
@@ -30,6 +30,6 @@ String QuantityToStringExact(Quantity quantity);
 
 String ScaleToClass(float scale);
 
-String String_Time(Time time);
+String String_Time(gametime_t time);
 
 #endif

@@ -5,9 +5,10 @@
 #include "LTE/Math.h"
 #include "LTE/Mouse.h"
 #include "LTE/Smooth.h"
-#include "LTE/Vector.h"
 #include "LTE/View.h"
 #include "LTE/Viewport.h"
+
+#include <vector>
 
 constexpr float FOV_Y = XMConvertToRadians(62.0f);
 constexpr float Z_NEAR = 0.05f;
@@ -15,9 +16,9 @@ constexpr float Z_FAR = 1.0e6f;
 
 namespace
 {
-  Vector<Camera>& GetStack()
+  std::vector<Camera>& GetStack()
   {
-    static Vector<Camera> stack;
+    static std::vector<Camera> stack;
     return stack;
   }
 
@@ -99,6 +100,6 @@ DefineFunction(Camera_CanSee)
 
 DefineFunction(Camera_Get) { return GetStack().size() ? GetStack().back() : nullptr; }
 
-void Camera_Pop() { GetStack().pop(); }
+void Camera_Pop() { GetStack().pop_back(); }
 
-void Camera_Push(const Camera& camera) { GetStack().push(camera); }
+void Camera_Push(const Camera& camera) { GetStack().push_back(camera); }

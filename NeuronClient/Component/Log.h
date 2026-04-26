@@ -7,7 +7,7 @@
 #include "LTE/Vector.h"
 
 AutoClass(LogEntry,
-  Time, time,
+  gametime_t, time,
   String, message,
   float, importance)
 

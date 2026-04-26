@@ -9,16 +9,17 @@
 #include "Texture2D.h"
 #include "Vector.h"
 #include "View.h"
+#include "Debug.h"
 
 #include <algorithm>
-#include "Debug.h"
+#include <vector>
 
 const size_t kMaxParticles = 1024 * 1024;
 const float kLodFactor = Squared(512);
 
 namespace {
-  Vector<ParticleSystem>& GetStack() {
-    static Vector<ParticleSystem> stack;
+  std::vector<ParticleSystem>& GetStack() {
+    static std::vector<ParticleSystem> stack;
     return stack;
   }
 
@@ -85,8 +86,8 @@ namespace {
         size_t vertexCount = gParticleMesh->vertices.size() * particles.size();
         size_t indexCount = gParticleMesh->indices.size() * particles.size();
 
-        static Vector<ParticleVertex> vertices;
-        static Vector<uint> indices;
+        static std::vector<ParticleVertex> vertices;
+        static std::vector<uint> indices;
         vertices.clear();
         indices.clear();
         vertices.reserve(vertexCount);
@@ -105,11 +106,11 @@ namespace {
 
           float age = (particle.maxLife - particle.life) / particle.maxLife;
           for (size_t j = 0; j < gParticleMesh->indices.size(); ++j)
-            indices.push((uint)(gParticleMesh->indices[j] + vertices.size()));
+            indices.push_back((uint)(gParticleMesh->indices[j] + vertices.size()));
 
           for (size_t j = 0; j < gParticleMesh->vertices.size(); ++j) {
             Vertex& sourceVertex = gParticleMesh->vertices[j];
-            vertices.push(ParticleVertex());
+            vertices.push_back(ParticleVertex());
             ParticleVertex& v = vertices.back();
             v.p = position;
             v.n.x = particle.size;
@@ -188,9 +189,9 @@ DefineFunction(ParticleSystem_Get) {
 }
 
 DefineFunction(ParticleSystem_Pop) {
-  GetStack().pop();
+  GetStack().pop_back();
 }
 
 DefineFunction(ParticleSystem_Push) {
-  GetStack().push(args.ps);
+  GetStack().push_back(args.ps);
 }

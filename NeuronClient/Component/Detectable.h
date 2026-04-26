@@ -4,7 +4,7 @@
 #include "Common.h"
 #include "LTE/AutoClass.h"
 
-AutoClass(ComponentDetectable, Time, detectionTime)
+AutoClass(ComponentDetectable, gametime_t, detectionTime)
 
   ComponentDetectable()
     : detectionTime(60000000) {}

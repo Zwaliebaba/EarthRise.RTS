@@ -29,6 +29,37 @@ namespace NeuronClientTest::Unit
     }
   };
 
+  struct ThreadCancelJob : LTE::JobT
+  {
+    std::atomic_bool& started;
+    std::atomic_bool& cancelRequested;
+    std::atomic_bool& exited;
+
+    ThreadCancelJob(
+      std::atomic_bool& started,
+      std::atomic_bool& cancelRequested,
+      std::atomic_bool& exited)
+      : started(started),
+        cancelRequested(cancelRequested),
+        exited(exited)
+    {}
+
+    char const* GetName() const override { return "ThreadCancelJob"; }
+
+    void OnCancel() override
+    {
+      cancelRequested.store(true);
+    }
+
+    void OnRun(uint) override
+    {
+      started.store(true);
+      while (!cancelRequested.load())
+        Thread_SleepMS(1);
+      exited.store(true);
+    }
+  };
+
   TEST_CLASS(NeuronClientSmokeTests)
   {
   public:
@@ -89,6 +120,24 @@ namespace NeuronClientTest::Unit
       thread->Wait();
 
       Assert::IsTrue(ran.load());
+      Assert::IsTrue(thread->IsFinished());
+    }
+
+    TEST_METHOD(ThreadTerminateRequestsCooperativeStop)
+    {
+      std::atomic_bool started(false);
+      std::atomic_bool cancelRequested(false);
+      std::atomic_bool exited(false);
+      Thread thread = Thread_Create(new ThreadCancelJob(started, cancelRequested, exited));
+
+      for (uint i = 0; i < 1000 && !started.load(); ++i)
+        Thread_SleepMS(1);
+
+      Assert::IsTrue(started.load());
+      thread->Terminate();
+
+      Assert::IsTrue(cancelRequested.load());
+      Assert::IsTrue(exited.load());
       Assert::IsTrue(thread->IsFinished());
     }
   };
