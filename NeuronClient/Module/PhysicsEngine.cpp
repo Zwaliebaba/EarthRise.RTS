@@ -8,7 +8,6 @@
 #include "LTE/Matrix.h"
 #include "LTE/Mesh.h"
 #include "LTE/Renderable.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Transform.h"
 
 #include <unordered_map>
@@ -66,7 +65,6 @@ struct PhysicsEngineImpl : public PhysicsEngine {
     ObjectT* object2,
     V3* contactNormal)
   {
-    AUTO_FRAME;
     CollisionMesh const& mesh1 = GetCollisionMesh(object1->GetRenderable());
     CollisionMesh const& mesh2 = GetCollisionMesh(object2->GetRenderable());
 
@@ -83,7 +81,6 @@ struct PhysicsEngineImpl : public PhysicsEngine {
     if (!meshes[id].mesh) {
       Mesh source = renderable->GetCollisionMesh();
       if (source)
-        FRAME("Build Collision Mesh")
           meshes[id].mesh = CollisionMesh_Create(source);
     }
 
@@ -109,7 +106,6 @@ struct PhysicsEngineImpl : public PhysicsEngine {
   }
 
   void Update() {
-    SFRAME("Physics Update");
     float dt = FrameTimer_Get();
     for (MeshMapT::iterator it = meshes.begin(); it != meshes.end(); ++it) {
       if ((it->second.lastUse += dt) >= kEvictionTime) {

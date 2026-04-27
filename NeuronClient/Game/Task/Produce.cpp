@@ -6,7 +6,6 @@
 #include "Game/Item/AssemblyChip.h"
 
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   /* TODO : Use gametime_t, not float. */
@@ -66,7 +65,7 @@ namespace {
       data = TaskProduceInstance();
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskProduceInstance& it = data.Convert<TaskProduceInstance>();
       Pointer<ObjectT> root = self->GetRoot();
       AssemblyChip* chip = (AssemblyChip*)args.chip.get();

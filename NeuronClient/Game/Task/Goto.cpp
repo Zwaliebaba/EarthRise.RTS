@@ -11,7 +11,6 @@
 
 #include "LTE/Pool.h"
 #include "LTE/SDFs.h"
-#include "LTE/StackFrame.h"
 
 #include "LTE/Debug.h"
 
@@ -221,7 +220,7 @@ namespace {
       }
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskGotoInstance& it = data.Convert<TaskGotoInstance>();
 
       /* If we're not in the same container, need to figure out how to get

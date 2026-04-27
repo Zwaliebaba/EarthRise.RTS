@@ -11,13 +11,13 @@ This plan prioritizes build stability, correctness, and testability first, then 
 ### Current Implementation Status - April 26, 2026
 - Phase 0 is complete for the x64-debug baseline. `build-baseline.md` records the current generator, SDK, dependency baseline, and legacy warning distribution. x64-release remains a follow-up validation item.
 - Gate A is satisfied for the default x64-debug workflow.
-- Phase 1 test foundation is implemented locally. `NeuronCore.Test`, `NeuronClient.Test`, and `EarthRise.Test` build as Microsoft Native Unit Test DLLs, are registered with CTest, and run through Visual Studio `vstest.console.exe`.
-- Gate B is satisfied locally: each active module has Unit and Integration test groups, the test targets build with scoped `/W4 /WX`, and the x64-debug CTest run passes all registered Microsoft Native Unit Test projects.
+- Phase 1 test foundation is implemented locally. `NeuronCore.Test`, `NeuronClient.Test`, and `EarthRise.Test` build as Microsoft Native Unit Test DLLs, are registered with CTest by Unit/Integration category, and run through Visual Studio `vstest.console.exe`.
+- Gate B is satisfied locally: each active module has Unit and Integration test groups, the test targets build with scoped `/W4 /WX`, and the x64-debug CTest category runs pass for all registered Microsoft Native Unit Test projects.
 - `DataReader` and `DataWriter` no longer depend on the missing `NetLib.h` include and now have round-trip unit coverage.
 - Phase 2 has started. Tuple equality and Array equality are currently in corrected form and now have regression tests that protect against the planned self-compare and byte-count comparison bugs.
 - Phase 2 is complete locally for x64-debug. Release-safe assertion semantics are implemented through `ASSERT_RELEASE` and `ASSERT_RELEASE_TEXT`, routed through `Neuron::Fatal`, and covered by Microsoft Native Unit Tests.
 - Gate C is satisfied locally for x64-debug. x64-release remains a deferred validation item.
-- Phase 3 has started. This plan now documents current `Reference<T>` and type metadata registry thread-safety assumptions before atomic or locking changes are attempted. `ThreadImpl::finished` is now atomic, `ThreadImpl::Terminate` now uses cooperative cancellation instead of forced termination, and both thread paths are covered by NeuronClient unit smoke tests.
+- Phase 3 has started. This plan now documents current `Reference<T>` and type metadata registry thread-safety assumptions before atomic or locking changes are attempted. `ThreadImpl::finished` is now atomic, `ThreadImpl::Terminate` now uses cooperative cancellation instead of forced termination, and NeuronClient unit categories cover thread wait/cancel, single-threaded `Reference<T>` copy semantics, and stable startup metadata lookup.
 - Phase 4 has started with contributor-facing documentation: `README.md`, `ARCHITECTURE.md`, and refreshed documentation-layout guidance in `.github/coding-standards.md`.
 - Phase 5 is complete locally for the safe implementation-local migration pass. `types.md` records seven completed pilots plus deferred boundaries for reflected fields, script-visible APIs, serialization shapes, wrapper-heavy APIs, and intrusive ownership semantics.
 
@@ -241,8 +241,8 @@ Priority: Critical
 
 #### Current Status
 - Complete locally for x64-debug.
-- The three Microsoft Native Unit Test projects build and are registered as CTest entries.
-- Initial coverage includes NeuronCore math helpers, EventManager dispatch behavior, DataReader/DataWriter round trips, NeuronClient Tuple equality, NeuronClient Array equality, and launcher/source tree smoke checks.
+- The three Microsoft Native Unit Test projects build and are registered as CTest Unit/Integration category entries.
+- Initial coverage includes NeuronCore math helpers, EventManager dispatch behavior, DataReader/DataWriter round trips, NeuronClient Tuple equality, NeuronClient Array equality, Phase 3 LTE thread/reference/type contract checks, and launcher/source tree smoke checks.
 - CI wiring remains a process-infrastructure follow-up unless it is pulled forward before Phase 4.
 
 ### Phase 2: Critical Correctness Fixes
@@ -300,8 +300,10 @@ Priority: High
 - Current recommendation is to treat `Reference<T>` and type metadata registration as thread-confined/startup-only until cross-thread ownership and runtime registration requirements are proven.
 - First contract comments now mark `RefCounted`, metadata storage, registry mutation, and LTE `ThreadImpl` job ownership as startup/thread-confined assumptions.
 - A Phase 3 boundary scan now covers LTE Thread/Job, NeuronCore async/task/event helpers, and reflection registry mutation points.
-- `ThreadImpl::finished` is now atomic and covered by a NeuronClient unit smoke test that waits for a simple LTE job to complete.
+- `ThreadImpl::finished` is now atomic and covered by a NeuronClient unit threading test that waits for a simple LTE job to complete.
 - `ThreadImpl::Terminate` now requests cooperative cancellation through `JobT::OnCancel` and joins the worker thread instead of calling Windows `TerminateThread`.
+- `Reference<T>` single-thread copy/refcount behavior and stable startup-only primitive metadata lookup now have NeuronClient unit coverage.
+- `Type_Find` now performs a non-mutating registry lookup on misses instead of inserting null entries into the type map.
 - The profiler sampler job now honors cooperative cancellation.
 - `StaticASyncLoader` no longer uses redundant `volatile` qualifiers on atomic loading state.
 - No `RefCounted` atomic or type-registry locking behavior has been changed yet.
@@ -329,6 +331,7 @@ Boundary scan:
 - LTE Thread termination: `ThreadImpl::Terminate` is cooperative. It calls `JobT::OnCancel` and joins the worker thread, so long-lived jobs must override `OnCancel` and exit their run loop promptly.
 - NeuronCore async/tasks/events: `ASyncLoader` uses atomics for loading state, `TasksCore` owns lifecycle state behind mutexes, and `EventManager` protects subscriber mutation/dispatch with `sm_sync`. `EventManager` handlers retain raw instance pointers, so lifetime remains a caller contract.
 - Reflection registry: lazy `Type_GetStorage<T>()` initialization and `Type_Create` registry insertion remain unguarded. Startup reflection registration may remain lazy, but runtime registration from multiple threads is out of contract until synchronization is designed.
+- Reflection lookup: `Type_Find` is a non-mutating lookup; new type-map entries should be created only by startup registration through `Type_Create` or aliases.
 - Worker metadata audit: current scheduler SDF/profiler jobs do not directly call `Type_Get` or `Type_Create` from `OnRun`. Script-created threads remain a boundary because script execution can reach reflected systems; scripts running on worker threads must not be the first path to discover/register reflected types.
 
 Contract decisions:
@@ -352,6 +355,7 @@ Contract decisions:
 - Document thread-safety contract for registration lifecycle.
 - Recommendation: prefer startup-only registration if that matches runtime behavior; locking every lookup should be avoided unless registration can happen after startup.
 - Current slice: keep type metadata registration startup-only/single-threaded. Do not add lookup-wide locks unless runtime lazy registration from worker threads becomes a proven requirement.
+- Current status: `Type_Find` no longer mutates the registry on unknown names, and unit coverage protects found and missing lookup behavior plus worker reads of pre-registered primitive metadata.
 
 3. Event and async ordering audit
 - Verify EventManager and ASyncLoader lock and atomic ordering invariants.
@@ -366,7 +370,7 @@ Contract decisions:
 
 #### Exit Criteria
 - Concurrency-critical files have explicit synchronization contracts.
-- New thread-safety tests pass.
+- New thread-safety and startup-contract tests pass.
 - No data races observed in targeted stress runs.
 - Gate D is satisfied.
 

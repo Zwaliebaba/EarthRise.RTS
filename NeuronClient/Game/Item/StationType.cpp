@@ -16,7 +16,6 @@
 #include "LTE/SDFs.h"
 #include "LTE/SDFMesh.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 
 DERIVED_IMPLEMENT(StationType)
 
@@ -26,7 +25,7 @@ Object StationType::Instantiate(ObjectT* parent) {
   return Object_Station(this);
 }
 
-DefineFunction(Item_StationType) { AUTO_FRAME;
+DefineFunction(Item_StationType) {
   RNG rg = RNG_MTG(args.seed);
 
   Mass capacity = Constant_ValueToCapacity(args.value, args.capacity);

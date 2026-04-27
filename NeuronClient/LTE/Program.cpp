@@ -5,7 +5,6 @@
 #include "Module.h"
 #include "Mouse.h"
 #include "OS.h"
-#include "StackFrame.h"
 #include "Window.h"
 
 #include <ctime>
@@ -20,7 +19,6 @@ Program::Program() : deleted(false) {
 }
 
 Program::~Program() {
-  AUTO_FRAME;
   destructed = true;
 }
 
@@ -29,7 +27,7 @@ void Program::Delete() {
 }
 
 void Program::Execute() {
-  FRAME("Initialize") {
+  {
     Window_Push(window);
     OnInitialize();
     Window_Pop();
@@ -40,12 +38,12 @@ void Program::Execute() {
       break;
     Window_Push(window);
 
-    FRAME("InputUpdate") {
+    {
       Mouse_Update();
       Keyboard_Update(window->HasFocus());
     }
 
-    FRAME("WindowUpdate") {
+    {
       Window_Pop();
       window->Update();
       Window_Push(window);
@@ -55,7 +53,6 @@ void Program::Execute() {
 
     Module_UpdateGlobal();
 
-    FRAME("Display")
       window->Display();
     Window_Pop();
   }

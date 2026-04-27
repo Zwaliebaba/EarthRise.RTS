@@ -5,7 +5,6 @@
 #include "ProgramLog.h"
 #include "Script.h"
 #include "Stack.h"
-#include "StackFrame.h"
 #include "StringList.h"
 
 #include <iostream>
@@ -13,7 +12,6 @@
 
 namespace LTE {
   void ExpressionT::Evaluate(void* returnValue) const {
-    AUTO_FRAME;
     Environment env;
     Evaluate(returnValue, env);
   }
@@ -23,7 +21,6 @@ namespace LTE {
     CompileEnvironment& env,
     Vector<String>* locals)
   {
-    SFRAME("Compile Expression");
 
     if (list->IsAtom()) {
       /* Variable. */ {

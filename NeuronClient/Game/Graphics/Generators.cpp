@@ -1,7 +1,6 @@
 #include "Generators.h"
 
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 
 namespace {
@@ -14,7 +13,6 @@ namespace {
     size_t const& height,
     ShaderInstance const& shader)
   {
-    SFRAME("Generate Texture");
     Texture2D texture = Texture_Create(width, height);
     shader->Begin();
     Texture_Generate(texture, shader->GetShader());

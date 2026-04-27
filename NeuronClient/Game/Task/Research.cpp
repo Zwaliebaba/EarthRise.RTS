@@ -8,7 +8,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 #include "Module/SoundEngine.h"
 
@@ -41,7 +40,7 @@ namespace {
       return Capability_Research(1);
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       if (10.0 * RandExp() < dt) {
         Item item = Item_Blueprint_Derived(args.blueprint.get());
         self->GetRoot()->AddItem(item, 1);

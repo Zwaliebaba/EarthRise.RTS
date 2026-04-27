@@ -4,9 +4,8 @@
 #include "Game/Object.h"
 #include "LTE/Debug.h"
 #include "LTE/Math.h"
-#include "LTE/StackFrame.h"
 
-void ComponentMotion::Run(ObjectT* self, UpdateState& state) { AUTO_FRAME;
+void ComponentMotion::Run(ObjectT* self, UpdateState& state) {
   DEBUG_ASSERT(force.IsFinite());
   DEBUG_ASSERT(torque.IsFinite());
 

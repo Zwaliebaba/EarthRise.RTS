@@ -1,5 +1,7 @@
 ﻿#include "EarthRise.h"
 
+#include <memory>
+
 #include "NeuronCore.h"
 #include "Module/PhysicsEngine.h"
 #include "Module/SoundEngine.h"
@@ -43,10 +45,8 @@ struct Launcher : Program
 
     void Launch()
     {
-        physicsEngine = nullptr;
-        soundEngine = nullptr;
-        physicsEngine = CreatePhysicsEngine();
-        soundEngine = SoundEngine_Default();
+        physicsEngine = std::shared_ptr<ModuleT>(CreatePhysicsEngine());
+        soundEngine = std::shared_ptr<ModuleT>(SoundEngine_Default());
 
         Script_ClearCache();
 

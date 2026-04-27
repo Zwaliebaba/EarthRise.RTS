@@ -9,7 +9,6 @@
 
 #include "LTE/Pool.h"
 #include "LTE/SDFs.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   Quantity GetBuyPrice(Object const& node, Item const& item) {
@@ -89,7 +88,7 @@ namespace {
       it.task = TaskInstance(args.task);
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskBuyInstance& it = data.Convert<TaskBuyInstance>();
 
       if (it.state == TaskBuyState::Buying) {

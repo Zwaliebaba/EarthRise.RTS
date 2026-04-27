@@ -14,7 +14,6 @@
 #include "LTE/RNG.h"
 #include "LTE/SDFs.h"
 #include "LTE/SDFMesh.h"
-#include "LTE/StackFrame.h"
 #include "LTE/View.h"
 
 const float kInitialSize = 8;
@@ -135,7 +134,7 @@ void Displace(Position& p, double g) {
   p += displace * g;
 }
 
-DefineFunction(Object_Zone) { AUTO_FRAME;
+DefineFunction(Object_Zone) {
   Reference<Zone> self = new Zone;
   self->SetPos(args.position);
   self->SetScale(args.scale);

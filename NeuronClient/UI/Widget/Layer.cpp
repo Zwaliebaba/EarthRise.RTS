@@ -6,7 +6,6 @@
 #include "LTE/Renderer.h"
 #include "LTE/RenderPass.h"
 #include "LTE/Shader.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 #include "LTE/Transform.h"
 #include "LTE/View.h"

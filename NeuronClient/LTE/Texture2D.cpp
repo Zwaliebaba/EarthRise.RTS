@@ -8,7 +8,6 @@
 #include "ProgramLog.h"
 #include "Renderer.h"
 #include "Shader.h"
-#include "StackFrame.h"
 #include "Timer.h"
 #include "Window.h"
 #include "SFML/Graphics.hpp"
@@ -303,7 +302,6 @@ Texture2D Texture_Create(uint width, uint height, GL_TextureFormat::Enum format,
 
 void Texture_Generate(const Texture2D& self, const Shader& shader, bool generateMips, bool segmented, float maxJobTime)
 {
-  AUTO_FRAME;
   Renderer_PushAllBuffers();
   self->Bind(0);
   IncrementalGenerateFromShader(self->GetWidth(), self->GetHeight(), shader.get(), segmented, maxJobTime);
@@ -317,7 +315,6 @@ void Texture_Generate(const Texture2D& self, const Shader& shader, bool generate
 void Texture_Generate(const Texture2D& source1, const Texture2D& source2, const Shader& shader, bool generateMips, bool segmented,
                       float maxJobTime)
 {
-  AUTO_FRAME;
   DEBUG_ASSERT(source1->GetWidth() == source2->GetWidth());
   DEBUG_ASSERT(source1->GetHeight() == source2->GetHeight());
   Renderer_PushAllBuffers();

@@ -5,7 +5,6 @@
 #include "LTE/Function.h"
 #include "LTE/Iterator.h"
 #include "LTE/RenderStyle.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Transform.h"
 
 ComponentInterior::~ComponentInterior()
@@ -55,15 +54,12 @@ void ComponentInterior::Remove(ObjectT* self, const Object& object)
 
 void ComponentInterior::Run(ObjectT* self, UpdateState& state)
 {
-  AUTO_FRAME;
   ParticleSystem_Push(particles);
 
-  FRAME("Particle Update")
     particles->Run(state.dt);
 
   for (ObjectType type = 0; type < ObjectType_SIZE; ++type)
   {
-    FRAME(ObjectType_String[type])
     {
       if (!objectMap.contains(type))
         continue;

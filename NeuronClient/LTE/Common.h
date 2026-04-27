@@ -132,7 +132,6 @@ struct Program;
 struct Timer;
 
 typedef Reference<struct LockT> Lock;
-typedef Reference<struct ModuleT> Module;
 typedef Reference<struct ThreadT> Thread;
 typedef Reference<struct WindowT> Window;
 
@@ -160,7 +159,6 @@ namespace LTE
   /* Engine. */
   struct Data;
   struct DataRef;
-  struct DataStack;
   struct Diff;
   struct Grammar;
   struct Patch;

@@ -6,7 +6,6 @@
 
 #include "LTE/Pool.h"
 #include "LTE/SDF.h"
-#include "LTE/StackFrame.h"
 
 const Distance kDockDistance = 100.0;
 
@@ -33,7 +32,7 @@ namespace {
       return self->GetContainer() == args.target;
     }
 
-    void OnUpdate(Object const& self, float dt, Data&) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data&) {
       if (Condition_Nearby(self, args.target, kDockDistance))
         args.target->Dock(self);
       else

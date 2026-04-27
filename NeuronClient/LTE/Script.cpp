@@ -8,7 +8,6 @@
 #include "Map.h"
 #include "ProgramLog.h"
 #include "Serializer.h"
-#include "StackFrame.h"
 #include "StringList.h"
 #include "Types.h"
 
@@ -50,7 +49,7 @@ namespace LTE {
     StringList list = StringList_Load(location);
     list = LTSL_ApplyRewrites(list);
 
-    FRAME(&name.front()) {
+    {
       CompileEnvironment env;
       env.script = this;
       for (size_t i = 0; i < list->GetSize(); ++i)

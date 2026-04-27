@@ -23,7 +23,6 @@
 #include "LTE/Script.h"
 #include "LTE/SDFs.h"
 #include "LTE/SDFMesh.h"
-#include "LTE/StackFrame.h"
 
 #include "UI/Glyphs.h"
 
@@ -117,7 +116,7 @@ bool AttachThrusterPair(
   V3 const& thrustDir,
   RNG const& rng,
   V3 const& scale)
-{ AUTO_FRAME;
+{
   V3 target, origin, normal, inter;
   Bound3 box = renderable->GetBound();
 
@@ -149,7 +148,7 @@ void AttachTurrets(
   Vector<Socket>& sockets,
   uint num,
   RNG const& rng)
-{ AUTO_FRAME;
+{
   /* Affix Turret Sockets. */
   Bound3 bound = renderable->GetBound();
   for (uint i = 0; i < num; ++i) {
@@ -182,7 +181,7 @@ void AttachTurrets(
   }
 }
 
-DefineFunction(Item_ShipType) { AUTO_FRAME;
+DefineFunction(Item_ShipType) {
   RNG rng = RNG_MTG(args.seed);
 
   double valueRemaining = args.value;

@@ -6,13 +6,11 @@
 #include "LTE/Math.h"
 #include "LTE/RNG.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 
 const size_t kResolution = 2048;
 
 namespace {
   CubeMap Generate(uint seed) {
-    SFRAME("Generate Planet Surface");
     static Shader shader = Shader_Create("identity.jsl", "gen/planet.jsl");
 
     CubeMap self = CubeMap_Create(kResolution);

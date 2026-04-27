@@ -4,13 +4,11 @@
 #include "LTE/CubeMap.h"
 #include "LTE/RNG.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 #include "LTE/Vector.h"
 
 namespace {
   CubeMap Generate(Generator_IRMap_Args const& args) {
-    SFRAME("Generate IRMap");
     static Shader shader = Shader_Create("identity.jsl", "cubemap/irmap.jsl");
 
     CubeMap const& source = args.source();

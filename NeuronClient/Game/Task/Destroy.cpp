@@ -12,7 +12,6 @@
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 #include "LTE/SDFs.h"
-#include "LTE/StackFrame.h"
 
 #include "LTE/Debug.h"
 const Distance kDestroyDistance = 10000;
@@ -80,7 +79,7 @@ namespace {
       data = TaskDestroyInstance();
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskDestroyInstance& it = data.Convert<TaskDestroyInstance>();
       it.t += dt;
 

@@ -1,8 +1,4 @@
 #include "Module.h"
-#include "StackFrame.h"
-
-#include <algorithm>
-#include <vector>
 
 namespace {
   std::vector<Module>& GetModules() {
@@ -18,6 +14,5 @@ void Module_RegisterGlobal(Module const& module) {
 
 void Module_UpdateGlobal() {
   for (size_t i = 0; i < GetModules().size(); ++i)
-    FRAME(GetModules()[i]->GetName())
       GetModules()[i]->Update();
 }

@@ -5,7 +5,6 @@
 #include "LTE/Pool.h"
 #include "LTE/ProgramLog.h"
 #include "LTE/Script.h"
-#include "LTE/StackFrame.h"
 #include "LTE/StringList.h"
 #include "LTE/Vector.h"
 
@@ -42,7 +41,6 @@ namespace {
     }
 
     void Evaluate(void* returnValue, Environment& env) const {
-      // SFRAME(&function->name.front());
       uint prevBase = env.base;
       uint newBase = env.registers.size();
 

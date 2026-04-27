@@ -11,7 +11,6 @@
 #include "LTE/Renderer.h"
 #include "LTE/RenderStyle.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 #include "LTE/View.h"
 #include "LTE/Viewport.h"
@@ -60,7 +59,6 @@ namespace {
   };
 
   Renderable Generate(Renderable_Imposter_Args const& args) {
-    SFRAME("Generate Imposter");
     /* TODO : Valid depth buffer. */
     const uint kResolution = 512;
 

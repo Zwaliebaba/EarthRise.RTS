@@ -1,6 +1,5 @@
 #include "ProgramLog.h"
 #include "OS.h"
-#include "StackFrame.h"
 #include "Window.h"
 
 #include <iostream>
@@ -45,7 +44,7 @@ namespace LTE {
 #ifdef _NDEBUG
     GetWindow()->close();
 #endif
-    DoLog("[CRITICAL] (" + StackFrame_Get() + ") " + entry);
+    DoLog("[CRITICAL] " + entry);
     DoLog("Shutting down due to critical Fatal.");
     OS_MessageBox("ERROR", "Shutting down due to critical Fatal:\n" + entry);
 #ifdef _DEBUG
@@ -56,12 +55,12 @@ namespace LTE {
 
   void Log_Error(String const& entry) {
     if (level >= LogLevel::Errors)
-      DoLog("[Error] (" + StackFrame_Get() + ") " + entry);
+      DoLog("[Error] " + entry);
   }
 
   void Log_Event(String const& entry) {
     if (level >= LogLevel::Everything)
-      DoLog("[Event] (" + StackFrame_Get() + ") " + entry);
+      DoLog("[Event] " + entry);
   }
 
   void Log_Message(String const& entry) {
@@ -71,7 +70,7 @@ namespace LTE {
 
   void Log_Warning(String const& entry) {
     if (level >= LogLevel::Warnings)
-      DoLog("[Warning] (" + StackFrame_Get() + ") " + entry);
+      DoLog("[Warning] " + entry);
   }
 
   size_t Log_GetEntries() {

@@ -2,7 +2,6 @@
 
 #include "Matrix.h"
 #include "Meshes.h"
-#include "StackFrame.h"
 #include "Warp.h"
 
 #include "Array.h"
@@ -110,7 +109,6 @@ DefineFunction(PlateMesh_Create) {
 }
 
 DefineFunction(Mesh_ComputeOcclusion) {
-  AUTO_FRAME;
   Mesh const& m = args.mesh;
 
   Vector<V4> points;

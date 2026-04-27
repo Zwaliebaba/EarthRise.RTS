@@ -6,7 +6,6 @@
 #include "ProgramLog.h"
 #include "Renderer.h"
 #include "Shader.h"
-#include "StackFrame.h"
 #include "Texture2D.h"
 #include "UniString.h"
 #include "Viewport.h"
@@ -201,7 +200,6 @@ namespace
 
     void Draw(const String& text, const V2& position, float size, const Color& color, float alpha, bool additive) const override
     {
-      AUTO_FRAME;
       size /= kFontSize;
 
       static std::vector<TextVertex> vertices;

@@ -1,11 +1,12 @@
-#ifndef LTE_Module_h__
-#define LTE_Module_h__
+#pragma once
 
-#include "Reference.h"
+#include <memory>
 
-struct ModuleT : RefCounted
+typedef std::shared_ptr<struct ModuleT> Module;
+
+struct ModuleT
 {
-  ~ModuleT() override {}
+  virtual ~ModuleT() {}
 
   virtual const char* GetName() const = 0;
   virtual void Update() = 0;
@@ -14,4 +15,3 @@ struct ModuleT : RefCounted
 void Module_RegisterGlobal(const Module& module);
 void Module_UpdateGlobal();
 
-#endif

@@ -2,11 +2,9 @@
 
 #include "LTE/CubeMap.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   CubeMap Generate(Generator_Blur_Args const& args) {
-    SFRAME("Generate Blurred CubeMap");
     static Shader shader = Shader_Create("identity.jsl", "cubemap/blur.jsl");
 
     CubeMap const& source = args.source();

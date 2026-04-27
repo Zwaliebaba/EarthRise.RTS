@@ -1,7 +1,6 @@
 #include "ScriptFunction.h"
 
 #include "Environment.h"
-#include "StackFrame.h"
 
 //#define ENABLE_SCRIPT_CACHING
 
@@ -33,7 +32,7 @@ namespace LTE {
     if (!expression)
       return;
 
-    FRAME(&name.front()) {
+    {
       Environment env;
       env.registers.reserve(32);
       for (size_t i = 0; i < parameters.size(); ++i)

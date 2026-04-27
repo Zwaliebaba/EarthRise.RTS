@@ -6,7 +6,6 @@
 #include "LTE/DrawState.h"
 #include "LTE/Renderer.h"
 #include "LTE/RenderStyle.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 
 namespace {

@@ -24,13 +24,13 @@ namespace {
     }
   };
 
-  Reference<LoaderHandler>& GetHandler() {
-    static Reference<LoaderHandler> handler;
+  LoaderHandler* GetHandler() {
+    static std::shared_ptr<LoaderHandler> handler;
     if (!handler) {
-      handler = new LoaderHandler;
+      handler = std::make_shared<LoaderHandler>();
       Module_RegisterGlobal(handler);
     }
-    return handler;
+    return handler.get();
   }
 }
 

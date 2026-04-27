@@ -6,7 +6,6 @@
 #include "Matrix.h"
 #include "Renderer.h"
 #include "Shader.h"
-#include "StackFrame.h"
 #include "Timer.h"
 #include "Transform.h"
 #include "V3.h"
@@ -116,7 +115,6 @@ namespace
 
     void GenerateFromShader(const Shader& shader, bool generateMips, float maxJobTime) override
     {
-      SFRAME("Generate CubeMap");
       Renderer_SetShader(*shader);
       BeginRender();
       (*shader)("halfTexel", 0.5f / static_cast<float>(resolution))(

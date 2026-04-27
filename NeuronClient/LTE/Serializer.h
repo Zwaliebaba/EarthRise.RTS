@@ -2,7 +2,6 @@
 #define LTE_Serializer_h__
 
 #include "AutoPtr.h"
-#include "StackFrame.h"
 
 namespace LTE {
   struct Serializer {
@@ -21,7 +20,7 @@ namespace LTE {
     Location const& location,
     int minVersion = 0,
     int maxVersion = INT_MAX)
-  { AUTO_FRAME;
+  {
     AutoPtr<Serializer> s = CreateLoader(location);
     if (!s->IsGood()
         || s->GetVersion() < minVersion
@@ -36,7 +35,7 @@ namespace LTE {
     T& t,
     Location const& location,
     int version)
-  { AUTO_FRAME;
+  {
     AutoPtr<Serializer> s = CreateSaver(location, version);
     s->Process(&t, Type_Get(t));
   }

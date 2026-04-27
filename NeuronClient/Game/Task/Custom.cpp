@@ -6,7 +6,6 @@
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 #include "LTE/Script.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   AutoClassDerived(TaskCustom, TaskT,

@@ -5,7 +5,6 @@
 #include "LTE/Pool.h"
 #include "LTE/ProgramLog.h"
 #include "LTE/Script.h"
-#include "LTE/StackFrame.h"
 #include "LTE/StringList.h"
 #include "LTE/Vector.h"
 
@@ -59,8 +58,6 @@ namespace {
     }
 
     void Evaluate(void* returnValue, Environment& env) const {
-      // SFRAME(function->name.data());
-
       for (size_t i = 0; i < args.size(); ++i) {
         ArgData const& arg = args[i];
         if (!arg.isLValue) {

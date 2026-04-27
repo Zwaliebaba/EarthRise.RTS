@@ -5,7 +5,6 @@
 #include "LTE/Pointer.h"
 #include "LTE/Renderer.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Thread.h"
 #include "LTE/Timer.h"
 #include "LTE/Tuple.h"
@@ -135,12 +134,10 @@ namespace
 
         if (!flushed)
         {
-          FRAME("Pre Flush")
             GL_Finish();
           flushed = true;
         }
 
-        FRAME(job->GetName())
         {
           uint jobSize = job->totalUnits > 0 ? static_cast<uint>(Floor(remainingTime / (job->totalTime / (float)job->totalUnits))) : 0;
           jobSize = Max(jobSize, kMinJobSize);
@@ -174,11 +171,11 @@ void Scheduler_Add(const Job& job, bool threaded) { Scheduler_Get()->Add(job, th
 
 Scheduler* Scheduler_Get()
 {
-  static Reference<SchedulerImpl> scheduler;
+  static std::shared_ptr<SchedulerImpl> scheduler;
   if (!scheduler)
   {
-    scheduler = new SchedulerImpl;
+    scheduler = std::make_shared<SchedulerImpl>();
     Module_RegisterGlobal(scheduler);
   }
-  return scheduler;
+  return scheduler.get();
 }

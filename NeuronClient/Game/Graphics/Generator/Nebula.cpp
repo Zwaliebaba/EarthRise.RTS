@@ -3,7 +3,6 @@
 #include "LTE/CubeMap.h"
 #include "LTE/RNG.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 
 const bool kAlwaysReload = false;
 const size_t res = 1024;
@@ -18,7 +17,6 @@ namespace {
   }
 
   CubeMap NebulaImpl(Generator_Nebula_Args const& args) {
-    SFRAME("Generate Nebula");
     CubeMap self = CubeMap_Create(res, GL_TextureFormat::RGBA32F);
     RNG rng = RNG_MTG(args.seed);
 

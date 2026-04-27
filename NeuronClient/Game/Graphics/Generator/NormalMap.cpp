@@ -1,7 +1,6 @@
 #include "../Generators.h"
 
 #include "LTE/Shader.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 
 namespace {
@@ -9,7 +8,6 @@ namespace {
     Generic<Texture2D> const& source,
     float strength)
   {
-    AUTO_FRAME;
     static Shader shader = Shader_Create("identity.jsl", "gen/normalmap_lum.jsl");
 
     Texture2D texture = source();

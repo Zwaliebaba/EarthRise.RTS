@@ -14,7 +14,6 @@
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 #include "LTE/RNG.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Vector.h"
 
 #include "LTE/Debug.h"
@@ -231,7 +230,7 @@ namespace {
       }
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       /* TODO : Global capital allocation. */
       FindProject();
 

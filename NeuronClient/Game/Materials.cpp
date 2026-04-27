@@ -6,7 +6,6 @@
 #include "LTE/Pointer.h"
 #include "LTE/Shader.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 #include "LTE/Vec.h"
 
@@ -15,7 +14,6 @@ const uint kTextureRes = 1024;
 
 namespace {
   Vec<Texture2D, 2> GenerateMetal(float seed) {
-    SFRAME("Generate Metal Texture");
     static Shader platingShader;
     static Shader aoShader;
     static Shader dirtShader;

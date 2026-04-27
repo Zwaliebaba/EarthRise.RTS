@@ -7,7 +7,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   AutoClassDerived(TaskMint, TaskT,
@@ -37,7 +36,7 @@ namespace {
       return Capability_Research(1);
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       if (RandExp() < dt) {
         Blueprint* bp = (Blueprint*)args.blueprint.get();
         self->GetRoot()->AddItem(bp->assemblyChip, 1);

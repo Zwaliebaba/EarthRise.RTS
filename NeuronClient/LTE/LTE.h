@@ -86,7 +86,6 @@
 #include "Sphere.h"
 #include "SphereTree.h"
 #include "Stack.h"
-#include "StackFrame.h"
 #include "StringList.h"
 #include "StringTree.h"
 #include "Text.h"

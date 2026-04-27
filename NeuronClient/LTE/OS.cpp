@@ -1,7 +1,6 @@
-#include "OS.h"
+﻿#include "OS.h"
 #include "Profiler.h"
 #include "ProgramLog.h"
-#include "StackFrame.h"
 #include "String.h"
 
 #include <csignal>
@@ -25,14 +24,12 @@
 
 void IntHandler(int value)
 {
-  StackFrame_Print();
   exit(0);
 }
 
 void SegHandler(int value)
 {
   Fatal("Access Violation");
-  StackFrame_Print();
   exit(0);
 }
 

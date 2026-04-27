@@ -5,7 +5,6 @@
 #include "LTE/Renderer.h"
 #include "LTE/RenderPass.h"
 #include "LTE/Shader.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 #include "LTE/Transform.h"
 #include "LTE/Vector.h"
@@ -63,7 +62,7 @@ namespace {
     }
 
     void PreDraw(Widget const& self) {
-      FRAME("Initialize Render") {
+      {
         uint targetWidth = (uint)(kResolution * self->size.x);
         uint targetHeight = (uint)(kResolution * self->size.y);
 
@@ -106,7 +105,7 @@ namespace {
       DrawState state;
       state.Push();
 
-      FRAME("Begin Render") {
+      {
         state.color[0] = buffers[0];
         state.color[1] = buffers[1];
         state.color[2] = buffers[2];
@@ -127,7 +126,7 @@ namespace {
       for (size_t i = 0; i < passes.size(); ++i)
         passes[i]->Render(&state);
 
-      FRAME("End Render") {
+      {
         Renderer_PopZBuffer();
         Renderer_PopBlendMode();
         Renderer_PopScissor();
@@ -139,7 +138,7 @@ namespace {
       state.Pop();
       Viewport_Pop();
 
-      FRAME("Present") {
+      {
         RendererState s(BlendMode::Alpha, CullMode::Disabled, false, false);
         DrawState_Link(presentShader);
         Renderer_SetShader((*presentShader)

@@ -11,7 +11,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 #include "LTE/Debug.h"
 
@@ -73,7 +72,7 @@ namespace {
       data = TaskPirateInstance();
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskPirateInstance& it = data.Convert<TaskPirateInstance>();
 
       if (it.target && CanAttack(self, it.target))

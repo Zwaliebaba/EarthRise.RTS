@@ -2,11 +2,9 @@
 #include "Assets.h"
 #include "Info.h"
 
-#include "LTE/StackFrame.h"
 
 void ComponentAsset::Run(ObjectT* self, UpdateState& state)
 {
-  AUTO_FRAME;
   if (owner)
   {
     /* An asset should always be fully visible to its owner. */

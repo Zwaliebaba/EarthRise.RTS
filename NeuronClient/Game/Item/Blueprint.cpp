@@ -5,7 +5,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/RNG.h"
-#include "LTE/StackFrame.h"
 
 #include "UI/Glyphs.h"
 
@@ -70,7 +69,7 @@ namespace {
   }
 }
 
-Item Item_Blueprint(DataRef const& properties) { AUTO_FRAME;
+Item Item_Blueprint(DataRef const& properties) {
   Reference<Blueprint> self = new Blueprint;
   self->metatype = properties;
 
@@ -96,7 +95,7 @@ Item Item_Blueprint(DataRef const& properties) { AUTO_FRAME;
   return self;
 }
 
-Item Item_Blueprint_Derived(Reference<Blueprint> const& source) { AUTO_FRAME;
+Item Item_Blueprint_Derived(Reference<Blueprint> const& source) {
   Reference<Blueprint> self = new Blueprint;
   self->parent = source.get();
   self->metatype = source->metatype;

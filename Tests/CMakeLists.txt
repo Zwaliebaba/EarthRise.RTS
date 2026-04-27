@@ -118,7 +118,12 @@ earthrise_add_microsoft_native_test(NeuronClient.Test
     NeuronClient.Test/Unit/NeuronClientSmokeTests.cpp
     NeuronClient.Test/Integration/NeuronClientIntegrationTests.cpp
   LIBRARIES
-    NeuronClient)
+    NeuronClient
+  CTEST_CATEGORIES
+    Unit.Smoke
+    Unit.Types
+    Unit.Threading
+    Integration.ClientRuntime)
 
 earthrise_add_microsoft_native_test(EarthRise.Test
   SOURCES
@@ -127,4 +132,7 @@ earthrise_add_microsoft_native_test(EarthRise.Test
   INCLUDES
     "${CMAKE_SOURCE_DIR}/EarthRise"
   DEPENDS
-    EarthRise)
+    EarthRise
+  CTEST_CATEGORIES
+    Unit.Smoke
+    Integration.AssetStaging)

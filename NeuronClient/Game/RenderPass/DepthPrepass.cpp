@@ -8,7 +8,6 @@
 #include "LTE/RenderStyle.h"
 #include "LTE/Shader.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 #include "LTE/View.h"
 

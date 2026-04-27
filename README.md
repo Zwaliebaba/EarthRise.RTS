@@ -59,8 +59,8 @@ cmake --build --preset x64-debug --target EarthRise.Test
 ## Current Status
 
 - x64-debug is the active validated workflow.
-- `NeuronCore.Test`, `NeuronClient.Test`, and `EarthRise.Test` are present and registered with CTest.
-- Phase 3 safety work has started. `Reference<T>` remains documented as thread-confined, type metadata registration remains startup/single-threaded by contract, and `ThreadImpl::finished` has been made atomic with NeuronClient test coverage.
+- `NeuronCore.Test`, `NeuronClient.Test`, and `EarthRise.Test` are present and registered with CTest Unit/Integration category filters.
+- Phase 3 safety work has started. `Reference<T>` remains documented as thread-confined, type metadata registration remains startup/single-threaded by contract, `Type_Find` no longer mutates the registry on misses, and NeuronClient unit coverage now checks LTE thread wait/cancel behavior, single-threaded reference copies, and stable startup metadata lookup.
 - Phase 4 documentation work has started with this README and the architecture overview.
 
 See `impl.md` for the staged implementation plan and `build-baseline.md` for the current build baseline.

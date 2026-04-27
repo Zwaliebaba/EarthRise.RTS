@@ -11,7 +11,6 @@
 #include "LTE/CollisionMesh.h"
 #include "LTE/ProgramLog.h"
 #include "LTE/Renderer.h"
-#include "LTE/StackFrame.h"
 
 constexpr double kCollisionDamageCoefficient = 1.0 / 1000.0;
 constexpr double kResolutionCoefficient = 1.5;
@@ -52,7 +51,6 @@ ComponentCollidable::ComponentCollidable()
 
 void ComponentCollidable::CheckCollisions(ObjectT* self, UpdateState& state)
 {
-  AUTO_FRAME;
   if (!state.hasFocus)
     return;
 

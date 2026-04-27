@@ -9,7 +9,6 @@
 
 #include "LTE/Ray.h"
 #include "LTE/SpatialPartition.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Vector.h"
 
 #include <memory>
@@ -158,7 +157,6 @@ struct ComponentQueryableImpl {
     Bound3D const& box,
     Vector<ObjectT*>& objects)
   {
-    SFRAME("AABB Query");
     Refresh(self);
 
     queryVersion++;
@@ -189,7 +187,6 @@ struct ComponentQueryableImpl {
     bool (*checkIntersection)(ObjectT const*, void*),
     void* aux)
   {
-    SFRAME("Ray Query");
     Refresh(self);
     RayMarchData rd(ray, tMax, normalOut, checkIntersection, aux);
 

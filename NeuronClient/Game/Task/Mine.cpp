@@ -15,7 +15,6 @@
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 #include "LTE/SDFs.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Smooth.h"
 #include "LTE/Vector.h"
 
@@ -75,7 +74,7 @@ namespace {
       data = TaskMineInstance();
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskMineInstance& it = data.Convert<TaskMineInstance>();
       it.timer -= dt;
 

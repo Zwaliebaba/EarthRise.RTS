@@ -18,7 +18,6 @@
 #include "LTE/Iterator.h"
 #include "LTE/Matrix.h"
 #include "LTE/Math.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Static.h"
 
 #include "UI/Glyphs.h"
@@ -110,7 +109,6 @@ void ObjectT::Update(UpdateState& state) {
 
   LIST_ITERATE(Object, children, nextSibling) {
     if (!it->IsDeleted())
-      FRAME(it->GetTypeString())
         it->Update(state);
 
     if (it->IsDeleted())

@@ -21,7 +21,6 @@
 #include "LTE/Renderable.h"
 #include "LTE/RNG.h"
 #include "LTE/Script.h"
-#include "LTE/StackFrame.h"
 #include "LTE/View.h"
 
 #include "LTE/Debug.h"
@@ -236,7 +235,7 @@ AutoClassDerived(System, SystemBaseT,
 
 DERIVED_IMPLEMENT(System)
 
-DefineFunction(Object_System) { AUTO_FRAME;
+DefineFunction(Object_System) {
   Reference<System> self = new System;
 
   RNG rng = RNG_MTG(args.seed);

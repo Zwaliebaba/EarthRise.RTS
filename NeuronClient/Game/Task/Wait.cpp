@@ -4,7 +4,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   AutoClassDerived(TaskWait, TaskT, Task_Wait_Args, args)
@@ -29,7 +28,7 @@ namespace {
       data = 0.0f;
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       data.Convert<float>() += dt;
     }
   };

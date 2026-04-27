@@ -226,7 +226,8 @@ void Type_AddAlias(Type const& type, String const& alias) {
 }
 
 Type Type_Find(String const& name) {
-  return GetTypeMap()[name];
+  Type* type = GetTypeMap().get(name);
+  return type ? *type : nullptr;
 }
 
 Vector<Type> const& Type_GetList() {

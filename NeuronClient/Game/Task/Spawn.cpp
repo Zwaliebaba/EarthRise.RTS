@@ -4,7 +4,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   AutoClassDerived(TaskSpawn, TaskT, Task_Spawn_Args, args)
@@ -29,7 +28,7 @@ namespace {
       outputs.push(ItemDelta(args.item, nullptr, 1));
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       /* TODO */
 #if 0
       while (args.rate * RandExp() < dt)

@@ -9,7 +9,6 @@
 #include "Program.h"
 #include "ProgramLog.h"
 #include "Renderer.h"
-#include "StackFrame.h"
 #include "Texture2D.h"
 #include "Texture3D.h"
 #include "V4.h"
@@ -132,7 +131,6 @@ namespace
 
     bool Compile()
     {
-      SFRAME("Compile GPU Shader");
       version++;
       GL_ShaderSource(id, source);
       GL_CompileShader(id);
@@ -298,7 +296,6 @@ namespace
 
     void Link()
     {
-      SFRAME("Link GPU Program");
       GL_LinkProgram(id);
 
       if (GL_GetProgramI(id, GL_ProgramProperty::LinkStatus) == 0)

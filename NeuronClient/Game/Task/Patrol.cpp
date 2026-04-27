@@ -7,7 +7,6 @@
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 #include "LTE/SDFs.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   AutoClass(TaskPatrolInstance,
@@ -41,7 +40,7 @@ namespace {
       data = it;
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskPatrolInstance& it = data.Convert<TaskPatrolInstance>();
 
       if (Length(self->GetPos() - it.target) < 512.0f)

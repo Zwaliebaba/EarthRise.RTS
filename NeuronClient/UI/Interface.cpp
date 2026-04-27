@@ -9,7 +9,6 @@
 #include "LTE/RenderPass.h"
 #include "LTE/Renderer.h"
 #include "LTE/Shader.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Window.h"
 
 namespace
@@ -39,7 +38,6 @@ namespace
 
     void Draw() override
     {
-      SFRAME("InterfaceDraw");
       V2 windowSize = Window_Get()->GetSize();
       Cursor_Push(Mouse_GetPosImmediate(), Mouse_GetPosLast());
       ClipRegion_Push(0, windowSize);
@@ -53,7 +51,6 @@ namespace
 
     void Update() override
     {
-      SFRAME("InterfaceUpdate");
       V2 windowSize = Window_Get()->GetSize();
       Cursor_Push(Mouse_GetPos(), Mouse_GetPosLast());
       ClipRegion_Push(0, windowSize);

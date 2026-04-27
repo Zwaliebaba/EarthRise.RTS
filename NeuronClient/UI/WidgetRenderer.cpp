@@ -10,7 +10,6 @@
 #include "LTE/Renderer.h"
 #include "LTE/Shader.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Vector.h"
 #include "LTE/Viewport.h"
 
@@ -147,7 +146,6 @@ DefineFunction(WidgetRenderer_DrawGlyph) {
 
 DefineFunction(WidgetRenderer_DrawPanel) {
   WidgetRenderer_Flush();
-  SFRAME("Panel");
   RendererState rs(BlendMode::Alpha, CullMode::Disabled, false, false);
   renderer.panelBuffer.clear();
   PopulateIndices(1);
@@ -187,7 +185,6 @@ DefineFunction(WidgetRenderer_DrawPanel) {
 
 DefineFunction(WidgetRenderer_DrawPanelRadial) {
   WidgetRenderer_Flush();
-  SFRAME("PanelRadial");
   RendererState rs(BlendMode::Alpha, CullMode::Disabled, false, false);
   renderer.radialPanelBuffer.clear();
   PopulateIndices(1);
@@ -285,7 +282,7 @@ DefineFunction(WidgetRenderer_Flush) {
   for (GlyphMapT::iterator it = renderer.glyphs.begin();
        it != renderer.glyphs.end(); ++it)
   {
-    FRAME(it->first->name) {
+    {
       RenderGlyphs(it->first, it->second);
       it->second.clear();
     }

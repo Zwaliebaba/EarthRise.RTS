@@ -17,7 +17,6 @@
 #include "LTE/RNG.h"
 #include "LTE/Script.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Texture2D.h"
 
 #include "UI/Glyphs.h"
@@ -130,7 +129,7 @@ Renderable Generate(PlanetType const& type) {
   return model;
 }
 
-DefineFunction(Item_PlanetType) { AUTO_FRAME;
+DefineFunction(Item_PlanetType) {
   RNG rg = RNG_MTG(args.seed);
 
   Reference<PlanetType> self = new PlanetType;

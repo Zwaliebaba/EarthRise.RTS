@@ -6,7 +6,6 @@
 
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 #include "LTE/Smooth.h"
 
 namespace {
@@ -39,7 +38,7 @@ namespace {
       return Capability_Transference(1);
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       if (RandExp() < dt)
         self->AddItem(args.target->GetResources()->elements.sample(Rand()), 1);
     }

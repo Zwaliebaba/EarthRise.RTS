@@ -8,13 +8,11 @@
 #include "LTE/Math.h"
 #include "LTE/RNG.h"
 #include "LTE/ShaderInstance.h"
-#include "LTE/StackFrame.h"
 
 const size_t res = 1024;
 
 namespace {
   CubeMap Generate(Planet const* planet) {
-    SFRAME("Generate Planet Skybox");
     static Shader shader = Shader_Create("identity.jsl", "gen/planetskybox.jsl");
 
     CubeMap self = CubeMap_Create(res);

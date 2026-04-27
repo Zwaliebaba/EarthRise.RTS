@@ -5,7 +5,6 @@
 #include "Game/Object.h"
 
 #include "LTE/Math.h"
-#include "LTE/StackFrame.h"
 
 const float kTurnHardness = 4.0f;
 
@@ -19,7 +18,6 @@ namespace {
 }
 
 void ComponentMotionControl::Run(ObjectT* self, UpdateState& state) {
-  AUTO_FRAME;
   if (!elements.size()) {
     self->Broadcast(MessageThrustLinear(0));
     return;

@@ -3,7 +3,6 @@
 #include "Game/Events.h"
 #include "Game/Object.h"
 #include "LTE/Pool.h"
-#include "LTE/StackFrame.h"
 
 namespace {
   AutoClassDerived(TaskTransport, TaskT, Task_Transport_Args, args)
@@ -41,7 +40,7 @@ namespace {
       return Capability_Storage(1);
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       if (self->GetContainer() == args.source) {
         // Quantity quantity =
         //  (Quantity)Floor(self->GetFreeCapacity() / args.item->GetMass());

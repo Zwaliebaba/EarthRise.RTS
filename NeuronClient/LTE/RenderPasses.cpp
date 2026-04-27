@@ -4,7 +4,6 @@
 #include "Math.h"
 #include "Renderer.h"
 #include "ShaderInstance.h"
-#include "StackFrame.h"
 #include "Texture2D.h"
 
 namespace {

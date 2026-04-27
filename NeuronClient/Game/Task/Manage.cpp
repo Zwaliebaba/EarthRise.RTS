@@ -12,7 +12,6 @@
 #include "LTE/Math.h"
 #include "LTE/Pool.h"
 #include "LTE/StackArray.h"
-#include "LTE/StackFrame.h"
 
 #include "LTE/Debug.h"
 
@@ -142,7 +141,7 @@ namespace {
       it.metaprojects[MetaprojectType_Secure].allocation = 0.3f;
     }
 
-    void OnUpdate(Object const& self, float dt, Data& data) { AUTO_FRAME;
+    void OnUpdate(Object const& self, float dt, Data& data) {
       TaskManageInstance& it = data.Convert<TaskManageInstance>();
 
       /* Split the project wallet among metaprojects. */ {

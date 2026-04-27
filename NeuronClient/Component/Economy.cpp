@@ -8,7 +8,6 @@
 #include "Game/Tasks.h"
 
 #include "LTE/Map.h"
-#include "LTE/StackFrame.h"
 
 #include <unordered_set>
 
@@ -98,7 +97,6 @@ namespace {
 }
 
 void ComponentEconomy::Run(ObjectT* self, UpdateState&) {
-  SFRAME("Economy Caching");
   static std::unordered_set<HashT> itemSet;
   itemSet.clear();
 

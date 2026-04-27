@@ -32,13 +32,13 @@ namespace
 
   FrameTimerModule* FrameTimer_GetModule()
   {
-    static Reference<FrameTimerModule> module;
+    static std::shared_ptr<FrameTimerModule> module;
     if (!module)
     {
-      module = new FrameTimerModule;
+      module = std::make_shared<FrameTimerModule>();
       Module_RegisterGlobal(module);
     }
-    return module;
+    return module.get();
   }
 }
 

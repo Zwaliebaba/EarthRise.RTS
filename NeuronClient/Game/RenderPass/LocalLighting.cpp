@@ -73,7 +73,7 @@ namespace {
       // Texture2D const& lightBuffer = state->smallColor[0];
 
       /* Local light accumulation. */
-      FRAME("Accumulation") {
+      {
         lightBuffer->Bind(0);
         RendererBlendMode blendMode(BlendMode::Additive);
 
@@ -116,7 +116,7 @@ namespace {
         lightBuffer->Unbind();
       }
 
-      FRAME("Compositing") {
+      {
         state->color[1]->Bind(0);
         DrawState_Link(shaderComposite);
         (*shaderComposite)
